@@ -1,0 +1,9 @@
+
+Route::prefix('funciones_admin')->group(function () {
+    Route::get('/fondos', [FondoController::class, 'index'])->name('fondos.index');
+    Route::get('/fondos/create', [FondoController::class, 'create'])->name('fondos.create');
+    Route::post('/fondos', [FondoController::class, 'store'])->name('fondos.store');
+    Route::get('/fondos/{id}/edit', [FondoController::class, 'edit'])->name('fondos.edit');
+    Route::put('/fondos/{id}', [FondoController::class, 'update'])->name('fondos.update');
+    Route::delete('/fondos/{id}', [FondoController::class, 'destroy'])->name('fondos.destroy');
+    Route::post('/fondos/{id}/update-comisiones', [FondoController::class, 'updateComisiones'])->name('fondos.update-comisiones');

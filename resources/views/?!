@@ -1,0 +1,35 @@
+@extends('layouts.app')
+
+@section('content')
+<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+    <thead>
+        <tr style="border-bottom: 1px solid #ddd; background-color: #f2f2f2;">
+            <th style="padding: 8px; text-align: left;">Nombre</th>
+            <th style="padding: 8px; text-align: left;">Id</th>
+            <th style="padding: 8px; text-align: left;">CCI</th>
+            <th style="padding: 8px; text-align: left;">Monto Invertido</th>
+            <th style="padding: 8px; text-align: left;">Pagos</th>
+            <th style="padding: 8px; text-align: left;">PDF</th>
+        </tr>
+    </thead>
+    <tbody>
+@if($profiles->count()>=3)
+        @foreach($profiles->slice(2) as $profile)
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 8px;">{{ $profile->first_name }}</td>
+                <td style="padding: 8px;">{{ $profile->id }}</td>
+                <td style="padding: 8px;">{{ $profile->cci_card }}</td>
+                <td style="padding: 8px;">${{ $profile->monto_invertido }}</td>
+                <td style="padding: 8px;">
+		    @foreach ($documents[$profile->id] as $document)
+		        <a href="{{ $document->file_path }}">{{ $document->filename }}</a><br>
+		    @endforeach
+		</td>
+
+            </tr>
+        @endforeach
+@endif
+    </tbody>
+</table>
+
+@endsection	
