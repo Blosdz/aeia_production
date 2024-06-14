@@ -1,0 +1,333 @@
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background: rgb(6,11,38);
+    background: linear-gradient(97deg, rgba(6,11,38,1) 0%, rgba(12,36,163,1) 100%);
+
+}
+
+body::-webkit-scrollbar-track{
+  background: #000;
+}
+body::-webkit-scrollbar-thumb{
+  background: #1e0a8d;
+}
+
+.fondo_dashboard{
+  /* position: relative; */
+  position: absolute;
+  overflow: hidden;
+  width:auto;
+  /* background-color: #1e0a8d; */
+    /* background: rgb(6,11,40); */
+    /* background: linear-gradient(165deg, rgba(6,11,40,0.5) 0%, rgba(10,14,35,0.5) 100%); */
+  object-fit: cover;
+  z-index: -1;
+  margin-top:12vw;
+  margin-left:60vw;
+}
+
+.container_dashboard_background{
+    /* background-color: rgb(15,18,59); */
+    /* background-color: rgb(230, 31, 31); */
+    /* background: linear-gradient(140deg, rgba(15,18,59,1) 0%, rgba(9,13,46,1) 59%, rgba(2,5,21,1) 100%);  */
+    margin-left:-5vw;
+}
+
+*{
+
+    /* background-color: rgb(15,18,59); */
+    /* background: linear-gradient(140deg, rgba(15,18,59,1) 0%, rgba(9,13,46,1) 59%, rgba(2,5,21,1) 100%);  */
+    font-size:15px;
+    color: #A0AEC0
+}
+
+
+.dashboard-new-container{
+    background: rgb(6,11,40);
+    background: linear-gradient(165deg, rgba(6,11,40,0.3967787798713235) 0%, rgba(10,14,35,5) 100%);
+    width:40vw;
+    padding:25px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+
+
+#group-new-containers{
+    display: flex;
+    flex-direction: row;
+}
+
+#group-new-containers > .dashboard-new-container{
+    width: 21.3vw;
+    margin-right: 15px;
+}
+
+.dashboard-image{
+    position:relative;
+    z-index: -1;
+    width:5vw;
+    margin-top: -2.5vw;
+    margin-left: 16vw;
+}
+.dashboard-image img{
+    position:relative;
+    z-index: 1;
+    width:3vw;
+}
+
+.group-row2{
+    display:flex;
+    flex-direction:row;
+    margin-top:3vw;
+}
+
+#medium-container{
+    width: 35vw;
+    height: 15vw;
+}
+
+.group-row2 #medium-container{
+    margin-right:1vw;
+}
+
+.group-row2 #small-container{
+    margin-right:1vw;
+}
+
+#small-container{
+    width:15vw;
+}
+
+.group-row3{
+    display:flex; 
+    flex-direction:row;
+    margin-top: 3vw;
+}
+
+#large-container{
+    width:51vw;
+    margin-right:1vw;
+}
+
+.dashboard-data{
+    font-size:1vw;
+    font-weight: bold;
+    color:white;
+}
+.dashboard-title{
+    font-size:28px;
+    font-weight: lighter !important ;
+    /* font-weight: bold; */
+    color:white;
+}
+.dashboard-new-container-show-data{
+    background: rgb(26,31,55);
+    border-radius: 15px;
+    background: linear-gradient(165deg, rgba(6,12,41,1) 0%, rgb(1, 1, 22) 100%);
+}
+
+#dashboard-new-container-show-data-circle{
+    width: 13vw;
+}
+
+#Fondo-flex{
+    display: flex;
+}
+
+#logo-dashboard{
+    width:8vw;
+    margin-left:20vw;
+    margin-top:-3vw;
+    z-index:-1;
+    position: relative;
+}
+
+
+
+
+/* ***********************TABLE****************************** */
+
+
+
+.gray-top {
+    border-top: 2px solid gray; /* Borde superior gris sólido */
+}
+
+table {
+    width:75vw;
+    border-collapse: collapse;
+    /* border: 2px soli; */
+    background-color: rgb(2,11,59);
+    /* background: linear-gradient(97deg, rgba(2,11,59,0.9738095921962535) 0%, rgba(36,57,168,0.8309524493391106) 100%);  */
+    color: white; /* Color de texto blanco */
+    border-radius:20px;
+}
+
+td , th{
+    padding:15px;
+}
+
+td{
+    border-top: 1px solid rgb( 180, 181, 186 );
+}
+
+tr{
+    width:200vw;
+}
+
+#contracts_table{
+    margin-top:6vw;
+}
+#contracts-row-1{
+    margin-top:2vw;
+}
+.contracts-outher-table{
+    background-color: rgb(2,11,59);
+    padding:20px;
+    border-radius: 20px;
+    width:76vw;
+}
+
+/* ****************************navbar******************************* */
+
+.nav-header{ 
+    margin:20px 0 0 24px;
+
+}
+.nav-text{
+    font-size:25px;
+    color:white;
+    /* font-weight: bold; */
+}
+.sidebar-new-menu{
+  position:fixed;
+  /* top:3vw; */
+  /* left:4vw; */
+  height:45vw;
+  /* background-color: #000; */
+  background: rgb(6,11,38);
+  background: linear-gradient(97deg, rgba(6,11,38,0.3) 0%, rgba(36,57,168,0.2) 100%);
+  width:11vw;
+  /* background: #0000 !important; */
+  /* padding:3vw; */
+  display: block;
+  /* display: flex; */
+  /* align-items: center; */
+  justify-content: left;
+  border-radius: 10px;
+    color:white;
+    font-weight: bold;
+  margin: 10px 3vw 2vw 2vw;
+  -webkit-box-shadow: -7px 14px 28px 7px rgba(0,0,0,0.75);
+  -moz-box-shadow: -7px 14px 28px 7px rgba(0,0,0,0.75);
+  box-shadow: -7px 14px 28px 7px rgba(0,0,0,0.75);
+  
+}
+
+.sidebar-new-menu ul li{
+    color:white;
+    font-weight: bold;
+  text-decoration: none;
+}
+
+.sidebar-new-menu ul  {
+    color:white;
+    font-weight: bold;
+    margin:7px 0;
+  list-style: none;
+}
+
+.siderbar-nav{
+    margin-top: 2vw;
+    color:white;
+    font-weight: bold;
+ 
+}
+.nav-item a span{
+    /* margin-top: 2vw; */
+    color:white !important;
+    font-weight: bold;
+ 
+}
+
+.sidebar-new-menu li{
+
+    display: block;
+    margin-top: 1vw;
+    margin-left:-3vw;
+    width:10vw;
+    border-radius: 10px;
+    color:white;
+    font-weight: bold;
+ 
+    padding:10px;
+}
+.sidebar-new-menu li:hover{
+    background-color: rgb( 180, 181, 186 , 0.5);
+}
+
+
+.sidebar-new-menu li>a{
+    /* position:relative; */
+    /* display:table; */
+    border-collapse:collapse;
+    border-spacing:0;
+    color:white;
+    font-weight: bold;
+    /* font-family: arial; */
+    font-size: 14px;
+    text-decoration:none;
+    -webkit-transform:translateZ(0) scale(1,1);
+    -webkit-transition:all .1s linear;
+    transition:all .1s linear;
+
+}
+
+.sidebar-new-menu ul li a {
+    text-decoration:none;
+    color:white;
+    font-weight: bold;
+ 
+}
+/* ***************************************************** */
+main{
+  margin-left:19vw;
+}
+
+.app-body-new{
+  display: flex;
+  flex-direction: row;
+}
+
+
+.sidebar-new-menu img{
+    width:1.8vw;
+}
+
+
+/* *******************PROFILES********************* */
+
+.tab-content{
+    background: rgb(2,11,59);
+    
+}
+
+.form-control{
+    background:  rgba(26, 26, 28, 0.5);
+    color:white;
+    border: none
+}
+
+.tab-content{
+    border:none;
+}
+
+#myTab  a{
+    border:none;
+    color:white;
+    font-weight:bolder;
+    background: #A0AEC0 !important;
+}
+
