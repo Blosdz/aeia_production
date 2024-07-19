@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts_new.app')
 @php
     $user = Auth::user();
     $profile = Auth::user()->with('profile')->first(); 
@@ -10,12 +10,12 @@
     }
 @endphp
 @section('content')
-  <div class="container-fluid">
-        <div class="animated fadeIn">
+  {{-- <div class="container-fluid"> --}}
+        <div class="animated fadeIn mt-5">
              <div class="row">
              
                  <div class="col-lg-12">
-                     <div class="card">
+                     <div class="card bg-1" id="rounded-container">
                          
                         <div class="card-body text-center">
                             
@@ -57,5 +57,5 @@
             </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
 @endsection

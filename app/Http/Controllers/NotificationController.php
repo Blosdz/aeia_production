@@ -43,7 +43,7 @@ class NotificationController extends AppBaseController
 
         BellTrait::verifyNotification(Auth::user()->id, 'notification', false);
 
-	return view('notifications.index')->with('notifications', $notifications)->with('user', $user);
+	return view('notifications_new.index')->with('notifications', $notifications)->with('user', $user);
     }
 
     /**
@@ -54,7 +54,7 @@ class NotificationController extends AppBaseController
     public function create()
     {
 	    $users=User::pluck('name','id');
-        return view(('notifications.create'),compact('users'));
+        return view(('notifications_new.create'),compact('users'));
     }
 
     /**
@@ -94,7 +94,7 @@ class NotificationController extends AppBaseController
             return redirect(route('notifications.index'));
         }
 
-        return view('notifications.show')->with('notification', $notification);
+        return view('notifications_new.show')->with('notification', $notification);
     }
 
     /**
@@ -114,7 +114,7 @@ class NotificationController extends AppBaseController
             return redirect(route('notifications.index'));
         }
 
-        return view('notifications.edit')->with('notification', $notification);
+        return view('notifications_new.edit')->with('notification', $notification);
     }
 
     /**

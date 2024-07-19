@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="./">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -9,24 +8,155 @@
     <meta name="description" content="CoreUI Template - InfyOm Laravel Generator">
     <meta name="keyword" content="CoreUI,Bootstrap,Admin,Template,InfyOm,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
     <!-- Bootstrap-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <!-- Theme style -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> --}}
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/css/coreui.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@icon/coreui-icons-free@1.0.1-alpha.1/coreui-icons-free.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css"
-          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
 
-    <style>
+   <style>
+
+
+        .outerring {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            /* border-radius: 100%; */
+            /* border: 5px solid #47dbdb; */
+        }
+
+        .innerring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 2px);
+            height: calc(100% - 3px);
+            /* border-radius: 100%; */
+            /* border: 5px solid #2255cb; */
+            animation: breathe 4s linear infinite;
+        }
+
+        @keyframes breathe {
+            0% {
+                box-shadow: 0;
+            }
+            25% {
+                box-shadow: inset 0 0 1000px 5px #152346;
+            }
+            50% {
+                box-shadow: inset 0 0 1200px 5px #094be6;
+            }
+            75% {
+                box-shadow: inset 0 0 2000px 5px #1c74e7;
+            }
+            100% {
+                box-shadow: 0;
+            }
+        }
         body {
-        background-color: #09114A;
-    }
+            color:white;
+
+            background-color: #09114A;
+        }
+
+        #login-form{
+            height: 100vh;
+        }
+        #login-right{
+            /* background: #1b253e; */
+        }
+        #login-left{
+            /* 5bbcf7c7 */
+            background: #0b0c14;
+        }
+        .form-container {
+            /* height: 100%; */
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+            margin-top: 15vw;
+        }
+        #form-item{
+            width:35vw;
+        }
+        input{
+            border-radius: 2vw !important;
+            background: #00000000 !important;
+            color: white !important;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important; /* Color del placeholder */
+        }
+        #logo{
+            width: 14vw;
+        }
     </style>
 </head>
-<body class="app flex-row align-items-center">
-<div class="container">
+<body>
+    <div class="container-fluid" id="login-form">
+        <div class="row h-100" id="login-left">
+            <div class="col d-flex align-items-center justify-content-center outerring">
+                <div class="innerring"></div>
+                    <img src="welcome/images/logo2.png" alt="" data-position="center center" id="logo" />
+                {{-- </div> --}}
+            </div>
+            <div class="col " id="login-right">
+                <div class="container form-container"  id="form-item">
+                    <form method="post" action="{{ url('/login') }}">
+                        @csrf
+                        <h1>Iniciar Sesión</h1>
+                        {{-- <p class="text-muted">Inicio de se</p> --}}
+                        <br>    
+
+                        <label for="email">Email</label><br>
+                        <div class="input-group mb-3">
+                            {{-- <div class="input-group-prepend"> --}}
+                                {{-- <span class="input-group-text">@</span> --}}
+                            {{-- </div> --}}
+                            <input type="email" class="form-control {{ $errors->has('email')?'is-invalid':'' }}" name="email" value="{{ old('email') }}"
+                                   placeholder="Ingresa tu Correo">
+                            @if ($errors->has('email'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <label for="password">Contraseña</label>
+                        <div class="input-group mb-4">
+                            {{-- <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <i class="icon-lock"></i>
+                                </span>
+                            </div> --}}
+                            <input type="password" class="form-control {{ $errors->has('password')?'is-invalid':'' }}" name="password"
+                                    placeholder="Ingresa tu Contraseña">
+                            @if ($errors->has('password'))
+                                <span class="invalid-feedback">
+                                   <strong>{{ $errors->first('password') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <a href="/register"><p> Crear Cuenta </p></a>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <button class="btn btn-primary px-4" type="submit">Iniciar Sesión</button>
+                            </div>
+                            <div class="col-6 text-right">
+                                <a href="{{ route('password.request') }}" class="btn btn-link px-0">Olvidé mi contraseña</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card-group">
@@ -83,8 +213,8 @@
                 
             </div>
         </div>
-    </div>
-</div>
+    </div> --}}
+{{-- </div> --}}
 <!-- CoreUI and necessary plugins-->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

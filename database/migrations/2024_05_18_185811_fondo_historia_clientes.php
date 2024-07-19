@@ -15,8 +15,10 @@ class FondoHistoriaClientes extends Migration
     {
 	Schema::create('fondo_historia_clientes', function (Blueprint $table) {
             $table->id();
-	    $table->unsignedBigInteger('fondo_cliente_id')->nullable();
-	    $table->integer('month')->nullable();
+	        $table->unsignedBigInteger('fondo_cliente_id')->nullable();
+		    $table->string('plan_id_fondo')->nullable();
+		    $table->string('planId')->nullable();
+	        $table->integer('month')->nullable();
             $table->decimal('total_invertido', 30, 2)->nullable();
             $table->decimal('ganancia', 30, 2)->nullable();
             $table->decimal('rentabilidad', 30, 2)->nullable();

@@ -48,7 +48,7 @@ class ProfileController extends AppBaseController
                   ->filterByStatus($request['status'])
                   ->get();
 
-        return view('profiles.index')
+        return view('profiles_new.index')
             ->with('profiles', $profiles);
     }
 
@@ -62,7 +62,7 @@ class ProfileController extends AppBaseController
                   })
                   ->get();
 
-        return view('profiles.index')
+        return view('profiles_new.index')
             ->with(compact('profiles'));
     }
     public function verified()
@@ -76,7 +76,7 @@ class ProfileController extends AppBaseController
      */
     public function create()
     {
-        return view('profiles.create');
+        return view('profiles_new.create');
     }
 
     /**
@@ -114,7 +114,7 @@ class ProfileController extends AppBaseController
             return redirect(route('profiles.index'));
         }
 
-        return view('profiles.show')->with('profile', $profile);
+        return view('profiles_new.show')->with('profile', $profile);
     }
 
     /**
@@ -135,7 +135,7 @@ class ProfileController extends AppBaseController
             return redirect(route('profiles.index'));
         }
 
-        return view('profiles.edit')->with('profile', $profile);
+        return view('profiles_new.edit')->with('profile', $profile);
     }
 
     /**
@@ -158,7 +158,7 @@ class ProfileController extends AppBaseController
         }
 
         $data = $request->all();
-        //dd($data);
+        // dd($data);
 
         if(!$data["obs"] && $request['verified'] == 3){
             Flash::error("Tiene que ingresar observacion.");
@@ -259,20 +259,25 @@ class ProfileController extends AppBaseController
             return redirect(route('profiles.index'));
         }
 		
-        return view('profiles.edit2')->with('profile', $profile);
+        session()->flash('success', 'Información enviada con éxito');
+        return view('profiles_new.edit2')->with('profile', $profile);
     }
 
     public function update2($id, UpdateProfileRequest $request)
     {
     // Obtener el user_id del formulario
     	
-            $userId = $request->input('user_id');
-            $profile = $this->profileRepository->find($id);
+        $userId = $request->input('user_id');
+        $profile = $this->profileRepository->find($id);
 	    $data=$request->all();
+        $data['phone']=$data['phone_code'].''.$data['phone'];
 	    $profile->verified = 1; // Otra forma de actualizar el campo "verified" del perfil	
 	    $profile=$this->profileRepository->update($data,$id);
 		
 //	    return redirect()->route('show-form-pdf');
+        // dd($data);
+
+        session()->flash('success', 'Información enviada con éxito');
 	    return redirect(route('profiles.user'));
     }
 
@@ -280,7 +285,7 @@ class ProfileController extends AppBaseController
 
         $profile = Profile::where("user_id", Auth::user()->id)->first();
 
-        $file_fields;
+        $file_fields=[];
         $file_fields[0] = "dni";
         $file_fields[1] = "dni_r"; 
         $file_fields[2] = "profile_picture"; 
@@ -295,8 +300,8 @@ class ProfileController extends AppBaseController
         $file_fields[10] = "power_file"; 
         $file_fields[11] = "taxes_file"; 
 
-        $path;
-        $name;
+        $path=[];
+        $name=[];
 
         for ( $i = 0; $i < sizeof($file_fields); $i++)
         {

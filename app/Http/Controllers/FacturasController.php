@@ -42,7 +42,7 @@ class FacturasController extends Controller
 		if(empty($payments)){
 			Flash::error('no hay pagos');
 		}
-		return view('admin_funciones.facturas')->with('payments',$payments);
+		return view('admin_funciones_new.facturas')->with('payments',$payments);
 	}
 	public function store_voucher(Request $request, $id)
 	{
@@ -92,7 +92,7 @@ class FacturasController extends Controller
 	    $vouchers = Facturas::where('user_id', $user_id)->get();
 	
 	    // Devolver la vista con los vouchers encontrados
-	    return view('admin_funciones.vista_cliente', ['vouchers' => $vouchers]);
+	    return view('admin_funciones_new.vista_cliente', ['vouchers' => $vouchers]);
 	}
 
 }

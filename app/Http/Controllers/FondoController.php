@@ -11,10 +11,15 @@ use App\Models\Payment;
 use App\Models\FondoHistoriaClientes;
 use App\Models\FondoClientes;
 use App\Models\ClientPayment;
+use App\Models\Notification;
 use App\Models\User;
+use App\Models\Profile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+
+use Twilio\Rest\Client;
+use dd;
 
 class FondoController extends Controller
 {
@@ -34,11 +39,13 @@ class FondoController extends Controller
             $totalPayments = Payment::whereYear('created_at', $currentYear)
                                     ->whereMonth('created_at', $currentMonth)
                                     ->where('created_at', '>', $timestampUltimoFondo)
+                                    ->where('status','PAGADO')
                                     ->sum('total');
         } else {
             // Si no hay fondos, obtener todos los pagos del mes actual
             $totalPayments = Payment::whereYear('created_at', $currentYear)
                                     ->whereMonth('created_at', $currentMonth)
+                                    ->where('status','PAGADO')
                                     ->sum('total');
         }    
         return $totalPayments;
@@ -50,7 +57,7 @@ class FondoController extends Controller
         $totalPayments = $this->calculate_latest_payments();
         $fondos = Fondo::where('month', $currentMonth)->get();
 
-        return view('admin_funciones.index', compact('fondos', 'totalPayments'));
+        return view('admin_funciones_new.index', compact('fondos', 'totalPayments'));
     }
 
     public function crearFondoClientes($mes, $year, $ultimoFondo)
@@ -100,6 +107,16 @@ class FondoController extends Controller
                 ], [
                     'monto_invertido' => $total,
                 ]);
+
+                FondoHistoriaClientes::create([
+                    'fondo_cliente_id'=> $fondoCliente->id,
+                    'month'=> $fondoCliente->month,
+                    'total_invertido'=>$fondoCliente->monto_invertido ,
+                    'planId'=>$plan_id,
+                    'plan_id_fondo'=>$ultimoFondo->id,
+                    'ganancia'=> 0 ,
+                    'rentabilidad'=> 0,
+                ]);
     
                 $fondosClientesCreados[] = $fondoCliente;
             }
@@ -124,11 +141,14 @@ class FondoController extends Controller
                 'ganancia_de_capital' => $request->ganancia_de_capital ?? 0,
             ]);
             // Crear los FondoClientes usando el nuevo fondo
+
             $fondosClientesCreados = $this->crearFondoClientes($request->month, date('Y'), $nuevoFondo);
         }
-	else{
+	    else{
 
-        	if ($fondoAnterior || $fondoAnterior->ganancia_de_capital > 0) {
+            // fondoAnterior ya existe -> es siempre  V 
+        	if ($fondoAnterior && $fondoAnterior->ganancia_de_capital > 0) {
+            
         	    // Si hay un fondo anterior con ganancia, crear un nuevo fondo
         	    $nuevoFondo = Fondo::create([
         	        'month' => $request->month,
@@ -141,95 +161,101 @@ class FondoController extends Controller
         	} else {
         	    // Si no hay un fondo anterior con ganancia, usar el fondo existente
 
-        	    $fondosClientesCreados = $this->crearFondoClientes($request->month, date('Y'), $nuevoFondo);
+                
+        	    $fondosClientesCreados = $this->crearFondoClientes($request->month, date('Y'), $fondoAnterior);
         	}
 	}
 
         return redirect()->route('fondos.index');
 
     }
+
+    private function enviarNotificacionesUsuarios($fondo)
+    {
+        $fondosClientes = FondoClientes::where('plan_id_fondo', $fondo->id)->get();
+        foreach ($fondosClientes as $fondoCliente) {
+            $user = User::find($fondoCliente->user_id);
+            if ($user) {
+                Notification::create([
+                    'title' => "Fondo Actualizado",
+                    'body' => "Revisa tus inversiones, una actualización ha sido realizada.",
+                    'user_id' => $user->id,
+                    'expires_at' => Carbon::now()->addDays(3), // Expira en 3 días
+                ]);
+    
+                $profile = $user->profile->phone;
+                // $phoneNumber = Profile::where('user_id',$user->id)->get('phone');
+                // Obtener el número de teléfono del perfil del usuario
+                // $phoneNumber = $user->phone;
+
+                // dd($user->profile->phone);
+                // $profile = $profile_get->phone;
+
+                // Verificar si existe un perfil y si tiene un número de teléfono
+                // if ($profile) {
+                //     $phoneNumber = $profile;
+                //     $sid = getenv("TWILIO_SID");
+                //     $token = getenv("TWILIO_TOKEN");
+                //     $senderNumber = getenv("TWILIO_PHONE");
+                //     $twilio = new Client($sid, $token);
+                    
+                //     $message = $twilio->messages->create(
+                //         $phoneNumber, [
+                //             "body" => "Actualización de inversión",
+                //             "from" => $senderNumber
+                //         ]
+                //     );
+
+                // }
+
+            }
+        }
+
+    }
+
     public function calcularComisiones($fondoId)
     {
-	   $fondo = Fondo::find($fondoId);
+        $fondo = Fondo::find($fondoId);
 
-	    if (!$fondo) {
-	        return redirect()->route('fondos.index')->with('error', 'Fondo no encontrado');
-	    }
-	
-	    // Calcular el total de inversiones en el fondo
-	    $totalInversiones = $fondo->total;
-	
-	    if ($totalInversiones == 0) {
-	        return redirect()->route('fondos.index')->with('error', 'No hay inversiones en este fondo');
-	    }
-	
-	    // Calcular las comisiones y actualizar los fondos y fondos de clientes
-	    $fondosClientes = FondoClientes::where('plan_id_fondo', $fondoId)->get();
-	
-	    // Depurar para ver los datos del fondo y los fondos de clientes
-	    //dd($fondo, $totalInversiones, $fondosClientes);
-	
-	    $totalComisiones = 0;
-	    $table_of_depurar=$fondosClientes;	
-	    foreach ($fondosClientes as $fondoCliente) {
-		$fondoHistClient=FondoHistoriaClientes::create([
-			'fondo_cliente_id'=>$fondoCliente->id,
-			'month'=>$fondoCliente->month,
-			'total_invertido'=>$fondoCliente->monto_invertido,
-			'ganancia'=>$fondoCliente->ganancia,
-			'rentabilidad'=>$fondoCliente->rentabilidad,
-			
-		    ]);
+        if (!$fondo) {
+            return null;
+        }
 
-	    	$plan=Plan::find($fondoCliente->planId);
-	        // Calcular el porcentaje de inversión del cliente en relación al total
-	        $porcentajeInversion = $fondoCliente->monto_invertido / $totalInversiones;
-	
-	        // Calcular la ganancia del cliente en base al porcentaje de inversión y la ganancia del fondo
-	        $gananciaCliente = $porcentajeInversion * $fondo->ganancia_de_capital;
-	
-	        $comision = $gananciaCliente * ($plan->commission / 100);
+        // Calcular el total de inversiones en el fondo
+        $totalInversiones = $fondo->total;
 
-	        $totalComisiones += $comision;
-	        // Actualizar la ganancia del cliente en la tabla de fondo_clientes
-	        $fondoCliente->ganancia = $gananciaCliente - $comision;
-	        $fondoCliente->rentabilidad = $gananciaCliente / $fondoCliente->monto_invertido;
-	        $fondoCliente->update();
-	    }
-	    //dd($table_of_depurar);	
-	    // Actualizar el balance del fondo con la comisión total
-	    $fondo->total_comisiones = $totalComisiones;
-	    $fondo->save();
-	    foreach ($fondosClientes as $fondoCliente) {
-		$fondoHistClient=FondoHistoriaClientes::create([
-			'fondo_cliente_id'=>$fondoCliente->id,
-			'month'=>$fondoCliente->month,
-			'total_invertido'=>$fondoCliente->monto_invertido,
-			'ganancia'=>$fondoCliente->ganancia,
-			'rentabilidad'=>$fondoCliente->rentabilidad,
-			
-		    ]);
+        if ($totalInversiones == 0) {
+            return null;
+        }
 
-	    	$plan=Plan::find($fondoCliente->planId);
-	        // Calcular el porcentaje de inversión del cliente en relación al total
-	        $porcentajeInversion = $fondoCliente->monto_invertido / $totalInversiones;
-	
-	        // Calcular la ganancia del cliente en base al porcentaje de inversión y la ganancia del fondo
-	        $gananciaCliente = $porcentajeInversion * $fondo->ganancia_de_capital;
-	
-	        $comision = $gananciaCliente * ($plan->commission / 100);
+        // Calcular las comisiones y actualizar los fondos y fondos de clientes
+        $fondosClientes = FondoClientes::where('plan_id_fondo', $fondoId)->get();
+        $totalComisiones = 0;
 
-	        $totalComisiones += $comision;
-	        // Actualizar la ganancia del cliente en la tabla de fondo_clientes
-	        $fondoCliente->ganancia = $gananciaCliente - $comision;
-	        $fondoCliente->rentabilidad = $gananciaCliente / $fondoCliente->monto_invertido;
-	        $fondoCliente->update();
-	    }
-	
-	    return redirect()->route('fondos.index')->with('success', 'Comisiones calculadas y actualizadas correctamente');
-	}
+        foreach ($fondosClientes as $fondoCliente) {
+            $plan = Plan::find($fondoCliente->planId);
 
-	
+            // Calcular el porcentaje de inversión del cliente en relación al total
+            $porcentajeInversion = $fondoCliente->monto_invertido / $totalInversiones;
+
+            // Calcular la ganancia del cliente en base al porcentaje de inversión y la ganancia del fondo
+            $gananciaCliente = $porcentajeInversion * $fondo->ganancia_de_capital;
+
+            $comision = $gananciaCliente * ($plan->commission / 100);
+            $totalComisiones += $comision;
+
+            // Actualizar la ganancia del cliente en la tabla de fondo_clientes
+            $fondoCliente->ganancia = $gananciaCliente - $comision;
+            $fondoCliente->rentabilidad = $gananciaCliente / $fondoCliente->monto_invertido;
+            $fondoCliente->update();
+        }
+
+        // Actualizar el balance del fondo con la comisión total
+        $fondo->total_comisiones = $totalComisiones;
+        $fondo->save();
+
+        return ['fondosClientes' => $fondosClientes, 'totalComisiones' => $totalComisiones];
+    }
 
     public function updateGanancia(Request $request, $id)
     {
@@ -237,24 +263,56 @@ class FondoController extends Controller
         $request->validate([
             'ganancia_de_capital' => 'required|numeric',
         ]);
-
-        $fondo->ganancia_de_capital = $request->ganancia_de_capital;
+    
+        // Actualizar la ganancia de capital del fondo
+        $fondo->ganancia_de_capital += $request->ganancia_de_capital;
         $fondo->save();
-
+    
+        // Calcular las comisiones y obtener los fondos de clientes actualizados
+        $resultado = $this->calcularComisiones($id);
+        $fondosClientes = $resultado['fondosClientes'];
+        $totalComisiones = $resultado['totalComisiones'];
+    
+        // Crear un registro en FondoHistorial
         FondoHistorial::create([
             'fondo_id' => $fondo->id,
-            'ganancia_neta' => $request->ganancia_de_capital,
+            'ganancia_neta' => $fondo->ganancia_de_capital,
             'total' => $fondo->total,
-            'tota_comisiones' => $this->calcularComisiones($id),
+            'total_comisiones' => $totalComisiones,
         ]);
-
+    
+        // Crear registros en FondoHistoriaClientes y actualizar FondoClientes
+        foreach ($fondosClientes as $fondoCliente) {
+            // Crear un registro en FondoHistoriaClientes
+            FondoHistoriaClientes::create([
+                'fondo_cliente_id' => $fondoCliente->id,
+                'month' => $fondoCliente->month,
+                'total_invertido' => $fondoCliente->monto_invertido,
+                'planId' => $fondoCliente->planId,
+                'plan_id_fondo' => $fondo->id,
+                'ganancia' => $fondoCliente->ganancia,
+                'rentabilidad' => $fondoCliente->rentabilidad,
+            ]);
+    
+            // Actualizar el registro en FondoClientes
+            $fondoCliente->update([
+                'ganancia' => $fondoCliente->ganancia,
+                'rentabilidad' => $fondoCliente->rentabilidad,
+            ]);
+        }
+    
+        // Enviar notificaciones a los usuarios
+        $this->enviarNotificacionesUsuarios($fondo);
+    
         return redirect()->route('fondos.index');
     }
+    
+
 
     public function edit($id)
     {
         $fondo = Fondo::findOrFail($id);
-        return view('admin_funciones.edit', compact('fondo'));
+        return view('admin_funciones_new.edit', compact('fondo'));
     }
 
     public function update( $id)
@@ -297,36 +355,6 @@ class FondoController extends Controller
 
 	    return redirect()->route('fondos.index');
     }
-    public function showClientHistory(Request $request){
-	    $user = Auth::user();
-	
-	    if (!$user) {                       
-	        return redirect()->route('login')->with('error', 'Por favor inicie sesión');
-	    }
-	
-	    $fondoId = $request->input('fondo_id');
-	
-	    // Obtener los planes asociados con el cliente autenticado
-	    $find_plans = FondoClientes::where('user_id', $user->id)->get();
-	
-	    // Obtener el historial del fondo seleccionado
-	    $historialClientes = collect();
-	    if ($fondoId) {
-	        $historialClientes = FondoHistoriaClientes::where('fondo_cliente_id', $fondoId)
-	            ->orderBy('created_at', 'asc')
-	            ->get();
-	    }
-		        // Definir el mapeo de los planes
-	    $mapPlan = [
-	        1 => 'Bronce',
-	        2 => 'Plata',
-	        3 => 'Oro',
-	        4 => 'Platino',
-	        5 => 'Diamante',
-	        6 => 'VIP'
-	    ];
-	
-	    return view('home', compact('user', 'find_plans', 'historialClientes', 'fondoId','mapPlan'));
-	}
+
 
 }

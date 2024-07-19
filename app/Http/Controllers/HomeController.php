@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FondoClientes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
@@ -11,12 +12,18 @@ use App\Models\Plan;
 use App\Models\Fondo;
 use App\Models\User;
 use App\Models\ClientPayment;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Mail as MailCustom;
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FondoHistoriaClientes;
+use App\Models\SubscriptorDataModel;
 use Carbon\Carbon;
 
-
+use DateTime;
+use Str;
+use dd;
+use FondoHistorial;
 
 class HomeController extends Controller
 {
@@ -29,20 +36,51 @@ class HomeController extends Controller
     {
         $this->middleware('auth', ['except' => ['sendmail', 'welcome']]);
     }
-
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
    
-    public function index()
+     public function index(){
+        $user=Auth::user();
+        if(!$user){
+            abort(404,'user not found');
+        }
+        $data = $this->DataUsers($user);
+        return view('home',compact('user','data'));
+     }
+    
+    public function DataUsers($user){
+        switch($user->rol){
+            case 1:
+                return $this->getUserAdmin();
+            case 2:
+                return $this->getUserReferidos();
+            case 3:
+                return $this->getUserCliente();
+            case 4:
+                return $this->getUserCliente();
+            case 5:
+                return $this->getUserReferidos();
+            case 6:
+                return $this->getUserVerificador();
+            case 7:
+                return $this->getUser7Data();
+            case 8:
+                return $this->getUserBanco();
+        }
+
+    }
+    public function data_idk()
     {
         // Obtén el usuario autenticado actualmente
         $user = Auth::user();
 
         // Obtén todos los pagos del cliente con sus planes asociados
         $clientPayments = ClientPayment::with('plan', 'payment')->where('user_id', $user->id)->get();
+
+        $notificaciones= Notification::where('user_id', $user->id)->get();
 
         // Agrupa los pagos por plan_id
         $groupedPayments = $clientPayments->groupBy('plan_id');
@@ -81,19 +119,22 @@ class HomeController extends Controller
         // Pasar los pagos agrupados y los cálculos a la vista
         return view('home', compact('groupedPayments', 'totalPayment', 'totalComisionEmpresa', 'totalSobra', 'fondo'));
     }
-
-
     public function start()
     {
         return view('start');
     }
-
     public function welcome()
     {
         $dt = Carbon::Now();
         return view('welcome');
     }
+    public function getUserVerificador(){
+        return view('home');
+    }
 
+    public function getUserBanco(){
+        return view('home');
+    }
     public function sendmail(Request $request)
     {
 
@@ -110,5 +151,162 @@ class HomeController extends Controller
         ], 200);
 
     }
+    public function getUserReferidos(){
+       $user = Auth::user();
+       $uniqueCode = $user->unique_code;
+       if (!$uniqueCode) {
+           // Generar un unique_code si el usuario no tiene uno
+           $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
+           $user->unique_code = $uniqueCode;
+           $user->save();
+       }
+	    $inviteLink=route('register',['refered_code'=>$uniqueCode]);
+
+        $dataInvitados=User::where('refered_code',$uniqueCode)->count();
+        // si el cliente se registra un pago se va a SuscriptorDataModel ahi se ven todas las transacciones mas su total de data
+        $totalPlanesVendidos=SubscriptorDataModel::where('refered_code',$uniqueCode)->count();
+    
+        $montoGenerado=SubscriptorDataModel::where('refered_code',$uniqueCode)->sum('membership_collected');
+        
+        // conseguir el SubscriptorDataModel para generar el chart de barras  a cada array agregar 0 de inicio pues el grafico se incializa en 0 
+        // el primer grafico de barras nos muestra cuanto genero con membership_collected
+        //el segundo barras se hace con cuantas personas trae con su codigo y 
+            // Preparar datos para los gráficos de barras (ejemplo)
+        $chartData = SubscriptorDataModel::selectRaw('DATE(created_at) as date, SUM(membership_collected) as total_collected')
+        ->where('refered_code', $uniqueCode)
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+    
+        $totalInvitados = User::all()->count();
+
+        $porcentajeInvitados = $totalInvitados>0 ? ($dataInvitados/$totalInvitados) *100 : 0 ;
+
+        $chartLabels = $chartData->pluck('date')->prepend('0')->toArray(); // Agregar '0' para iniciar en 0
+        $chartValues = $chartData->pluck('total_collected')->prepend(0)->toArray(); // Agregar 0 para iniciar en 0
+
+        return view('home', compact('inviteLink' ,'totalPlanesVendidos' ,'dataInvitados','montoGenerado','chartValues','porcentajeInvitados','chartLabels'));
+
+
+    }
+
+
+
+    public function getUserCliente()
+    {
+        $user = Auth::user();
+    // Obtener el primer día del mes actual
+        $primerDiaMesActual = Carbon::now()->startOfMonth()->toDateString();
+    
+        // Obtener el último día del mes actual
+        $ultimoDiaMesActual = Carbon::now()->endOfMonth()->toDateString();
+    
+        // Filtrar FondoClientes por el mes actual
+        $fondoClientes = FondoClientes::where('user_id', $user->id)
+                                       ->whereDate('created_at', '>=', $primerDiaMesActual)
+                                       ->whereDate('created_at', '<=', $ultimoDiaMesActual)
+                                       ->get();
+        $montoInvertidoTotal=$fondoClientes->sum('monto_invertido');
+
+        $fondoids=FondoClientes::where('user_id',$user->id)->pluck('id');
+        // dd($fondoClientes);
+        // Filtrar Fondo por el mes actual
+        $ultimoFondo = Fondo::latest()->first();
+    
+
+        // ********************************TIMER************************************************
+        $currentDate=new DateTime();
+        $targetDate=new DateTime('29-'.$currentDate->format('m').'-'.$currentDate->format('Y'));
+        if($currentDate>$targetDate){
+            $targetDate->modify('+1month');
+        }
+        $interval=$currentDate->diff($targetDate);
+
+        // *********************************************************************************
+
+        // $fondoClientes = FondoClientes::selectRaw('DATE(created_at)as date,')where('user_id', $user->id)->pluck('id');
+        // $ultimoFondo= Fondo::selectRaw('DATE(created_at) as date, ')->where();
+        // $montoInvertidoTotal = FondoClientes::whereIn('id', $fondoClientes)->sum('monto_invertido');
+        if($montoInvertidoTotal){
+            $totalFondo=$ultimoFondo->total;
+            // $montoInvertido = FondoHistoriaClientes::where('plan_id_fondo',$ultimoFondo->id)->where('fondo_cliente_id',$user->id)->sum('total_invertido');
+            $porcentajeInvertido = $totalFondo > 0 ? ($montoInvertidoTotal/$totalFondo) *100 : 0 ;
+        }else{
+            $totalFondo=0;
+            $montoInvertidoTotal=0;
+            $porcentajeInvertido=0 ;
+        }
+        
+        // dd($porcentajeInvertido);
+
+        // *******************************************************************************
+
+        $currentMonth = date('n'); // Obtener el mes actual (por ejemplo, junio sería 6)
+
+        // $fondoTotal = Fondo::where('month', $currentMonth)->value('total');
+        
+        $historiaClientes = FondoHistoriaClientes::whereIn('fondo_cliente_id', $fondoids)->get();
+
+        // data client
+        $fondoClientesTotal = FondoClientes::where('user_id', $user->id)->selectRaw('SUM(monto_invertido + ganancia) as total')->first();
+
+        $totalInversionYBeneficio = $fondoClientesTotal->total ?? 0;
+
+            // Suma del monto invertido de todos los planes que tiene el usuario
+        $totalInversionPlanes = FondoClientes::where('user_id', $user->id)->sum('monto_invertido');
+
+        // $totalInversionPlanes = $totalInversionPlanes ?? 0;
+
+
+
+
+        //porcentaje del fondo de este mes corregir 
+        // $ultimoFondo = FondoClientes::where('user_id',$user->id)->latest()->first();
+
+        // Preparar los datos para el gráfico de dona en ApexCharts
+        
+    
+        $planData = [];
+        $mapPlan = [
+            1 => 'bronce',
+            2 => 'plata',
+            3 => 'oro',
+            4 => 'platino',
+            5 => 'diamante',
+            6 => 'vip'
+        ];
+
+        // dd($plans);
+        foreach ($historiaClientes as $historia) {
+            $planId = $historia->planId;
+            $planName = $mapPlan[$planId];
+            $month = $historia->month;
+            $total_invertido = $historia->ganancia;
+            $inversion_inicial = $historia->total_invertido;
+            if (!isset($planData[$planName])) {
+                $planData[$planName] = [
+                    'months' => [],
+                    'data' => [],
+                    'inversion_inicial'=>$inversion_inicial
+                ];
+            }
+    
+            $planData[$planName]['months'][] = $month;
+            $planData[$planName]['data'][] = $total_invertido;
+            $planData[$planName]['inversion_inicial'] = $inversion_inicial; 
+
+        }
+        // dd($interval);
+
+        $plans = Plan::all();
+        return view('home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans'));
+    }
+
+
+
+    // Obtener el fondo total para el mes actual
+
+    // Obtener las inversiones del cliente para el mes actual
 
 }
+

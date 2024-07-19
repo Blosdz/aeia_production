@@ -49,20 +49,24 @@ class BankViewsController extends Controller
     public function showUsers()
     {
         $users = User::where('rol', 3)->get();
+
         $totalPaymentsByUser = [];
-        $totalDocuments = [];
-
-        // Calcular la suma de pagos por usuario y buscar documentos por el ID del usuario
         foreach ($users as $user) {
-	    $totalDocuments[$user->name] = Document::where('user_name', $user->id)->get();
+            $get_payments = Payment::where('user_id', $user->id)->sum('total');
+            $totalPaymentsByUser[$user->id]['total_payment'] = $get_payments;
+            $totalPaymentsByUser[$user->id]['user'] = $user->toArray();
 
-
-            $totalPaymentsByUser[$user->id] = Payment::where('user_id', $user->id)->sum('total');
+            $users_documents = Document::where('id', $user->id)->get();
+            if ($users_documents->isNotEmpty()) {
+                $totalPaymentsByUser[$user->id]['documentsFilePath'] = $users_documents->pluck('file_path')->toArray();
+            } else {
+                $totalPaymentsByUser[$user->id]['documentsFilePath'] = [];
+            }
         }
 
-        return view('bankUsers', compact('users', 'totalPaymentsByUser', 'totalDocuments'));
+        // dd($totalPaymentsByUser);
+        return view('bankUsers', compact('users', 'totalPaymentsByUser'));
     }
-// BankViewsController.php
 
 public function view($id)
 {
@@ -74,8 +78,6 @@ public function view($id)
 
     return view('viewproduct', compact('document'));
 }
-
-
 
 }
 

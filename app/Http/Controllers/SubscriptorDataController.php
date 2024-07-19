@@ -21,7 +21,8 @@ class SubscriptorDataController extends Controller
                             ->get();
 
         // Retornar la vista con los datos
-        return view('subscriptor_data.index', compact('subscriptorData'));
+        return view('subscriptor_data_new.index', compact('subscriptorData'));
+
     }
 
 }

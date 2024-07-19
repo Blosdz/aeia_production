@@ -109,9 +109,9 @@ class Profile extends Model
         'business_file',
         'power_file',
         'taxes_file',
-	'bank_name',
-	'card_number',
-	'cci_card'
+	    'bank_name',
+	    'card_number',
+	    'cci_card'
     ];
 
     /**
@@ -127,10 +127,11 @@ class Profile extends Model
         'type_document' => 'string',
         'birthdate' => 'string',
         'nacionality' => 'string',
-	'city' => 'string',
-	'bank_name'=>'string',
-	'card_number'=>'string',
-	'cci_card'=>'string'
+        'city' => 'string',
+        'bank_name'=>'string',
+        'phone'=>'string',
+        'card_number'=>'string',
+        'cci_card'=>'string'
     ];
 
     /**

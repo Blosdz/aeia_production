@@ -34,7 +34,8 @@ class Notification extends Model
     public $fillable = [
         'title',
         'body',
-        'user_id'
+        'user_id',
+        'expires_at'
     ];
 
     /**

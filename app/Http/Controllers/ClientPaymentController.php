@@ -9,6 +9,7 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
+use DB;
 
 class ClientPaymentController extends AppBaseController
 {
@@ -31,7 +32,7 @@ class ClientPaymentController extends AppBaseController
     {
         $clientPayments = $this->clientPaymentRepository->all();
 
-        return view('client_payments.index')
+        return view('client_payments_new.index')
             ->with('clientPayments', $clientPayments);
     }
 
@@ -42,7 +43,7 @@ class ClientPaymentController extends AppBaseController
      */
     public function create()
     {
-        return view('client_payments.create');
+        return view('client_payments_new.create');
     }
 
     /**
@@ -80,7 +81,7 @@ class ClientPaymentController extends AppBaseController
             return redirect(route('clientPayments.index'));
         }
 
-        return view('client_payments.show')->with('clientPayment', $clientPayment);
+        return view('client_payments_new.show')->with('clientPayment', $clientPayment);
     }
 
     /**
@@ -100,7 +101,7 @@ class ClientPaymentController extends AppBaseController
             return redirect(route('clientPayments.index'));
         }
 
-        return view('client_payments.edit')->with('clientPayment', $clientPayment);
+        return view('client_payments_new.edit')->with('clientPayment', $clientPayment);
     }
 
     /**

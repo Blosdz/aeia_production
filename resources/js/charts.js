@@ -1,244 +1,457 @@
 import ApexCharts from 'apexcharts';
-document.addEventListener('DOMContentLoaded', function() {
-    const options = {
-        chart: {
-            type: 'line',
-            height:300,
-        },
-        series: [{
-            name: 'Example Series',
-            data: [10, 20, 30, 40, 50]
-        }],
-        xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May']
-        }
-    };
 
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
+document.addEventListener("DOMContentLoaded", function() {
+    console.log(planData); // Verificar los datos en charts.js
+    console.log("thisdonadata".donaData);
+
+    var seriesData = [];
+    var months = [];
+
+    Object.keys(planData).forEach(function(plan) {
+        var planInfo = planData[plan];
+        seriesData.push({
+            name: plan,
+            type: 'area',
+            data: planInfo.data
+        });
+
+        if (months.length === 0) {
+            months = planInfo.months;
+        }
+    });
+
+    function getChartOptions(theme) {
+        return {
+            series: seriesData,
+            chart: {
+                height: 400,
+                width: '100%',
+                type: 'area',
+                foreColor: theme === 'dark' ? '#fff' : '#000'
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            fill: {
+                type: 'solid',
+                opacity: 0.3
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                tickPlacement:'between',
+                categories: months,
+                labels: {
+                    style: {
+                        colors: theme === 'dark' ? '#fff' : '#000'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Ganancia',
+                },
+                labels: {
+                    formatter: function (value) {
+                        return value.toFixed(2); // Formato con dos decimales para las etiquetas del eje Y
+                    },
+                    style: {
+                        colors: theme === 'dark' ? '#fff' : '#000'
+                    }
+                }
+            },
+        };
+    }
+
+    var currentTheme = localStorage.getItem("theme") || "light";
+    var chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(currentTheme));
     chart.render();
 
-    var options_radial = {
-        series: [porcentajeReferidosPorMes],
+    var options_dona = {
+        series: donaSeries,
         chart: {
-            type: 'radialBar',
-            offsetY: -20,
-            sparkline: {
-              enabled: true
+            width: 380,
+            type: 'donut',
+            foreColor: currentTheme === 'dark' ? '#fff' : '#000'
+        },
+        labels: ['Inversión del Cliente', 'Resto del Fondo'],
+        dataLabels: {
+            enabled: false
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    show: false
+                }
+            }
+        }],
+        legend: {
+            position: 'right',
+            offsetY: 0,
+            height: 230,
+            labels: {
+                colors: currentTheme === 'dark' ? '#fff' : '#000'
             }
         },
         plotOptions: {
-          radialBar: {
-            startAngle: -90,
-            endAngle: 90,
-            track: {
-              background: "#e7e7e7",
-              strokeWidth: '97%',
-              margin: 5, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: 2,
-                left: 0,
-                color: '#999',
-                opacity: 1,
-                blur: 2
-              }
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        name: {
+                            fontSize: '44px',
+                            color: currentTheme === 'dark' ? '#fff' : '#000'
+                        },
+                        value: {
+                            fontSize: '44px',
+                            color: currentTheme === 'dark' ? '#fff' : '#000',
+                            formatter: function (val) {
+                                return val.toFixed(2) + "%";
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                            color: currentTheme === 'dark' ? '#fff' : '#000',
+                            formatter: function (w) {
+                                // Mostrar 100% como el total
+                                return "100%";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+    var chart_dona = new ApexCharts(document.querySelector("#chart_dona"), options_dona);
+    chart_dona.render();
+
+    Object.keys(planData).forEach(function(plan) {
+        var planInfo = planData[plan];
+
+        var planOptions = {
+            series: [{
+                name: plan,
+                type: 'area',
+                data: planInfo.data
+            }],
+            chart: {
+                height: 400,
+                width: '100%',
+                type: 'area',
+                stacked: false,
+                toolbar: {
+                    show: false
+                },
+                foreColor: currentTheme === 'dark' ? '#fff' : '#000'
             },
             dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                offsetY: -2,
-                fontSize: '22px'
-              }
-            }
-          }
-        },
-        grid: {
-          padding: {
-            top: -10
-          }
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shade: 'light',
-            shadeIntensity: 0.4,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 53, 91]
-          },
-        },
-        labels: ['Average Results'],
+                enabled: false
+            },
+            stroke: {
+                width: [1],
+                curve: 'smooth'
+            },
+            fill: {
+                type: 'solid',
+                opacity: 0.3
+            },
+            tooltip: {
+                shared: true,
+                intersect: false,
+                y: {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(2) + " units"; // Formato con dos decimales
+                        }
+                        return y;
+                    }
+                }
+            },
+            xaxis: {
+                tickPlacement: 'between',
+                categories: planInfo.months,
+                labels: {
+                    style: {
+                        colors: currentTheme === 'dark' ? '#fff' : '#000'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Ganancia',
+                },
+                labels: {
+                    formatter: function (value) {
+                        return value.toFixed(2); // Formato con dos decimales para las etiquetas del eje Y
+                    },
+                    style: {
+                        colors: currentTheme === 'dark' ? '#fff' : '#000'
+                    }
+                }
+            },
+
         };
+        var planChart = new ApexCharts(document.querySelector("#chart_" + plan), planOptions);
+        planChart.render();
+    });
 
-    var chart_radial= new ApexCharts(document.querySelector('#chart_radial'),options_radial);
-    chart_radial.render();
-    var options_circle = {
-        series: [77],
+    window.addEventListener('themeChanged', function() {
+        var newTheme = localStorage.getItem("theme") || "light";
+        chart.updateOptions(getChartOptions(newTheme));
+        chart_dona.updateOptions({
+            chart: {
+                foreColor: newTheme === 'dark' ? '#fff' : '#000'
+            },
+            legend: {
+                labels: {
+                    colors: newTheme === 'dark' ? '#fff' : '#000'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            name: {
+                                color: newTheme === 'dark' ? '#fff' : '#000'
+                            },
+                            value: {
+                                color: newTheme === 'dark' ? '#fff' : '#000'
+                            },
+                            total: {
+                                color: newTheme === 'dark' ? '#fff' : '#000'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        Object.keys(planData).forEach(function(plan) {
+            var planInfo = planData[plan];
+            var planOptions = {
+                chart: {
+                    foreColor: newTheme === 'dark' ? '#fff' : '#000'
+                },
+                xaxis: {
+                    labels: {
+                        style: {
+                            colors: newTheme === 'dark' ? '#fff' : '#000'
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            colors: newTheme === 'dark' ? '#fff' : '#000'
+                        }
+                    }
+                }
+            };
+            var planChart = new ApexCharts(document.querySelector("#chart_" + plan), planOptions);
+            planChart.updateOptions(planOptions);
+        });
+    });
+
+
+    
+    // Object.keys(planData).forEach(function(plan) {
+    //     var planInfo = planData[plan];
+
+    //     var planOptions = {
+    //         series: [{
+    //             name: plan,
+    //             type: 'area',
+    //             data: planInfo.data
+    //         }],
+    //         chart: {
+    //             height: 400,
+    //             width: '100%',
+    //             type: 'area',
+    //             stacked: false,
+    //             toolbar: {
+    //                 show: false
+    //             }
+    //         },
+    //         dataLabels:{
+    //             enabled:false
+    //         },
+    //         stroke: {
+    //             width: [1],
+    //             curve: 'smooth'
+    //         },
+    //         fill: {
+    //             type: 'solid',
+    //             opacity: 0.3
+    //         },
+    //         tooltip: {
+    //             shared: true,
+    //             intersect: false,
+    //             y: {
+    //                 formatter: function (y) {
+    //                     if (typeof y !== "undefined") {
+    //                         return y.toFixed(2) + " units"; // Formato con dos decimales
+    //                     }
+    //                     return y;
+    //                 }
+    //             }
+    //         },
+    //         xaxis: {
+    //             categories: planInfo.months,
+
+    //         },
+    //         yaxis: {
+    //             title: {
+    //                 text: 'Ganancia',
+    //            },
+    //             labels: {
+    //                 formatter: function (value) {
+    //                     return value.toFixed(2); // Formato con dos decimales para las etiquetas del eje Y
+    //                 },
+    //             }
+    //         }
+
+    //     };
+    //     var planChart = new ApexCharts(document.querySelector("#chart_" + plan), planOptions);
+    //     planChart.render();
+    // });
+
+
+    var donaData = [porcentajeInvitados, 100 - porcentajeInvitados];
+
+    var porcentaje_subs = {
+        series: donaData,
         chart: {
-        height: 350,
-        type: 'radialBar',
-      },
-      plotOptions: {
-        radialBar: {
-          hollow: {
-            size: '80%',
-          }
+            width: 380,
+            type: 'donut',
         },
-      },
-      labels: ['Cricket'],
-      };
-    var chart_circle= new ApexCharts(document.querySelector('#chart_circle'),options_circle);
-    chart_circle.render();
-
-
-    var seriesData = chartData.map(item => item.total);
-    var categoriesData = chartData.map(item => item.date); 
-    var options_spline = {
-      series: [{
-      name: 'series1',
-      data: seriesData
-    }],
-      chart: {
-      height: 350,
-      type: 'area'
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: categoriesData
-    },
-    tooltip: {
-      x: {
-        format: 'dd/MM/yy HH:mm'
-      },
-    },
-    };
-
-    var chart_spline = new ApexCharts(document.querySelector("#chart_spline"), options_spline);
-    chart_spline.render();
-
-          
-    var options_column = {
-      series: [{
-      name: 'Inflation',
-      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
-    }],
-      chart: {
-      height: 350,
-      type: 'bar',
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 10,
+        labels: ['Porcentaje Invitados', 'Total Users'],
         dataLabels: {
-          position: 'top', // top, center, bottom
+            enabled: false
         },
-      }
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function (val) {
-        return val + "%";
-      },
-      offsetY: -20,
-      style: {
-        fontSize: '12px',
-        colors: ["#304758"]
-      }
-    },
-    
-    xaxis: {
-      categories: ["Enero", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      position: 'top',
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false
-      },
-      crosshairs: {
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    show: false
+                }
+            }
+        }],
+        legend: {
+            position: 'right',
+            offsetY: 0,
+            height: 230,
+
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+
+                        value: {
+                            fontSize: '44px',
+                            formatter: function (val) {
+                                return val.toFixed(2) + "%";
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total',
+                        }
+                    }
+                }
+            }
+        }   
+    };
+
+    var chart_porcentaje_Subs = new ApexCharts(document.querySelector("#porcentaje_subs"), porcentaje_subs);
+    chart_porcentaje_Subs.render();
+
+    var planOptions = {
+        series: [{
+            name: 'Monto Generado',
+            type: 'line',
+            data: chartValues
+        }],
+        chart: {
+            height: 400,
+            width: '100%',
+            type: 'line',
+            stacked: false,
+            toolbar: {
+                show: false
+            }
+        },
+        colors: ['#1C305C'], // Color de la línea
+        stroke: {
+            width: [3],
+            curve: 'smooth'
+        },
+        markers: {
+            size: 6,
+            colors: ['#0000000'], // Color de los marcadores
+            strokeColors: ['#333'],
+            strokeWidth: 2
+        },
         fill: {
-          type: 'gradient',
-          gradient: {
-            colorFrom: '#D8E3F0',
-            colorTo: '#BED1E6',
-            stops: [0, 100],
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
-          }
+            type: 'solid',
+            colors: ['#1C305C'], // Color del área bajo la línea
+            opacity: 0.3
+        },
+        tooltip: {
+            theme: 'dark',
+            shared: true,
+            intersect: false,
+            y: {
+                formatter: function (y) {
+                    if (typeof y !== "undefined") {
+                        return y.toFixed(2) + " units"; // Formato con dos decimales
+                    }
+                    return y;
+                }
+            }
+        },
+        xaxis: {
+            categories: chartLabels,
+            labels: {
+                style: {
+                    colors: '#000000' // Color de las etiquetas del eje X
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Ganancia',
+                style: {
+                    color: '#000000'
+                }
+            },
+            labels: {
+                formatter: function (value) {
+                    return value.toFixed(2); // Formato con dos decimales para las etiquetas del eje Y
+                },
+                style: {
+                    colors: '#000000' // Color de las etiquetas del eje Y
+                }
+            }
+        },
+        legend: {
+            labels: {
+                colors: '#000000' // Color de las etiquetas de la leyenda
+            }
         }
-      },
-      tooltip: {
-        enabled: true,
-      }
-    },
-    yaxis: {
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-        formatter: function (val) {
-          return val + "%";
-        }
-      }
-    
-    },
-    title: {
-      text: 'Monthly Inflation in Argentina, 2002',
-      floating: true,
-      offsetY: 330,
-      align: 'center',
-      style: {
-        color: '#444'
-      }
-    }
     };
 
-    var chart_column = new ApexCharts(document.querySelector("#chart_column"), options_column);
-    chart_column.render();
-
-    var options_client = {
-      series: [{
-      name: 'series1',
-      data: [31, 40, 28, 51, 42, 109, 100]
-    }, {
-      name: 'series2',
-      data: [11, 32, 45, 32, 34, 52, 41]
-    }],
-      chart: {
-      height: 350,
-      type: 'area'
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-    },
-    tooltip: {
-      x: {
-        format: 'dd/MM/yy HH:mm'
-      },
-    },
-    };
-
-    var chart_client = new ApexCharts(document.querySelector("#chart_client"), options_client);
-    chart_client.render();
+    var planChart = new ApexCharts(document.querySelector("#chart_monto_generado"), planOptions);
+    planChart.render();
 
 });

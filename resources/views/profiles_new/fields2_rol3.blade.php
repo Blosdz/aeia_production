@@ -1,15 +1,12 @@
-<div class="row">
-    <div class="col-2">
-    </div>
-    <div class="col-10">
-                
+{{-- <div class="row"> --}}
+<div class="justify-content-center text-align-center p-5">
         <!-- Dni Field -->
         <div class="form-group col" >
             {!! Form::label('dni', 'Cargar foto de DNI frontal:') !!}
             <div class="row" id="dni_file">
                 <div class="custom-file col-6 ml-2" id="rrr">
                     {!! Form::label('dni', "Select file",array('class' => 'custom-file-label ','for'=>'image','id'=>'file_input_label_dni')) !!}
-                    <input type="file" accept="image/*" class="custom-file-input" name="dni" id="dni" oninput="input_filename(event);" tofill="" onclick="check_progress_bar(event)">
+                    <input type="file" accept="image/*" class="custom-file-input" name="dni" id="dni" oninput="input_filename(event);" tofill="" onclick="check_progress_bar(event)" >
                     <input type="text" class="d-none" id="hide_dni"   value = {{ $profile->dni }}>
                 </div>
 
@@ -102,6 +99,22 @@
             {!! Form::select('country_document',$countries, null, ['class' => 'form-control','autocomplete'=>'off']) !!}
         </div>
 
+        <div class="form-group col-sm-6">
+            {!! Form::label('phone_code', 'Código de país:') !!}
+            {!! Form::select('phone_code', [
+                '+51' => '+51 (Peru)',
+                '+1' => '+1 (USA/Canada)',
+                '+44' => '+44 (UK)',
+                '+52' => '+52 (Mexico)',
+                '+91' => '+91 (India)',
+            ], null, ['class' => 'form-control']) !!}
+        </div>
+
+        <div class="form-group col-sm-6" >
+            {!! Form::label('phone', 'Número de celular:') !!}
+            {!! Form::text('phone', null, ['class' => 'form-control', 'value'=>'-']) !!}
+        </div>
+
         <!-- Sex Field -->
         <div class="form-group col-sm-6">
             {!! Form::label('sex', 'Sexo:') !!}
@@ -124,24 +137,22 @@
             {!! Form::label('country_sel', 'Seleccione país, región y ciudad:') !!}
         </div>
 
-        <div class="form-inline">
+        <div class="form-group">
         <!-- City Field -->
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-6">
                 {!! Form::label('country', 'País:') !!}
                 {!! Form::select('country',$countries, null, ['class' => 'form-control client_country', 'style' => 'width: 180px; ','autocomplete'=>'off']) !!}
             </div>
 
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-6">
                 {!! Form::label('city', 'Región:') !!}
                 {!! Form::text('city', null, ['class' => 'form-control','maxlength' => '20']) !!}
             </div>
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-6">
                 {!! Form::label('state', 'Cuidad:') !!}
                 {!! Form::text('state', null, ['class' => 'form-control','maxlength' => '20']) !!}
             </div>
         </div>
-
-
 
         <div class="form-group col-sm-6">
             {!! Form::label('address', 'Dirección de residencia:') !!}
@@ -216,12 +227,6 @@
 
 
 
-
-
-        <div class="form-group col-sm-6" style="display: none;">
-            {!! Form::label('phone', 'Número de celular:') !!}
-            {!! Form::text('phone', null, ['class' => 'form-control', 'value'=>'-']) !!}
-        </div>
         <div class="form-group col-sm-6" style="display: none;">
             {!! Form::label('job', 'Ocupación o profesión:') !!}
             {!! Form::text('job', null, ['class' => 'form-control', 'value'=>'-']) !!}
@@ -232,7 +237,6 @@
         <div class="form-group col-sm-12">
             {!! Form::submit('Enviar a revision', ['class' => 'btn btn-primary save-client', 'id'=>'btn-send']) !!}
         </div>
-    </div>
 </div>
 <script src="{{ asset('upload_file.js') }}"></script>
 <script>
@@ -255,199 +259,4 @@
         return true;
     }
 
-    /*
-    var cancel_btn;
-    var alert_wrapper;
-    var show_progress_bar; 
-    var input; 
-    var file_input_label; 
-    var list_alert_wrapper = [];
-    var data = '{"alert_wrapper":[]}';
-    var hide_file;
-    var loading_btn;
-    var can_upload_file = "yes";
-
-    $( document ).ready(function() {
-
-        $("#hide_dni").val($("#hide_dni").val().substring($("#hide_dni").val().lastIndexOf('/') + 1)) ;
-        $("#hide_dni_r").val($("#hide_dni_r").val().substring($("#hide_dni_r").val().lastIndexOf('/') + 1)) ;
-        $("#hide_profile_picture").val($("#hide_profile_picture").val().substring($("#hide_profile_picture").val().lastIndexOf('/') + 1)) ;
-
-    });
-
-    $(document).on("click", "#alert_wrapper_dni", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_dni_r", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni_r");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_profile_picture", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_profile_picture");
-        alert_wrapper.innerHTML = ``;
-    });
-
-    
-    function check_progress_bar(e){
-
-        input_w = document.getElementById(e.target.id);
-        input_parentNode_w = document.getElementById(input_w.parentNode.id);
-        input_grandpa_w = document.getElementById(input_parentNode_w.parentNode.id);
-        var alert_wrapper_w = document.getElementById(input_grandpa_w.children[2].id);
-
-        if(can_upload_file == "yes"){
-             //ok you can upload files
-        }else{
-            e.preventDefault();
-            alert_wrapper_w.classList.remove("d-none");
-            show_alert(`hay un archivo en cola`, "primary",alert_wrapper_w);
-        }
-        
-    }
-    function show_alert(message, alert,alert_wrapper) {
-
-        alert_wrapper.innerHTML = `
-        <div id="alert" class="alert-${alert} alert-dismissible fade show" >
-           <div class="row">
-                <div class="col-10 mt-2">
-                    <span >${message}</span>
-                </div>
-                <div class="col-2">
-                     <button  id =${alert_wrapper.id} type="button" class="close" data-dismiss="alert" aria-label="Close" code = ${alert_wrapper.id}>
-                         <span aria-hidden="true">&times;</span>
-                     </button>                
-                </div>
-           </div>
-        </div>
-        `
-    }
-  
-    function upload(alert_wrapper,show_progress_bar) {
-
-        var data = new FormData();
-        var request = new XMLHttpRequest();
-        request.responseType = "json";
-
-        alert_wrapper.innerHTML = "";
-        input.disabled = true;
-        alert_wrapper.classList.remove("d-none");
-        show_progress_bar.classList.remove("d-none");
-
-        var file = input.files[0];
-        //var filename = file.name;
-        //var filesize = file.size;
-        //document.cookie = `filesize=${filesize}`;
-        data.append(input.id, file);
-
-        request.upload.addEventListener("progress", function (e) {
-            var loaded = e.loaded;
-            var total = e.total
-            var percent_complete = (loaded / total) * 100;
-            loading_btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Cargando...
-                            ${Math.floor(percent_complete)}%`;
-        })
-
-        request.addEventListener("load", function (e) {
-
-            if (request.status == 200) {
-
-                hide_file.value = request.response.file_name;
-                show_alert(`${request.response.message}`, "success",alert_wrapper);
-            }
-            else {
-                show_alert(`Error al cargar el archivo`, "danger",alert_wrapper);
-            }
-                reset();
-        });
-
-        request.addEventListener("error", function (e) {
-            reset();
-            show_alert(`Error al cargar el archivo`, "warning",alert_wrapper);
-        });
-
-        request.addEventListener("abort", function (e) {
-            reset();
-            show_alert(`Carga cancelado`, "primary",alert_wrapper);
-        });
-
-        request.open('post', '{{ route('upload_file')}}');
-        request.setRequestHeader('x-csrf-token','{{csrf_token() }}');
-        request.send(data);
-
-        cancel_btn.addEventListener("click", function () {
-            request.abort();
-            reset();
-            show_alert(`Carga cancelado`, "primary",alert_wrapper);
-
-        })
-        
-
-    }
-
-    function input_filename(e) {
-
-        input = document.getElementById(e.target.id);
-        input_parentNode = document.getElementById(input.parentNode.id);
-        input_grandpa = document.getElementById(input_parentNode.parentNode.id);
-
-        file_input_label_s = document.getElementById(input_grandpa.children[0].id);
-        file_input_label = document.getElementById(file_input_label_s.children[0].id);
-        file_input_label.innerText = input.files[0].name;
-
-        hide_file = document.getElementById(file_input_label_s.children[2].id);
-
-
-        show_progress_bar = document.getElementById(input_grandpa.children[1].id);
-        loading_btn = document.getElementById(show_progress_bar.children[0].id);
-
-
-        alert_wrapper = document.getElementById(input_grandpa.children[2].id);
-        cancel_btn = document.getElementById(show_progress_bar.children[1].id)
-
-        can_upload_file = "no"; //a file begins to upload and with which no more processes will be allowed
-
-        upload(alert_wrapper,show_progress_bar);
-    }
-    
-    
-    function reset() {
-        input.value = null;
-        input.disabled = false;
-        show_progress_bar.classList.add("d-none");
-        file_input_label.innerText = "Select file";
-        can_upload_file = "yes";
-    }
-
-
-    $(".save5").click(function() {
-
-        var dni = document.getElementById("dni");
-        var dni_r = document.getElementById("dni_r");
-        var profile_picture = document.getElementById("profile_picture");
-
-        dni.removeAttribute("required");
-        dni_r.removeAttribute("required");
-        profile_picture.removeAttribute("required");
-
-        dni.setAttribute(((document.getElementById("hide_dni").value == "") ? "required" : "tofill" ), "");
-        dni_r.setAttribute(((document.getElementById("hide_dni_r").value == "") ? "required" : "tofill" ), "");
-        profile_picture.setAttribute(((document.getElementById("hide_profile_picture").value == "") ? "required" : "tofill" ), "");
-
-        if(can_upload_file != "yes"){
-
-            input.disable = true;
-            input.setCustomValidity("este campo aún no ha sido completado");
-            window.scrollTo(0, input.offsetTop);
-            input.focus();
-
-            return false;
-        }
-        return true;
-    });
-    */
 </script>

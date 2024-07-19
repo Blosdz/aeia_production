@@ -44,9 +44,9 @@ class Payment extends Model
         'transact_timestamp',
         'qr_url',
         'expiration_date',
-	'voucher_picture',
-	'comments_on_payment',
-	'user_name',
+	    'voucher_picture',
+	    'comments_on_payment',
+	    'user_name',
 
     ];
 
@@ -57,7 +57,7 @@ class Payment extends Model
      */
     protected $casts = [
         'status' => 'string',
-	'voucher_picture'=>'string',
+        'voucher_picture'=>'string',
     ];
 
     public $timestamps=true;

@@ -11,30 +11,56 @@ services:
                   php artisan key:generate &&
                   php artisan serve --host=0.0.0.0 --port=8000"
     volumes:
-      - .:/public
-      - /public/vendor
+      # - /media/velorie/LOSTHDD/codigos_general/aeia/proyects/aeia_production:/app
+      # - /media/velorie/LOSTHDD/codigos_general/aeia/proyects/aeia_production/vendor:/app/vendor
+      - .:/app
+      - ./vendor:/app/vendor
+    # working_dir: /app
+
     ports:
       - 8000:8000
     environment:
       DB_CONNECTION: pgsql
       DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: "5432"
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: root
     depends_on:
       - db
 
   db:
     image: postgres:latest
+    container_name: postgres
     ports:
-      - 5632:5432
+      - "5432:5432"
     environment:
-      POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: laravel
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: password
+
+  mailhog_server:
+    image: mailhog/mailhog
+    container_name: cont_mailhog_server
+    tty: true
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 
 volumes:
-  postgres_data:
+  postgres-data:
+  pgadmin:

@@ -11,7 +11,7 @@ class FondoClientes extends Model
     public $table='fondo_clientes';
     protected $fillable = [
         'month',
-	'plan_id_fondo',
+	    'plan_id_fondo',
         'planId',
         'monto_invertido',
         'Balance',

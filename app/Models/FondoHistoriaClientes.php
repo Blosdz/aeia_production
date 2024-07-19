@@ -13,9 +13,11 @@ class FondoHistoriaClientes extends Model
     protected $fillable = [
         'fondo_cliente_id',
         'month',
+        'plan_id_fondo',
+        'planId',
         'total_invertido',
-	'ganancia',
-	'rentabilidad',
+	    'ganancia',
+	    'rentabilidad',
     ];
 
     public function fondoCliente()

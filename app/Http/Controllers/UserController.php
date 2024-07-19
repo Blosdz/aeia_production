@@ -41,7 +41,7 @@ class UserController extends AppBaseController
         $users = User::whereIn("rol", [2,3,4])->get();
         //$users = $this->userRepository->all();
 
-        return view('users.index')->with('users', $users);
+        return view('users_new.index')->with('users', $users);
     }
 
     /**
@@ -51,7 +51,7 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        return view('users.create');
+        return view('users_new.create');
     }
 
     /**
@@ -89,7 +89,7 @@ class UserController extends AppBaseController
             return redirect(route('users.index'));
         }
 
-        return view('users.show')->with('user', $user);
+        return view('users_new.show')->with('user', $user);
     }
 
     /**
@@ -109,7 +109,7 @@ class UserController extends AppBaseController
             return redirect(route('users.index'));
         }
 
-        return view('users.edit')->with('user', $user);
+        return view('users_new.edit')->with('user', $user);
     }
 
     /**
@@ -185,7 +185,7 @@ class UserController extends AppBaseController
 
         $user = $this->userRepository->find(Auth::user()->id);
 
-        return view('users.invite')->with('user', $user);
+        return view('users_new.invite')->with('user', $user);
     }
 
     public function link(Request $request)
@@ -257,17 +257,16 @@ class UserController extends AppBaseController
         return redirect(route('invite.user'));
     }
     public function generateInviteLink()
-{
-    $user = Auth::user();
-    $uniqueCode = $user->unique_code;
-
-    if (!$uniqueCode) {
-        // Generar un unique_code si el usuario no tiene uno
-        $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
-        $user->unique_code = $uniqueCode;
-        $user->save();
+    {
+       $user = Auth::user();
+       $uniqueCode = $user->unique_code;
+       if (!$uniqueCode) {
+           // Generar un unique_code si el usuario no tiene uno
+           $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
+           $user->unique_code = $uniqueCode;
+           $user->save();
+       }
+	    $inviteLink=route('register',['refered_code'=>$uniqueCode]);
+       return view('users_new.invite', ['inviteLink'=>$inviteLink]);
     }
-	$inviteLink=route('register',['refered_code'=>$uniqueCode]);
-    return view('users.invite', ['inviteLink'=>$inviteLink]);
-}
 }

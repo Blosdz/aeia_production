@@ -1,5 +1,5 @@
-<!-- <div class="table-responsive-sm"> -->
-    <table class="" >
+<div class="table-responsive w-100">
+    <table class="table table-striped" id="payments-table" >
         <thead>
             <tr>
                 <th>Código</th>
@@ -18,11 +18,11 @@
                 <td>{{ $contract->created_at }} </td>
                 <td>
                     <div class='btn-group'>
-                        <a href="{{ route('contracts.pdf', [$contract->id]) }}" class='btn btn-ghost-success' target="_blank">Descargar</a>
+                        <a href="{{ route('contracts.pdf', [$contract->id]) }}" class='btn btn-success' target="_blank">Descargar</a>
                     </div>
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-<!-- </div> -->
+</div>

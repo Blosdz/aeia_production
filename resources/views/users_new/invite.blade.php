@@ -1,9 +1,9 @@
 @extends('layouts_new.app')
 
 @section('content')
-<div class="container">
+{{-- <div class="container"> --}}
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 bg-1">
             <div class="card">
                 <div class="card-header">Invitar a nuevos usuarios</div>
 
@@ -17,7 +17,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     function copyToClipboard(element) {

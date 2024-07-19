@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
           'email'     => 'administrador@yopmail.com',
           'password'  => Hash::make('12345678'),
           'email_verified_at' => Carbon::now(),
-	  'unique_code' =>'aeia',
+	        'unique_code' =>'aeia',
           'validated' => 1,
           'rol'      => 1,
         ]);

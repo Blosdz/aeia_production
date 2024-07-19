@@ -24,7 +24,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\BinanceMoneySplitterTrait;
 use App\Traits\BinanceDoughSenderTrait;
-use App\Models\SuscriptorDataModel;
 use App\Traits\BinanceBalanceCheckerTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -34,6 +33,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
 use Flash;
+use DB;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Response;
@@ -63,7 +63,7 @@ class PaymentController extends AppBaseController
     {
         $payments = $this->paymentRepository->all();
 
-        return view('payments.index')
+        return view('payments_new.index')
             ->with('payments', $payments);
     }
 
@@ -74,7 +74,7 @@ class PaymentController extends AppBaseController
      */
     public function create()
     {
-        return view('payments.create');
+        return view('payments_new.create');
     }
 
     /**
@@ -87,7 +87,7 @@ class PaymentController extends AppBaseController
     public function store(CreatePaymentRequest $request)
     {
         $input = $request->all();
-	$input["date_transaction"] = Carbon::now()->format('Y-m-d H:i:s'); // Formatear la fecha con horas, minutos y segundos
+	    $input["date_transaction"] = Carbon::now()->format('Y-m-d H:i:s'); // Formatear la fecha con horas, minutos y segundos
 
         $payment = $this->paymentRepository->create($input);
 
@@ -113,7 +113,7 @@ class PaymentController extends AppBaseController
             return redirect(route('payments.index'));
         }
 
-        return view('payments.show')->with('payment', $payment);
+        return view('payments_new.show')->with('payment', $payment);
     }
 
     /**
@@ -133,7 +133,7 @@ class PaymentController extends AppBaseController
             return redirect(route('payments.index'));
         }
 
-        return view('payments.edit')->with('payment', $payment);
+        return view('payments_new.edit')->with('payment', $payment);
     }
 
     /**
@@ -228,14 +228,9 @@ class PaymentController extends AppBaseController
             $current = true;
             $message = "Tiene un estado de pago en PENDIENTE";
             Flash::error($message, 'message');
-        }
-;
-        return view('payments.index2')
+        };
+        return view('payments_new.index2')
         ->with(compact('payments', 'current', 'total'));
-
-
-
-
     }
 
     public function generateQR($data)
@@ -305,7 +300,7 @@ class PaymentController extends AppBaseController
                   });
         $plans = Plan::pluck('name','id')->toArray();
 
-        return view('payments.clients')
+        return view('payments_new.index')
             ->with(compact('payments', 'plans'));
     }
 
@@ -319,19 +314,19 @@ class PaymentController extends AppBaseController
             return redirect(route('payments.index'));
         }
 
-        return view('payments.client_detail')->with('payment', $payment);
+        return view('payments_new.client_detail')->with('payment', $payment);
     }
 
     public function select_plan()
     {
         $plans = Plan::get();
-        return view('payments.select_plan')->with(compact('plans'));
+        return view('payments_new.select_plan')->with(compact('plans'));
     }
 
     public function plan_detail($id)
     {
         $plan = Plan::find($id);
-        return view('payments.detail')->with(compact('plan'));
+        return view('payments_new.detail')->with(compact('plan'));
     }
 
     public function client_pay(ClientPaymentRequest $request)
@@ -359,15 +354,14 @@ class PaymentController extends AppBaseController
         $currentMonth = (int)$currentDate->format('m');
         $month = $months[($dayOfMonth >= 28 ? ($currentMonth + 1) % 12 : $currentMonth)];
         $input["month"] = $month;
-
-	$input["user_name"]=Auth::user()->name;
+	    $input["user_name"]=Auth::user()->name;
         $input["total"] = $input["amount"];
         //$input["date_transaction"] = Carbon::parse()->format('Y-m-d');
         $input["name"] = $input["month"];
         $input["details"] = $input["month"];
-	$filePath='vouchers/';
-	if ($request->hasFile('voucher_picture')) {
-		if (!file_exists(storage_path($filePath))) {
+	    $filePath='vouchers/';
+	    if ($request->hasFile('voucher_picture')) {
+		    if (!file_exists(storage_path($filePath))) {
                 	Storage::makeDirectory('public/'.$filePath, 0777, true);
             	}
         //     $size = $request->file('voucher_picture')->getSize();
@@ -422,7 +416,7 @@ class PaymentController extends AppBaseController
             'payment_id' => $payment->id
         ];
 
-	$contract = Contract::create($contract);
+	    $contract = Contract::create($contract);
 
         $referred_user = Auth::user()->refered_code;
 
@@ -431,8 +425,8 @@ class PaymentController extends AppBaseController
             'payment_id' => $payment->id,
             'referred_code' => $referred_user ,
             'plan_id' => $input['plan_id'],
-	    'code' => uniqid(),
-	    'total'=>$input['total'],
+	        'code' => uniqid(),
+	        'total'=>$input['total'],
         ];
 
 
@@ -445,16 +439,9 @@ class PaymentController extends AppBaseController
 
         ClientPayment::create($client_payment);
 
-//        $expireTime = Carbon::createFromTimestamp($qr->data->expireTime / 1000)->format("Y-m-d H:i:s");
 
 
-        $responseData = [
-           // 'qrcodeLink' => $qr->data->qrcodeLink,
-            //'expiration' => $expireTime,
-        ];
-//        return redirect()->route('stats')->with('succes');
-
-	return redirect()->back()->with('success'); 
+	    return redirect()->back()->with('success'); 
     }
 
 
@@ -502,12 +489,7 @@ class PaymentController extends AppBaseController
         $contract = Contract::create($contract);
         // Flash::success('Deposito recibido correctamente.');
 
-        $responseData = [
-            'qrcodeLink' => $qr->data->qrcodeLink,
-            'expiration' => $expireTime,
-        ];
-
-	return redirect()->back()->with('success','pago realizado con exito');
+	    return redirect()->back()->with('success','pago realizado con exito');
     }
 
     public function webhook(Request $request){
@@ -544,54 +526,93 @@ class PaymentController extends AppBaseController
             return $e->getMessage();
         }
     }
+
     public function updateStatus($id)
-	{
-	    $payment = Payment::find($id);
-
-	    if (!$payment) {
-	        return redirect()->back()->with('error', 'Pago no encontrado');
-	    }
-
-
-	    // Actualiza el estado del pago a "PAGADO"
-	    $payment->status = 'PAGADO';
-	    $payment->update();
-        $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
-
-        if ($clientPayment) {
-            // Definir el array de mapeo
-            $membershipCosts = [
-                1 => 14,
-                2 => 35,
-                3 => 70,
-                4 => 84,
-                5 => 140,
-                6 => 300
-            ];
-
-            // Obtener el costo de la membresía basado en plan_id
-            $membershipCollected = $membershipCosts[$clientPayment->plan_id] ?? 0;
-
-            // Buscar el usuario que refirió
-            $referredUser = User::where('unique_code', $clientPayment->referred_code)->first();
-
-            // Crear una nueva entrada en membresias_data
-            $data_created=SubscriptorDataModel::create([
-
-                'name' => $payment->user_name ?? 'Unknown',
-                'refered_code' => $clientPayment->referred_code,
-                'plan_id' => $clientPayment->plan_id,
-                'membership_collected' => $membershipCollected
-            ]);
-	    //dd($data_created,$clientPayment);
-
-
+    {
+        $payment = Payment::find($id);
+    
+        if (!$payment) {
+            return response()->json(['error' => 'Pago no encontrado'], 404);
         }
+    
+        // Actualiza el estado del pago a "PAGADO"
+        $payment->status = 'PAGADO';
+    
+        // Asegurarse de que la actualización del pago esté en una transacción
+        $dataSuscriptor = [
+            1 => 4,
+            2 => 10,
+            3 => 20,
+            4 => 24,
+            5 => 40
+        ];
+        $dataGerente = [
+            1 => 18,
+            2 => 45,
+            3 => 90,
+            4 => 108,
+            5 => 180
+        ];
+        $dataAdmin = [
+            1 => 2,
+            2 => 5,
+            3 => 10,
+            4 => 12,
+            5 => 20
+        ]; 
+    
+        $result = DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin) {
+            $payment->update();
+    
+            // Buscar el registro de ClientPayment asociado al pago
+            $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
+            
+            // Buscar el usuario asociado al pago
+            $user = User::find($payment->user_id);
+    
+            $suscriptorData = [];
+    
+            if ($user) {
+                $referredCode = $user->refered_code;
+                
+                if ($referredCode == "aeia") {
+                    $suscriptorData[] = SubscriptorDataModel::create([
+                        'name' => $user->name,
+                        'refered_code' => 'aeia',
+                        'plan_id' => $clientPayment->plan_id,
+                        'membership_collected' => $dataAdmin[$clientPayment->plan_id]
+                    ]);
+                } else {
+                    $suscriptor = User::where('unique_code', $user->refered_code)->first();
+                    $suscriptorData[] =SubscriptorDataModel::create([
+                        'name' => $user->name,
+                        'refered_code' => $suscriptor->unique_code,
+                        'plan_id' => $clientPayment->plan_id,
+                        'membership_collected' => $dataSuscriptor[$clientPayment->plan_id]
+                    ]);
+                    
+                    $suscriptorGerente = User::where('unique_code', $suscriptor->refered_code)->first();
+                    $suscriptorData[] =  SubscriptorDataModel::create([
+                        'name' => $suscriptor->name,
+                        'refered_code' => $suscriptorGerente->unique_code,
+                        'plan_id' => $clientPayment->plan_id,
+                        'membership_collected' => $dataGerente[$clientPayment->plan_id]
+                    ]);
+                    
+                    $suscriptorData[] = SubscriptorDataModel::create([
+                        'name' => 'aeia',
+                        'refered_code' => 'aeia',
+                        'plan_id' => $clientPayment->plan_id,
+                        'membership_collected' => $dataAdmin[$clientPayment->plan_id]
+                    ]);
+                }
+            }
+        });
 
-	    
-	    return redirect()->back()->with('success', 'Pago Actualizado exitosamente');
-	}
-
+	    return redirect()->back()->with('success','pago realizado con exito');
+    
+    }
+    
     public function updateComments(Request $request, $id){
 	    $payment=Payment::findOrFail($id);
 	    $request->validate(['comments_on_payment'=>'nullable|string|max:255',]);
@@ -607,4 +628,5 @@ class PaymentController extends AppBaseController
 	    $pdf=Pdf::loadView('pdf',compact('profile'));
 	    return $pdf->stream();
     }
+
 }

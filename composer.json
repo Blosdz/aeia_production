@@ -9,8 +9,9 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "doctrine/dbal": "^3.6",
         "elibyy/tcpdf-laravel": "^9.0",
+        "filament/filament": "^1.13",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "^7.8",
         "infyomlabs/coreui-templates": "^1.0",
         "infyomlabs/laravel-generator": "^3.0",
         "laravel/framework": "^8.65",
@@ -19,7 +20,9 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.2",
-        "monarobase/country-list": "^3.3"
+        "monarobase/country-list": "^3.3",
+        "twbs/bootstrap-icons": "*",
+        "twilio/sdk": "^8.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.9",

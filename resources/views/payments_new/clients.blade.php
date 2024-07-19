@@ -5,21 +5,24 @@
 
 @extends('layouts_new.app')
 
-<style>
+{{-- <style>
     .center-img {
         display: block;
         margin-left: auto;
         margin-right: auto;
         width: 50%;
     }
-</style>
+</style> --}}
 
 @section('content')
 
-    <div class="container_dashboard_background" id="contracts_table">
-        <div class="dashboard-new-title" >Depósitos</div>
-            <div class="row">
-                <div class="payments-row">
+    {{-- <div class="container_dashboard_background" id="contracts_table"> --}}
+
+    <strong" >Depósitos</strong>
+            {{-- <div class="row"> --}}
+                {{-- <div class="payments-row"> --}}
+
+    <div class="container bg-1 rounded w-100 h-100">
                     @php
                         if($user->validated) {
                     @endphp
@@ -57,9 +60,9 @@
                     @php
                         }
                     @endphp
-                </div>
-            </div>
-        </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
+        {{-- </div> --}}
     </div>
 @endsection
 

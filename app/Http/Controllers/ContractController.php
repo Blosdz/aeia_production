@@ -33,7 +33,7 @@ class ContractController extends AppBaseController
     {
         //$contracts = $this->contractRepository->all();
         $contracts = Contract::where('user_id',auth()->user()->id)->get();
-        return view('contracts.index')
+        return view('contracts_new.index')
             ->with('contracts', $contracts);
     }
 
@@ -44,7 +44,7 @@ class ContractController extends AppBaseController
      */
     public function create()
     {
-        return view('contracts.create');
+        return view('contracts_new.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class ContractController extends AppBaseController
 
         Flash::success('Contract saved successfully.');
 
-        return redirect(route('contracts.index'));
+        return redirect(route('contracts_new.index'));
     }
 
     /**
@@ -82,7 +82,7 @@ class ContractController extends AppBaseController
             return redirect(route('contracts.index'));
         }
 
-        return view('contracts.show')->with('contract', $contract);
+        return view('contracts_new.show')->with('contract', $contract);
     }
 
     /**
@@ -102,7 +102,7 @@ class ContractController extends AppBaseController
             return redirect(route('contracts.index'));
         }
 
-        return view('contracts.edit')->with('contract', $contract);
+        return view('contracts_new.edit')->with('contract', $contract);
     }
 
     /**
@@ -127,7 +127,7 @@ class ContractController extends AppBaseController
 
         Flash::success('Contract updated successfully.');
 
-        return redirect(route('contracts.index'));
+        return redirect(route('contracts_new.index'));
     }
 
     /**

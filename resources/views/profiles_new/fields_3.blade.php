@@ -97,21 +97,18 @@
     {!! Form::label('address_wallet', 'Dirección Wallet:') !!}
     {!! Form::text('address_wallet3', null, ['class' => 'form-control']) !!}
 </div>
-
-
-
-        <!-- BANK USER -->
-        <div class="form-group col-sm-6">
-            {!! Form::label('bank_name', 'Entidad Bancaria:') !!}
-            {!! Form::text('bank_name', null, ['class' => 'form-control','maxlength' => '20']) !!}
-        </div>
-        <!-- CARD NUMBER -->
-        <div class="form-group col-sm-6">
-            {!! Form::label('card_number', 'Número de cuenta:') !!}
-            {!! Form::text('card_number', null, ['class' => 'form-control',  'onkeypress'=>'return isNumber(event)','maxlength' => '16']) !!}
-        </div>
-        <!-- CCI -->
-        <div class="form-group col-sm-6">
-            {!! Form::label('cci_card', 'CCI:') !!}
-            {!! Form::text('cci_card', null, ['class' => 'form-control',  'onkeypress'=>'return isNumber(event)','maxlength' => '30']) !!}
-        </div>
+<!-- BANK USER -->
+<div class="form-group col-sm-6">
+    {!! Form::label('bank_name', 'Entidad Bancaria:') !!}
+    {!! Form::text('bank_name', null, ['class' => 'form-control','maxlength' => '20']) !!}
+</div>
+<!-- CARD NUMBER -->
+<div class="form-group col-sm-6">
+    {!! Form::label('card_number', 'Número de cuenta:') !!}
+    {!! Form::text('card_number', null, ['class' => 'form-control',  'onkeypress'=>'return isNumber(event)','maxlength' => '16']) !!}
+</div>
+<!-- CCI -->
+<div class="form-group col-sm-6">
+    {!! Form::label('cci_card', 'CCI:') !!}
+    {!! Form::text('cci_card', null, ['class' => 'form-control',  'onkeypress'=>'return isNumber(event)','maxlength' => '30']) !!}
+</div>

@@ -29,9 +29,9 @@ class User extends Authenticatable
         'link',
         'validated',
         'remember_token',
-	'unique_code',
-	'email_verified_at',
-	'refered_code'
+	    'unique_code',
+	    'email_verified_at',
+	    'refered_code'
     ];
 
     /**
@@ -55,8 +55,12 @@ class User extends Authenticatable
 
     public function profile(): HasOne
     {
-        return $this->hasOne(Profile::class, 'id');
+        return $this->hasOne(Profile::class);
     }
+    // public function profile()
+    // {
+    //     return $this->hasOne(Profile::class);
+    // }
 
     public function rejection_histories(): HasMany
     {
@@ -80,5 +84,6 @@ class User extends Authenticatable
     {
         return $this->payments()->orderBy('created_at', 'desc')->first();
     }
+    
 
 }

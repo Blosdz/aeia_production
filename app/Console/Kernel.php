@@ -6,6 +6,7 @@ use App\Console\Commands\UpdatePaidPayment;
 use App\Console\Commands\UpdatePaymentStatus;
 use App\Console\Commands\UpdatePaymentStatusExpirationDate;
 use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\DeleteExpiredNotifications;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -18,6 +19,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         UpdatePaymentStatus::class,
         UpdatePaidPayment::class,
+        DeleteExpiredNotifications::class,
     ];
 
     /**
@@ -31,6 +33,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('payments:update-pendings')->hourly();
         $schedule->command('payments:update-paids')->dailyAt('23:59');
+        $schedule->command('notifications:delete-expired')->daily();
+        $schedule->command('update:crypto-rates')->daily();
     }
 
     /**

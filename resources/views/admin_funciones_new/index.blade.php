@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container_dashboard_background" id="contracts_table">
+    <div class="container">
         <div class="dashboard-new-title">Depositos</div>
              <div class="row" id="contracts-row-1">
                 <div class="contracts-outher-table">

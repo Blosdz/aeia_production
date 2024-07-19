@@ -3,10 +3,10 @@
         <thead>
             <tr>
                 <th>Name</th>
-        <th>Minimum Fee</th>
-        <th>Maximum Fee</th>
-        <th>Annual Membership</th>
-        <th>Commission</th>
+                <th>Minimum Fee</th>
+                <th>Maximum Fee</th>
+                <th>Annual Membership</th>
+                <th>Commission</th>
                 <th colspan="3">Action</th>
             </tr>
         </thead>
