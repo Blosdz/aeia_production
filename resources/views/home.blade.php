@@ -92,9 +92,9 @@
                     <br>
                     <p class="lead">¡Qué gusto verte de nuevo! {{ $user->name }}</p>
                     @if($user->validated == 1)
-                        <h4 class="text-success fw-bold">Su cuenta ha sido vereficada, ya puedes invertir</h4>
+                        <h4 class="text-success fw-bold">Su cuenta ha sido verificada, ya puedes invertir</h4>
                     @else
-                        <h4 class="text-danger fw-bold">Su cuenta aún no esta vereficada</h4>
+                        <h4 class="text-danger fw-bold">Su cuenta aún no esta verificada</h4>
                     @endif
                 </div>
                 <div class="container w-40 h-100">

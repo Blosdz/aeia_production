@@ -62,10 +62,10 @@
     <div id="particles-js"></div>
     <div class="container-fluid">
         <div class="row h-100">
-            <div class="side-bar col-auto me-auto overflow-scroll" id="sidebar-col">
+            <div class="side-bar col-auto me-auto " id="sidebar-col">
                 @include('layouts_new.sidebar_new')
             </div>
-            <div class="col overflow-scroll h-100 p-0 w-100 content-wrapper">
+            <div class="col h-100 p-0 w-100 content-wrapper">
                 <div class="nbar w-100 d-flex justify-content-end ">
                     <div class="nbar-r h-75 w-25 d-flex align-items-center text-align-center justify-content-end bg-2">
                         <div class="container">

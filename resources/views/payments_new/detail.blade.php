@@ -6,26 +6,28 @@
         <div class="detail-payment-card p-4 bg-1" id="rounded-container">
             Selecciona tu plan
             <a href="{{ route('payment.plan') }}" class="btn btn-danger float-right">Escoger otro plan</a>
-            <div class="card-body row payment-card">
-                <div class="card mx-5 p-3 w-25" style="background-color: #1c2a5b; color:white" id="rounded-container">
-                    <span>
-                        <h1 class="float-left">{{ $plan->name }}</h1>
-                        <img class="card-img-top float-right" style="width: 15%" src="/welcome_new/images/icons/{{ $plan->logo }}" alt="Card image cap">
+            <div class="card-body row payment-card p-5">
+                <div class="card mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 25%;" id="rounded-container">
+                    <span class="d-flex flex-column justify-content-center align-items-center">
+                        <h1 class="float-left" style="color: white !important;">{{ $plan->name }}</h1>
+                        <img class="card-img-top" style="width: 30%" src="/welcome_new/images/icons/{{ $plan->logo }}" alt="Card image cap">
                         &nbsp;
                     </span>
-                    <div class="card-body text-center">
-                        <p class="card-text mt-4 text-left">Deposito permitido desde:</p>
-                        <p>
-                            <h1 style="color: #eab226"><b>${{ $plan->minimum_fee }} a {{ $plan->maximum_fee ? '$'.$plan->maximum_fee : "más" }}</b></h1>
-                        </p>
-                        <p class="text-left"><b>Membresía: </b>$<span id="anual_membership">{{ $plan->annual_membership }}</span>/Anual</p>
-                        <p class="text-left"><b>Comisión: </b>{{ $plan->commission }}%</p>
-                        <p>"La comisión se ejecuta sobre la ganancia y se realiza al finalizar el ciclo de inversión"</p>
-                        <p>CTA dólares Banbif: 8028712533</p>
-                        <p>CCI: 038-730-208028712533-80</p>
+                    <div class="card-body text-center" style="color: white !important;">
+                        <p class="card-text mt-4 text-left" style="color: white !important;">Deposito permitido desde:</p>
+                        <h3 style="color: #eab226 !important;">
+                            ${{ $plan->minimum_fee }} a {{ $plan->maximum_fee ? '$'.$plan->maximum_fee : "más" }}
+                        </h3>
+                        <p class="text-left" style="color: white !important; font-weight: bolder !important;">Membresía: ${{ $plan->annual_membership }} /Anual</p>
+                        <p class="text-left" style="color: white !important; font-weight: bolder !important;">Comisión: {{ $plan->commission }}%</p>
+                        <p style="color: white !important; font-weight: bolder !important;">"La comisión se ejecuta sobre la ganancia y se realiza al finalizar el ciclo de inversión"</p>
+                        <p style="color: white !important; font-weight: bolder !important;">CTA dólares Banbif: 8028712533</p>
+                        <p style="color: white !important; font-weight: bolder !important;">CCI: 038-730-208028712533-80</p>
                     </div>
                 </div>
-                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
+
+               
+               <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
                     <p class="text-center">Complete el formulario para adquirir el plan escogido.</p>
 
                     <!-- Mensaje de éxito -->
@@ -62,7 +64,7 @@
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="form-group col-sm-6 mb-5">
-                            <p><strong>Sube tu comprobante de pago</strong></p>
+                            <p><strong>Sube tu voucher:</strong></p>
                             <div class="input-group">
                                 {!! Form::label('voucher_picture', "Seleccionar archivo", ['class' => 'custom-file-label', 'for' => 'voucher_picture', 'id' => 'file_input_voucher']) !!}
                                 {!! Form::file('voucher_picture', ['class' => 'custom-file-input', 'id' => 'voucher_picture', 'oninput' => 'input_filename(event);', 'tofill' => '', 'onclick' => 'check_progress_bar(event);']) !!}
