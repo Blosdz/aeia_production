@@ -259,7 +259,7 @@ class ProfileController extends AppBaseController
             return redirect(route('profiles.index'));
         }
 		
-        session()->flash('success', 'Información enviada con éxito');
+        // session()->flash('success', 'Información enviada con éxito');
         return view('profiles_new.edit2')->with('profile', $profile);
     }
 
@@ -277,8 +277,9 @@ class ProfileController extends AppBaseController
 //	    return redirect()->route('show-form-pdf');
         // dd($data);
 
-        session()->flash('success', 'Información enviada con éxito');
-	    return redirect(route('profiles.user'));
+        // session()->flash('success', 'Información enviada con éxito');
+        return redirect()->back()->with('success', 'La información se ha enviado para revisión.');
+	    // return redirect(route('profiles.user'));
     }
 
     public function upload_file(Request $request){

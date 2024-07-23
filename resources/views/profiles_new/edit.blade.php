@@ -6,8 +6,6 @@
     $sex_list = ['Hombre'=>'Hombre', 'Mujer'=>'Mujer'];
     $document_types = ["DNI"=>"DNI", "Pasaporte"=>"Pasaporte", "Carnet de extranjería"=>"Carnet de extranjería"];
 @endphp
-    {{-- @include('coreui-templates::common.errors') --}}
-      {{-- @include('flash::message') --}}
       <strong>Perfiles a verificar</strong>
       <div class="container">
         <div class="row bg-1 h-100 w-100 rounded p-4">
