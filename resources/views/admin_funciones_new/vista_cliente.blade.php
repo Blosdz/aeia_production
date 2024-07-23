@@ -10,7 +10,7 @@
 @php
 if($user_session->rol == 3 ){
 @endphp
-    <strong>Depósitos</strong>
+    <strong>Recibos</strong>
 
     <div class="row bg-1 w-100 h-100 p-4 " id="rounded-container">
         <div class="row col-12">
