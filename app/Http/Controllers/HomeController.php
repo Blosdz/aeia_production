@@ -207,6 +207,8 @@ class HomeController extends Controller
                                        ->whereDate('created_at', '<=', $ultimoDiaMesActual)
                                        ->get();
         $montoInvertidoTotal=$fondoClientes->sum('monto_invertido');
+        
+        $userProfile = Profile::where('user_id',$user->id)->first();
 
         $fondoids=FondoClientes::where('user_id',$user->id)->pluck('id');
         // dd($fondoClientes);
@@ -237,27 +239,35 @@ class HomeController extends Controller
             $porcentajeInvertido=0 ;
         }
         
+
         // dd($porcentajeInvertido);
 
         // *******************************************************************************
 
         $currentMonth = date('n'); // Obtener el mes actual (por ejemplo, junio sería 6)
 
+        $paymentsTotal = Payment::where('user_id',$user->id)->sum('total') ;
+
+        $homeGraph =   ClientPayment::where('user_id',$user->id);
+
         // $fondoTotal = Fondo::where('month', $currentMonth)->value('total');
+        // dd($paymentsTotal);
         
         $historiaClientes = FondoHistoriaClientes::whereIn('fondo_cliente_id', $fondoids)->get();
 
         // data client
-        $fondoClientesTotal = FondoClientes::where('user_id', $user->id)->selectRaw('SUM(monto_invertido + ganancia) as total')->first();
+        $fondoClientesTotal = FondoClientes::where('user_id', $user->id)->sum('ganancia');
 
-        $totalInversionYBeneficio = $fondoClientesTotal->total ?? 0;
+        $totalInversionYBeneficio = ($fondoClientesTotal ?? 0) + $paymentsTotal;
+
+        // dd($totalInversionYBeneficio);
+        // 707.19 databalance 465 invertido
+
 
             // Suma del monto invertido de todos los planes que tiene el usuario
         $totalInversionPlanes = FondoClientes::where('user_id', $user->id)->sum('monto_invertido');
 
         // $totalInversionPlanes = $totalInversionPlanes ?? 0;
-
-
 
 
         //porcentaje del fondo de este mes corregir 
@@ -296,10 +306,9 @@ class HomeController extends Controller
             $planData[$planName]['inversion_inicial'] = $inversion_inicial; 
 
         }
-        // dd($interval);
 
         $plans = Plan::all();
-        return view('home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans'));
+        return view('home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans' ,'paymentsTotal','userProfile'));
     }
 
 

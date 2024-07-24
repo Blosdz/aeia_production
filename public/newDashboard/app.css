@@ -1059,3 +1059,40 @@ h5{
 .dropdown-list.hover:hover li:first-child, .dropdown-list.toggle > input:checked ~ ul li:first-child {
   padding-top: 1px;
 }
+
+
+
+.chart-container {
+    position: relative;
+    display: inline-block;
+}
+.chart-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(128, 128, 128, 0.7); /* Fondo gris semi-transparente */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1;
+    display: none; /* Oculto por defecto */
+}
+.chart-container:hover .chart-overlay {
+    display: block; /* Mostrar al pasar el ratón */
+}
+
+.chart-container {
+  position: relative;
+  display: inline-block;
+}
+.chart-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(128, 128, 128, 0.7); /* Fondo gris semi-transparente */
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1;
+  display: block; /* Mostrar siempre */
+}

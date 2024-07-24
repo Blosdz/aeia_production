@@ -1,6 +1,64 @@
 import ApexCharts from 'apexcharts';
 
 document.addEventListener("DOMContentLoaded", function() {
+      
+    var optionsDemo = {
+        chart: {
+            height: 280,
+            type: "area"
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [
+            {
+                name: "Plan Bronce",
+                data: [45, 52, 38, 45, 19, 43, 40]
+            },
+            {
+                name: "Plan Plata",
+                data: [50, 40, 35, 50, 70, 130, 200]
+            },
+            {
+                name: "Plan Oro",
+                data: [80, 30, 50, 30, 80, 100, 120]
+            }
+        ],
+        colors: ['#cd7f32', '#c0c0c0', '#ffd700'], // Colores para los planes Bronce, Plata y Oro
+        // fill: {
+        //     opacity: 1 // Opacidad completa para colores sólidos
+        // },
+        xaxis: {
+            categories: [
+                "01 Jan",
+                "02 Jan",
+                "03 Jan",
+                "04 Jan",
+                "05 Jan",
+                "06 Jan",
+                "07 Jan"
+            ]
+        }
+    };
+    
+    var chartDemo = new ApexCharts(document.querySelector("#chart-demo"), optionsDemo);
+    
+    chartDemo.render();
+    
+    var optionsDonaDemo = {
+        series: [20, 15, 30, 35], // Porcentajes de los planes en el gráfico de dona
+        chart: {
+            type: 'donut',
+        },
+        labels: ['Plan Bronce', 'Plan Plata', 'Plan Oro', 'Otros'], // Etiquetas para el gráfico de dona
+        responsive: [{
+            breakpoint: 480,
+        }]
+    };
+
+    var chartDonaDemo = new ApexCharts(document.querySelector("#chart-demo-dona"), optionsDonaDemo);
+    chartDonaDemo.render();
+
     console.log(planData); // Verificar los datos en charts.js
     console.log("thisdonadata".donaData);
 
@@ -453,5 +511,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var planChart = new ApexCharts(document.querySelector("#chart_monto_generado"), planOptions);
     planChart.render();
+
+
+
 
 });

@@ -6,7 +6,7 @@
 <div class="row bg-1 w-100 h-100 p-5" id="rounded-container">
     <strong> Selecciona tu plan </strong> 
 
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false"> <!-- Agrega data-interval="false" para desactivar el movimiento automático -->
         <div class="carousel-inner">
             @for($i = 0; $i < 6; $i++)
                 @if($i % 3 == 0)
@@ -36,12 +36,12 @@
                 @endif
             @endfor
         </div>
-        <a class="carousel-control-prev " href="#carouselExampleControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon custom-carousel-control" aria-hidden="true"></span>
+        <a class="carousel-control-prev custom-carousel-control" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon custom-carousel-control" aria-hidden="true"></span>
+        <a class="carousel-control-next custom-carousel-control" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
     </div>
@@ -50,61 +50,43 @@
 @endsection
 
 <style>
-.custom-carousel-control {
-    background-color: #000000 !important;
+    .carousel-control-prev-icon{
+        background-color: #646464 !important;
+        border-radius: 2vw;
+        padding: 2vw !important;
+        /* width: 40px; */
+        /* height: 40px; */
+        /* display: flex; */
+        /* align-items: center; */
+        /* justify-content: center; */
+    }
+    .custom-carousel-control .carousel-control-prev-icon,
+    .custom-carousel-control .carousel-control-next-icon {
+        background-size: 100%, 100%;
+    }
+</style>
+    
+    
+
+<style>
+.carousel-control-next-icon {
+    /* background-color: #000000 !important; */
     border-radius: 2vw;
     padding: 2vw !important;
-    /* width: 40px; */
-    /* height: 40px; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
+    animation: breath 3s infinite;
 }
+
+@keyframes breath {
+    0%, 100% {
+        background-color: #000000;
+    }
+    50% {
+        background-color: silver;
+    }
+}
+
 .custom-carousel-control .carousel-control-prev-icon,
 .custom-carousel-control .carousel-control-next-icon {
     background-size: 100%, 100%;
 }
 </style>
-
-
-
-
-{{-- 
-.card-columns
-                @for ($i = 0 ; $i < 3 ; $i ++)
-                    <div class="card p-3 card_new">
-                        <span>
-                            <h1 class="float-left">{{$plans[$i]->name}}</h1> 
-                            <img class="card-img-top float-right" style ="width: 15%" src="/welcome_new/images/icons/{{$plans[$i]->logo}}" alt="Card image cap">
-                            &nbsp;
-                        </span>
-                        <div class="card-body text-center">
-                            <p class="card-text mt-4 text-left"> Deposito permitido desde: </p>
-                            <p><h1 class="" style="color: #eab226"><b>${{$plans[$i]->minimum_fee}} a {{$plans[$i]->maximum_fee?'$'.$plans[$i]->maximum_fee:"más"}}</b></h1></p>
-                            <p class="text-left"><b>Membresía: </b> ${{$plans[$i]->annual_membership}}/Anual</p>
-                            <p class="text-left"><b>Comisión: </b> {{$plans[$i]->commission}}%</p>
-                            <p>"La comisión se ejecuta sobre la ganancia y se realiza al finalizar el ciclo de inversión"</p>
-
-                            <a href="{{ route('payment.detail', [$plans[$i]->id]) }}" class="btn btn-success btn-xl px-5"><h2>Invertir</h2></a>
-                        </div>
-                    </div>
-                    <div class="card p-3" style="background-color: #1c2a5b; color:white">
-                        <span>
-                            <h1 class="float-left">{{$plans[$i+3]->name}}</h1> 
-                            <img class="card-img-top float-right" style ="width: 15%" src="/welcome_new/images/icons/{{$plans[$i+3]->logo}}" alt="Card image cap">
-                            &nbsp;
-                        </span>
-                        <div class="card-body text-center">
-                            <p class="card-text mt-4 text-left"> Deposito permitido desde: </p>
-                            <p><h1 class="" style="color: #eab226"><b>${{$plans[$i+3]->minimum_fee}} a {{$plans[$i+3]->maximum_fee?'$'.$plans[$i+3]->maximum_fee:"más"}}</b></h1></p>
-                            <p class="text-left"><b>Membresía: </b> ${{$plans[$i+3]->annual_membership}}/Anual</p>
-                            <p class="text-left"><b>Comisión: </b> {{$plans[$i+3]->commission}}%</p>
-                            <p>"La comisión se ejecuta sobre la ganancia y se realiza al finalizar el ciclo de inversión"</p>
-
-                            <a href="{{ route('payment.detail', [$plans[$i+3]->id]) }}" class="btn btn-success btn-xl px-5"><h2>Invertir</h2></a>
-                        </div>
-                    </div>
-                @endfor
-
-
---}}

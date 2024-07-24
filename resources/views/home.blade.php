@@ -27,13 +27,14 @@
                         </div>
                         {{-- <span class="rounded-span">
                             <i class="far fa-eye  d-flex text-align-center align-items-center justify-content-center"></i>
-                        </span>
-                        <h2 class="text-light fw-bolder">$ <span class="count">{{$totalInversionYBeneficio ?? ''}}</span></h2>
-                        <span>Total</span>--}}
-{{-- 
-                    <div class="count-r h-100 w-50 text-end align-self-end">
-                        <span class="text-success fw-bold"></span>
-                    </div> --}}
+                            </span>
+                            <h2 class="text-light fw-bolder">$ <span class="count">{{$totalInversionYBeneficio ?? ''}}</span></h2>
+                            <span>Total</span>--}}
+                    {{-- 
+                        <div class="count-r h-100 w-50 text-end align-self-end">
+                            <span class="text-success fw-bold"></span>
+                        </div> 
+                    --}}
                 </div>
             </div>
         </div>
@@ -41,7 +42,7 @@
             <div class="counter h-100 w-100 bg-1 "  id="rounded-container">
                 <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
                     <div class="col h-100">
-                        <h2 class="fw-bolder">${{$totalInversionPlanes ?? ''}}</h2>
+                        <h2 class="fw-bolder">${{$paymentsTotal ?? ''}}</h2>
                         <span>Capital Invertido</span>
                     </div>
                     <div class="col-3 h-100">
@@ -56,10 +57,11 @@
                         </div>
                         <h2 class="text-light fw-bolder">$ <span class="count">{{$totalInversionPlanes ?? ''}}</span></h2>
                         <span>Total Invertido</span>
-                    </div>
-                    <div class="count-r h-100 w-50 text-end align-self-end">
-                        <span class="text-success fw-bold"></span>
-                    </div> --}}
+                        </div>
+                        <div class="count-r h-100 w-50 text-end align-self-end">
+                            <span class="text-success fw-bold"></span>
+                        </div> 
+                    --}}
                 </div>
             </div>
         </div>
@@ -90,7 +92,7 @@
                 <div class="container w-60 p-4">
                     <h1 class="display-4">Bienvenido</h1>
                     <br>
-                    <p class="lead">¡Qué gusto verte de nuevo! {{ $user->name }}</p>
+                    <p class="lead">¡Qué gusto verte de nuevo! {{ $userProfile->first_name ?? '' }}</p>
                     @if($user->validated == 1)
                         <h4 class="text-success fw-bold">Su cuenta ha sido verificada, ya puedes invertir</h4>
                     @else
@@ -130,14 +132,20 @@
 
     <div class="row">
         <div class="col p-3">
-          <div class="counter w-100 bg-1   d-flex text-align-center align-items-center justify-content-center"  id="rounded-container">
+          <div class="counter w-100 bg-1   d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
             @if (!empty($planData ?? ''))
-                <div id="chart" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+                <div id="chart" class="rounded" style="height: 16vw; width: 35vw;"></div>
             @else
-                <div class="  bg-1 container-size">
-                    <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
-               </div>
+                {{-- <div class="  bg-1 container-size"> --}}
+                    <div class="chart-container">
+                        <div class="chart-overlay">Ejemplo</div>
+                        <div id="chart-demo" style="height: 16vw; width: 35vw;"></div>
+
+                    </div>
+                    {{-- <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p> --}}
+               {{-- </div> --}}
+  
             @endif
 
           </div>
@@ -149,7 +157,12 @@
                 @if (!empty($porcentajeInvertido ?? ''))
                     <div id="chart_dona" class="" style="height: 16vw; width: 35vw;"></div>
                 @else
-                    <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
+                    <div class="chart-container">
+                        <div class="chart-overlay">Ejemplo</div>
+                        <div id="chart-demo-dona" style="width: 26vw;" ></div>
+
+                    </div>
+                    {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
                 @endif         
 
             </div>
@@ -187,78 +200,78 @@
         </div>
         @endforeach
     @endif
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let stack = document.querySelector(".stack");
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let stack = document.querySelector(".stack");
+    
+        [...stack.children].reverse().forEach(i => stack.append(i));
+    
+        stack.addEventListener("click", swap);
+    
+        function swap(e) {
+            let card = document.querySelector(".card:last-child");
+            if (e.type === 'click' && e.target !== card) return;
+            card.style.animation = "swap 700ms forwards";
+        
+            setTimeout(() => {
+                card.style.animation = "";
+                stack.prepend(card);
+            }, 700);
+        }
+    
+        // Cambiar tarjeta automáticamente cada 5 segundos
+        setInterval(() => {
+            swap(new Event('autoSwap'));
+        }, 5000);
+    });
 
-    [...stack.children].reverse().forEach(i => stack.append(i));
 
-    stack.addEventListener("click", swap);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const interval = @json($interval ?? '');
+        const days = interval.days;
+        const hours = interval.h;
+        const minutes = interval.i;
+        const seconds = interval.s;
 
-    function swap(e) {
-        let card = document.querySelector(".card:last-child");
-        if (e.type === 'click' && e.target !== card) return;
-        card.style.animation = "swap 700ms forwards";
+        let countdownDate = new Date();
+        countdownDate.setDate(countdownDate.getDate() + days);
+        countdownDate.setHours(countdownDate.getHours() + hours);
+        countdownDate.setMinutes(countdownDate.getMinutes() + minutes);
+        countdownDate.setSeconds(countdownDate.getSeconds() + seconds);
 
-        setTimeout(() => {
-            card.style.animation = "";
-            stack.prepend(card);
-        }, 700);
-    }
+        const countdownElement = document.getElementById('countdown');
 
-    // Cambiar tarjeta automáticamente cada 5 segundos
-    setInterval(() => {
-        swap(new Event('autoSwap'));
-    }, 5000);
-});
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
 
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
 
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const interval = @json($interval ?? '');
-            const days = interval.days;
-            const hours = interval.h;
-            const minutes = interval.i;
-            const seconds = interval.s;
+            countdownElement.innerHTML = d + "d " + h + "h " + m + "m " + s + "s ";
 
-            let countdownDate = new Date();
-            countdownDate.setDate(countdownDate.getDate() + days);
-            countdownDate.setHours(countdownDate.getHours() + hours);
-            countdownDate.setMinutes(countdownDate.getMinutes() + minutes);
-            countdownDate.setSeconds(countdownDate.getSeconds() + seconds);
-
-            const countdownElement = document.getElementById('countdown');
-
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = countdownDate - now;
-
-                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownElement.innerHTML = d + "d " + h + "h " + m + "m " + s + "s ";
-
-                if (distance < 0) {
-                    clearInterval(x);
-                    countdownElement.innerHTML = "EXPIRED";
-                }
+            if (distance < 0) {
+                clearInterval(x);
+                countdownElement.innerHTML = "EXPIRED";
             }
+        }
 
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        });
-    </script>
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    });
+</script>
 
-    <script>
-        var planData = @json($planData ?? '');
-        var donaData = @json($porcentajeInvertido ?? '');
-        donaSeries=[donaData,100-donaData]
-        console.log(planData); // Verifica que los datos se están pasando correctamente
-        console.log(donaData); // Verifica que los datos se están pasando correctamente
-    </script>
+<script>
+    var planData = @json($planData ?? '');
+    var donaData = @json($porcentajeInvertido ?? '');
+    donaSeries=[donaData,100-donaData]
+    console.log(planData); // Verifica que los datos se están pasando correctamente
+    console.log(donaData); // Verifica que los datos se están pasando correctamente
+</script>
 @elseif ($user_session->rol == 5 || $user_session->rol == 2 )
 <div class="row">
     <div class="col-3 p-3">

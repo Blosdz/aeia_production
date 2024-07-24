@@ -161,6 +161,10 @@ Route::middleware(['auth'])->group(function() {
         return redirect('/login');
     })->name('logout');
     Route::get('/home-gerente',[HomeController::class,'gerenteHome'])->name('gerente.home');
+
+    Route::get('fondo-table',function(){
+        return view('admin_funciones_new.tableFondos');
+    });
 });
 
 

@@ -26,7 +26,6 @@
                     </div>
                 </div>
 
-               
                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
                     <p class="text-center">Complete el formulario para adquirir el plan escogido.</p>
 
@@ -105,15 +104,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let anual = parseFloat(document.getElementById('anual_membership').textContent);
+            let anual = parseFloat({{ $plan->annual_membership }});
 
             document.getElementById('amount-input').addEventListener('input', function() {
                 let amount = parseFloat(this.value);
                 let totalInversion = document.getElementById('total_inversion');
+                let amountModal = document.getElementById('amount-modal');
+
                 if (!isNaN(amount)) {
-                    totalInversion.textContent = (amount + anual).toFixed(2);
+                    let total = (amount + anual).toFixed(2);
+                    totalInversion.textContent = total;
+                    amountModal.textContent = total;
                 } else {
                     totalInversion.textContent = '0.00';
+                    amountModal.textContent = '0.00';
                 }
             });
 
@@ -125,7 +129,12 @@
                 }
 
                 let amount = parseFloat(document.getElementById('amount-input').value);
-                document.getElementById('amount-modal').textContent = (amount + anual).toFixed(2);
+                let amountModal = document.getElementById('amount-modal');
+                if (!isNaN(amount)) {
+                    amountModal.textContent = (amount + anual).toFixed(2);
+                } else {
+                    amountModal.textContent = '0.00';
+                }
             });
 
             document.getElementById('myCheckbox').addEventListener('change', function() {
