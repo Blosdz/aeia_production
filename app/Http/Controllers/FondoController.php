@@ -23,6 +23,10 @@ use dd;
 
 class FondoController extends Controller
 {
+    public function get_payments(){
+        $payments = Payment::where('status','PAGADO')->get();
+        dd($payments);
+    }
     // CONSEGUIR LOS PAGOS POSTERIORES A UN FONDO YA CREADO VERIFICA SI HAY FONDO O NO 
     public function calculate_latest_payments(){
         $currentMonth = date('m');

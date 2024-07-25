@@ -629,4 +629,13 @@ class PaymentController extends AppBaseController
 	    return $pdf->stream();
     }
 
+    public function declaracion(){
+        $user=Auth::user();
+        $profile=Profile::where('user_id',$user->id)->first();
+        // $
+
+        $pdf=Pdf::loadview('declaracionVoluntaria',compact('profile','user'));
+        return  $pdf->stream();
+    }
+
 }

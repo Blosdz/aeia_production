@@ -3,17 +3,26 @@
 <strong>Fondos</strong>
 <div class="container bg-1 w-100 h-100 p-5" id="rounded-container">
 
-    <strong>Pago</strong>
+    <strong>Pagos Anual</strong>
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Usuario</th>
-            <th>Fecha</th>
-            <th>Monto</th>
-            <th>Status</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            
+        </tbody>
     </table>
+
+    <strong>Pagos con Rescate</strong>
     <table>
         <tr>
             <th>ID</th>

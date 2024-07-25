@@ -142,6 +142,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('payment/pdf', [PaymentController::class, 'pdf'])->name('pdf');
     Route::get('/payments/client/pay/{id}/contrato-pdf', [PaymentController::class, 'pdf'])->name('pdf');
 
+    Route::get('payment/declaracion',[PaymentController::class, 'declaracion'])->name('declaracion');
+
+
     Route::prefix('funciones_admin')->group(function () {
         Route::get('/fondos', [FondoController::class, 'index'])->name('fondos.index');
         Route::get('/fondos/create', [FondoController::class, 'create'])->name('fondos.create');
@@ -165,6 +168,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('fondo-table',function(){
         return view('admin_funciones_new.tableFondos');
     });
+    Route::get('table-clientes/fondo-select',[FondoController::class,'get_payments'])->name('adminselect');
 });
 
 

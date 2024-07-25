@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-               <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
+                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
                     <p class="text-center">Complete el formulario para adquirir el plan escogido.</p>
 
                     <!-- Mensaje de éxito -->
@@ -71,8 +71,18 @@
                             <input type="text" class="d-none" id="hide_voucher">
                         </div>
                     </div>
-                    <div class="text-align-center align-items-center justify-content-center d-flex">
-                        <button type="button" class="btn btn-primary btn-xl p-2" data-toggle="modal" data-target="#exampleModal" id="modal-btn">
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="form-check col-sm-6">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              <a href="{{route('declaracion')}}" target="_blank"> Acepta la declaración de sus Fondos. </a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-align-center align-items-center justify-content-center d-flex p-4">
+                        <button type="button" class="btn btn-primary btn-xl p-2" data-toggle="modal" data-target="#exampleModal" id="modal-btn" disabled>
                             <h3>¡Depositar ahora!</h3>
                         </button>
                     </div>
@@ -135,6 +145,10 @@
                 } else {
                     amountModal.textContent = '0.00';
                 }
+            });
+
+            document.getElementById('flexCheckDefault').addEventListener('change', function() {
+                document.getElementById('modal-btn').disabled = !this.checked;
             });
 
             document.getElementById('myCheckbox').addEventListener('change', function() {

@@ -96,7 +96,7 @@
                             <input id="t1" type="checkbox">
                             <label for="t1">
                                 @if ($profile && $profile->profile_picture)
-                                    <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" />
+                                    <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" style="width:45px !important; border-radius:100%;" />
                                 @else 
                                     <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 32%;"/>
                                 @endif
