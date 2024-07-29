@@ -35,7 +35,7 @@
     </a>
 </li>
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('fondos.index') }}">
+    <a class="nav-link" href="{{ route('tableFondos') }}">
         <img src="{{URL::asset('/images/dashboard/actualizar_fondos.png')}}" alt="">
         <span>Actualizar Fondos</span>
     </a>

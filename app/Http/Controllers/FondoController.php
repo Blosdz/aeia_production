@@ -23,10 +23,214 @@ use dd;
 
 class FondoController extends Controller
 {
-    public function get_payments(){
-        $payments = Payment::where('status','PAGADO')->get();
-        dd($payments);
+    public function get_payments()
+    {
+        // Obtener los ClientPayment donde fondo_name es null y rescue_money es false
+        $clientPayments = ClientPayment::where('fondo_name', null)
+            ->where('rescue_money', null)
+            ->pluck('payment_id');
+    
+        // Obtener los ClientPayment donde fondo_name es null y rescue_money es true
+        $clientPaymentsR = ClientPayment::where('fondo_name', null)
+            ->where('rescue_money', true)
+            ->pluck('id');
+    
+        // Obtener los pagos asociados a los ClientPayment anteriores con estado 'PAGADO'
+        $payments = Payment::whereIn('id', $clientPayments)
+            ->where('status', 'PAGADO')
+            ->get();
+    
+        $paymentsR = Payment::whereIn('id', $clientPaymentsR)
+            ->where('status', 'PAGADO')
+            ->get();
+    
+        // Calcular el total de los pagos
+        $total_payments = $payments->sum('total');
+        // dd($clientPayments);
+    
+        return view('admin_funciones_new.fondoNew', compact('payments', 'total_payments', 'paymentsR'));
     }
+    public function view_fondos(){
+        $getFondos=Fondo::all();
+
+        return view('admin_funciones_new.tableFondos',compact('getFondos'));
+    }
+
+    public function createFondo(Request $request)
+    {
+        $validatedData = $request->validate([
+            'fondo_name' => 'required|string|max:255',
+            'payments' => 'required|array',
+            'payments.*' => 'exists:payments,id',
+        ]);
+    
+        $fondo_name = $validatedData['fondo_name'];
+        $paymentIds = $validatedData['payments'];
+    
+        // Calcular el total de los pagos seleccionados
+        $payments_total = Payment::whereIn('id', $paymentIds)->sum('total');
+        $current_month = date('m');
+        $current_year = date('Y');
+    
+        // Crear el nuevo fondo
+        $nuevoFondo = Fondo::create([
+            'month' => $current_month,
+            'total' => $payments_total,
+            'ganancia_de_capital' => 0,
+            'fondo_name' => $fondo_name,
+        ]);
+    
+        // Obtener los pagos seleccionados
+        $payments = Payment::whereIn('id', $paymentIds)->with('clientPayments')->get();
+        $fondosClientesTotales = [];
+    
+        foreach ($payments as $payment) {
+            foreach ($payment->clientPayments as $clientPayment) {
+                $user_id = $clientPayment->user_id;
+                $plan_id = optional($clientPayment->plan)->id;
+                $total = $payment->total;
+    
+                if ($plan_id === null) {
+                    continue;
+                }
+    
+                if (!isset($fondosClientesTotales[$user_id][$plan_id])) {
+                    $fondosClientesTotales[$user_id][$plan_id] = 0;
+                }
+    
+                $fondosClientesTotales[$user_id][$plan_id] += $total;
+            }
+        }
+    
+        // Actualizar fondo_name en clientPayments
+
+        ClientPayment::whereIn('payment_id', $paymentIds)->update(['fondo_name' => $fondo_name]);
+    
+        foreach ($fondosClientesTotales as $user_id => $planes) {
+            foreach ($planes as $plan_id => $total) {
+                $fondoCliente = FondoClientes::updateOrCreate([
+                    'month' => $current_month,
+                    'user_id' => $user_id,
+                    'planId' => $plan_id,
+                    'plan_id_fondo' => $nuevoFondo->id,
+                ], [
+                    'monto_invertido' => $total,
+                ]);
+    
+                FondoHistoriaClientes::create([
+                    'fondo_cliente_id' => $fondoCliente->id,
+                    'month' => $fondoCliente->month,
+                    'total_invertido' => $fondoCliente->monto_invertido,
+                    'planId' => $plan_id,
+                    'plan_id_fondo' => $nuevoFondo->id,
+                    'ganancia' => 0,
+                    'rentabilidad' => 0,
+                ]);
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Fondo creado con éxito');
+    }
+    
+    
+    
+    public function editFondo($id){
+        $clientPayments = ClientPayment::where('fondo_name', null)
+            ->where('rescue_money', null)
+            ->pluck('payment_id');
+    
+        // Obtener los ClientPayment donde fondo_name es null y rescue_money es true
+        $clientPaymentsR = ClientPayment::where('fondo_name', null)
+            ->where('rescue_money', true)
+            ->pluck('id');
+    
+        // Obtener los pagos asociados a los ClientPayment anteriores con estado 'PAGADO'
+        $payments = Payment::whereIn('id', $clientPayments)
+            ->where('status', 'PAGADO')
+            ->get();
+    
+        $paymentsR = Payment::whereIn('id', $clientPaymentsR)
+            ->where('status', 'PAGADO')
+            ->get();
+    
+        // Calcular el total de los pagos
+        $total_payments = $payments->sum('total');
+        // dd($clientPayments);
+        $fondo= Fondo::findOrFail($id);
+
+        return view('admin_funciones_new.fondoEdit', compact('payments', 'total_payments', 'paymentsR','fondo'));
+    }
+
+    public function editUpdateFondo(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'payments' => 'required|array',
+            'payments.*' => 'exists:payments,id',
+        ]);
+    
+        $paymentIds = $validatedData['payments'];
+        $fondo = Fondo::findOrFail($id);
+    
+        // Calcular el total de los nuevos pagos seleccionados
+        $payments_total = Payment::whereIn('id', $paymentIds)->sum('total');
+    
+        // Actualizar el total del fondo
+        $fondo->total += $payments_total;
+        $fondo->save();
+    
+        // Obtener los pagos seleccionados
+        $payments = Payment::whereIn('id', $paymentIds)->with('clientPayments')->get();
+        $fondosClientesTotales = [];
+    
+        foreach ($payments as $payment) {
+            foreach ($payment->clientPayments as $clientPayment) {
+                $user_id = $clientPayment->user_id;
+                $plan_id = optional($clientPayment->plan)->id;
+                $total = $payment->total;
+    
+                if ($plan_id === null) {
+                    continue;
+                }
+    
+                if (!isset($fondosClientesTotales[$user_id][$plan_id])) {
+                    $fondosClientesTotales[$user_id][$plan_id] = 0;
+                }
+    
+                $fondosClientesTotales[$user_id][$plan_id] += $total;
+            }
+        }
+    
+        // Actualizar fondo_name en clientPayments
+        ClientPayment::whereIn('payment_id', $paymentIds)->update(['fondo_name' => $fondo->fondo_name]);
+    
+        foreach ($fondosClientesTotales as $user_id => $planes) {
+            foreach ($planes as $plan_id => $total) {
+                $fondoCliente = FondoClientes::updateOrCreate([
+                    'month' => $fondo->month,
+                    'user_id' => $user_id,
+                    'planId' => $plan_id,
+                    'plan_id_fondo' => $fondo->id,
+                ], [
+                    'monto_invertido' => $total,
+                ]);
+    
+                FondoHistoriaClientes::create([
+                    'fondo_cliente_id' => $fondoCliente->id,
+                    'month' => $fondoCliente->month,
+                    'total_invertido' => $fondoCliente->monto_invertido,
+                    'planId' => $plan_id,
+                    'plan_id_fondo' => $fondo->id,
+                    'ganancia' => 0,
+                    'rentabilidad' => 0,
+                ]);
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Fondo actualizado con éxito');
+    }
+     
+
+
     // CONSEGUIR LOS PAGOS POSTERIORES A UN FONDO YA CREADO VERIFICA SI HAY FONDO O NO 
     public function calculate_latest_payments(){
         $currentMonth = date('m');
@@ -308,7 +512,7 @@ class FondoController extends Controller
         // Enviar notificaciones a los usuarios
         $this->enviarNotificacionesUsuarios($fondo);
     
-        return redirect()->route('fondos.index');
+        return redirect()->back()->with('success', 'Fondo actualizado');   
     }
     
 

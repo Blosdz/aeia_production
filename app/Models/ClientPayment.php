@@ -40,7 +40,9 @@ class ClientPayment extends Model
         'referred_code',
         'referred_user_id',
         'plan_id',
-        'code'
+        'code',
+        'fondo_name',
+        'rescue-money'
     ];
 
     /**

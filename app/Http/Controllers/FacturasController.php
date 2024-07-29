@@ -37,54 +37,69 @@ class FacturasController extends Controller
 		$this->paymentRepository=$paymentRepo;
 		$this->transfer=null;
 	}
-	public function show_index(Request $request){
-		$payments=$this->paymentRepository->all();
-		if(empty($payments)){
-			Flash::error('no hay pagos');
-		}
-		return view('admin_funciones_new.facturas')->with('payments',$payments);
+	// public function show_index(Request $request){
+	// 	$payments=$this->paymentRepository->all();
+	// 	if(empty($payments)){
+	// 		Flash::error('no hay pagos');
+	// 	}
+	// 	return view('admin_funciones_new.facturas')->with('payments',$payments);
+	// }
+
+	public function show_index()
+	{
+		// Obtener los ClientPayment donde fondo_name es null y rescue_money es false
+		$clientPayments = ClientPayment::whereNotNUll('fondo_name')	
+			->pluck('payment_id');
+	
+		// Obtener los pagos asociados a los ClientPayment anteriores con estado 'PAGADO'
+		$payments = Payment::whereIn('id', $clientPayments)
+			->where('status', 'PAGADO')
+			->get();
+	
+		// dd($payments); // Verificar los datos
+	
+		return view('admin_funciones_new.facturas', compact('payments'));
 	}
+	 
+
 	public function store_voucher(Request $request, $id)
 	{
-	    $payment = Payment::findOrFail($id);
-	    $filePath = 'voucher/';
-	    $user = User::findOrFail($id);
-	    $user_id = $user->id;
-	    // Verificar si hay un archivo PDF en la solicitud
-	    if ($request->hasFile('pdf_file')) {
-	        // Crear el directorio si no existe
-	        if (!file_exists(storage_path('app/public/' . $filePath))) {
-	            Storage::makeDirectory('public/' . $filePath, 0777, true);
-	        }
+		// Encontrar el ClientPayment por id
+		$ClientPayment = ClientPayment::findOrFail($id);
 	
-	        // Generar un nombre único para el archivo PDF
-	        $name = uniqid() . '.' . $request->file('pdf_file')->getClientOriginalExtension();
-	        // Ruta completa donde se guardará el archivo PDF
-	        $path = $filePath . $name;
+		// Verificar si hay un archivo PDF en la solicitud
+		if ($request->hasFile('pdf_file')) {
+			// Crear el directorio si no existe
+			$filePath = 'Facturas/';
+			if (!Storage::exists('public/' . $filePath)) {
+				Storage::makeDirectory('public/' . $filePath, 0777, true);
+			}
 	
-	        // Almacenar el archivo PDF
-	        $request->file('pdf_file')->storeAs('public/' . $filePath, $name);
-	        
-	        // Crear la factura asociada al pago
-          	$newFactura = new Facturas();
-	        $newFactura->route_path = '/storage/' . $path;
-	        $newFactura->user_name = $payment->user->name;
-	        $newFactura->user_id = $payment->user_id;
-        	$newFactura->save();
-        
-	        // Devolver una respuesta JSON con la URL del archivo y un mensaje de éxito
-	        return response()->json([
-	            'url' => url('/storage/' . $path),
-	            'message' => $name . ' subido',
-	            'file_name' => $name
-	        ], 200);
-	    } else {
-	        // Si no se encuentra ningún archivo PDF en la solicitud, devolver un mensaje de error
-	        return response()->json([
-	            'message' => 'No se proporcionó ningún archivo PDF para subir'
-	        ], 400);
-	    }
+			// Generar un nombre único para el archivo PDF
+			$name = uniqid() . '.' . $request->file('pdf_file')->getClientOriginalExtension();
+			// Ruta completa donde se guardará el archivo PDF
+			$path = $filePath . $name;
+	
+			// Almacenar el archivo PDF
+			$request->file('pdf_file')->storeAs('public/' . $filePath, $name);
+	
+			// Obtener el pago relacionado
+			$payment = Payment::findOrFail($ClientPayment->payment_id);
+	
+			// Crear la factura asociada al pago
+			$facturaCreada = Facturas::create([
+				'route_path' => '/storage/' . $path,
+				'user_name' => $payment->user->name,
+				'user_id' => $payment->user_id,
+				'fondo_name' => $ClientPayment->fondo_name,
+				'plan_id' => $ClientPayment->plan_id,
+				'total' => $payment->total,
+			]);
+		}
+	
+		return redirect()->route('admin_funciones.fondos')->with('success', 'PDF subido exitosamente');
 	}
+
 	public function show_vouchers()
 	{
 	    $user_id = Auth::id();

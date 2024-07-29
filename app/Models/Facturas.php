@@ -9,5 +9,13 @@ class Facturas extends Model
 {
     use HasFactory;
     protected $table='facturas_admin';
-    protected $fillable=['route_path','user_name','user_id'];
+    protected $fillable=[
+        'route_path',
+        'user_name',    
+        'user_id',
+        'fondo_name',
+        'plan_id',
+        'total',
+
+    ];
 }

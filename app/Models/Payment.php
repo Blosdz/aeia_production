@@ -47,7 +47,6 @@ class Payment extends Model
 	    'voucher_picture',
 	    'comments_on_payment',
 	    'user_name',
-
     ];
 
     /**

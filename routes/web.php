@@ -135,6 +135,7 @@ Route::middleware(['auth'])->group(function() {
     Route::resource('home',HomeController::class);
     // Route::get('/home/{userId}', [HomeController::class, 'dataUsers'])->name('home');
 
+    // ******************Facturas***********************
     Route::get('/facturas', [FacturasController::class, 'show_index'])->name('admin_funciones.fondos');
     Route::post('/facturas/{id}/store-voucher', [FacturasController::class, 'store_voucher'])->name('facturas.store_voucher');
     Route::get('/vouchers', [FacturasController::class, 'show_vouchers'])->name('vouchers.show');
@@ -158,7 +159,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('/view-product/{id}', [BankViewsController::class, 'view'])->name('viewproduct');
     Route::get('/subscriptor-data', [SubscriptorDataController::class, 'index'])->name('subscriptor.data.index');
-
+// tableFondos
     Route::post('/logout',function(){
         Auth::logout();
         return redirect('/login');
@@ -168,7 +169,14 @@ Route::middleware(['auth'])->group(function() {
     Route::get('fondo-table',function(){
         return view('admin_funciones_new.tableFondos');
     });
-    Route::get('table-clientes/fondo-select',[FondoController::class,'get_payments'])->name('adminselect');
+    // FONDOS NEW 
+    Route::get('table-fondo/fondo-select',[FondoController::class,'get_payments'])->name('adminSelect');
+    Route::post('/create-fondo', [FondoController::class,'createFondo'])->name('create.fondo');
+    Route::get('table-fondo',[FondoController::class,'view_fondos'])->name('tableFondos');
+    // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
+    Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
+    Route::post('/table-fondo/edit/{id}/update-add-payments', [FondoController::class, 'editUpdateFondo'])->name('fondos.update-add-payments');
+
 });
 
 

@@ -168,6 +168,8 @@
                 }
 
                 let formData = new FormData(form);
+                let submitButton = document.getElementById('submitButton');
+                submitButton.disabled = true;
 
                 $.ajax({
                     type: "POST",
@@ -177,11 +179,14 @@
                     contentType: false,
                     success: function(data) {
                         console.log(data);
+                        // Cierra la ventana modal
+                        $('#exampleModal').modal('hide');
                         // Aquí puedes manejar la respuesta del servidor si es necesario
                         window.location.href = "{{ route('payment.plan') }}";
                     },
                     error: function(error) {
                         console.error(error);
+                        submitButton.disabled = false; // Habilita el botón si hay un error
                     }
                 });
             }
