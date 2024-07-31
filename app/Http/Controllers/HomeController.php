@@ -54,7 +54,7 @@ class HomeController extends Controller
     public function DataUsers($user){
         switch($user->rol){
             case 1:
-                return $this->getUserAdmin();
+                return $this->getUserReferidos();
             case 2:
                 return $this->getUserReferidos();
             case 3:

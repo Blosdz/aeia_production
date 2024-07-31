@@ -27,6 +27,10 @@ use Illuminate\Support\Facades\File;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/pgadmin', function() {
+    abort(404);
+});
+
 
 Route::get('/welcome_default', function () {
     return view('welcome_default');

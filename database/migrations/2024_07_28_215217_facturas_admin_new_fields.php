@@ -15,9 +15,9 @@ class FacturasAdminNewFields extends Migration
     {
         //
         Schema::table('facturas_admin',function(Blueprint $table){
-            $table->string('fondo_name');
-            $table->integer('plan_id');
-            $table->double('total');
+            $table->string('fondo_name')->default('default_fondo_name')->notNull();
+            $table->integer('plan_id')->default(0)->notNull();
+            $table->double('total')->default(0)->notNull();
         });
     }
 
