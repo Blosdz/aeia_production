@@ -58,7 +58,7 @@
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        // <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
         <span>Inicio</span>
     </a>
 </li>
@@ -69,29 +69,17 @@
     @else
         <a class="nav-link {{ Request::is('profiles*') ? 'active' : '' }}" href="{{ route('profiles.user') }}">
     @endif
-        // <img src="{{URL::asset('/images/dashboard/perfil_nav.png')}}" alt="">
+        <img src="{{URL::asset('/images/dashboard/perfil_nav.png')}}" alt="">
         <span>Verificación</span>
     </a>
 </li>
 
-<li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link {{ Request::is('payments*') ? 'active' : '' }}" href="{{ route('payments.index2') }}">
-        // <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
-        <span>Depositar</span>
-    </a>
-</li>
+
 
 <li class="nav-item {{ Request::is('suscriptores*') ? 'active' : '' }}">
     <a class="nav-link {{ Request::is('suscriptores*') ? 'active' : '' }}" href="{{ route('tableClientes') }}">
-        // <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
+        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
         <span>Clientes</span>
-    </a>
-</li>
-
-<li class="nav-item {{ Request::is('invite*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('invite.user') }}">
-        // <img src="{{URL::asset('/images/dashboard/invitar.png')}}" alt="">
-        <span>Invitar</span>
     </a>
 </li>
 

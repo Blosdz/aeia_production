@@ -7,8 +7,193 @@
     $profile = $user->profile;
 
 @endphp
+@if($user_session->rol==2)
+    <strong>Dashboard</strong>
+<div class="row">
+    <div class="col-3 p-3">
+        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                <div class="col h-100">
+                    <h2>Invitar a nuevos usuarios</h2>
+                    <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
+                    <span class="text-success fw-bold">
+                        <button class="btn btn-primary" onclick="copyToClipboard('#inviteLink')">Copiar Enlace</button>
+                    </span>
+                </div>
+                <div class="col-3 h-100">
+                    <span class="rounded-span">
+                        <i class="fa-solid fa-link"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-@if($user_session->rol == 3)
+    <div class="col-3 p-3">
+        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                <div class="col h-100 ">
+                    <h2 class="fw-bolder">$ {{$montoGenerado ?? ''}}</h2>
+                    <span>Total Generado</span>
+                </div>
+                <div class="col-3 h-100">
+                    <span class="rounded-span">
+                        <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 p-3">
+        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                <div class="col h-100 w-50">
+                   <h2 class="fw-bolder">{{ $dataInvitados ?? ''}}</h2>
+                    <span>Total de Clientes</span>
+                </div>
+                <div class="col-3 h-100">
+                    <span class="rounded-span">
+                        <i class="fa-solid fa-users"></i>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-3 p-3">
+        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                <div class="col h-100 w-50">
+                    <h2 class="fw-bolder">{{ $totalPlanesVendidos ?? ''}}</h2>
+                    <span>Planes Vendidos</span>
+                </div>
+                <div class="col-3 h-100">
+                    <span class="rounded-span">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+        <div class="col-md-6">
+            <div class="h-100 w-100 bg-1 d-flex justify-content-center "  id="rounded-container">
+                <div class="container w-60 p-4">
+                    <h1 class="display-4">Bienvenido</h1>
+                    <br>
+                    <p class="lead">¡Qué gusto verte de nuevo!</p>
+                    <p>Controla tus inversiones</p>
+                </div>
+                <div class="container w-40 h-100">
+                    <div class="content h-100 justify-content-center align-items-center text-center mt-5">
+                        @include('layouts_new.nav')
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="h-100 w-100 bg-1 "  id="rounded-container">
+                <div class="h-100 w-100 justify-content-center align-content-center">
+                    <table class="styled-table ">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Plan</th>
+                                <th>Comisión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bronce</td>
+                                <td>$ 4</td>
+                            </tr>
+                            <tr class="active-row">
+                                <td>Plata</td>
+                                <td>$ 10</td>
+                            </tr>
+                            <tr>
+                                <td>Oro</td>
+                                <td>$ 20</td>
+                            </tr>
+                            <tr>
+                                <td>Platino</td>
+                                <td>$ 24</td>
+                            </tr>
+                            <tr>
+                                <td>Diamante</td>
+                                <td>$ 40</td>
+                            </tr>
+                            <tr>
+                                <td>Vip</td>
+                                <td>$ 60</td>
+                            </tr>
+                            <!-- and so on... -->
+                        </tbody>
+                    </table>
+                     
+                </div>
+            </div>
+
+        </div>
+    <div class="col-3">
+        <div class="counter bg-1  h-100  d-flex text-align-center align-items-center justify-content-center"  id="rounded-container">
+
+            @if (!empty($Total ?? ''))
+                <div id="chart_dona" class="" style="height: 16vw; width: 35vw;"></div>
+            @else
+                <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
+            @endif         
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col p-3">
+      <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
+
+        @if (!empty($totalVentas ?? ''))
+            <div id="chart_monto_generado" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+        @else
+            <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
+        @endif
+
+      </div>
+    </div>
+    <div class="col p-3">
+      <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
+
+        @if (!empty($porcentajeInvitados ?? '')) 
+            <div id="porcentaje_subs" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+        @else
+            <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
+        @endif
+
+      </div>
+    </div>
+
+</div>
+<script>
+    var chartValues=@json($chartValues ?? '');
+    var porcentajeInvitados=@json($porcentajeInvitados ?? '');
+    var chartLabels=@json($chartLabels ?? '');
+</script>
+
+<script>
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).val()).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alert("Enlace copiado al portapapeles.");
+    }
+</script>
+
+
+
+@elseif($user_session->rol == 3)
     <strong>Dashboard</strong>
 
     <div class="row">
@@ -272,7 +457,7 @@
     console.log(planData); // Verifica que los datos se están pasando correctamente
     console.log(donaData); // Verifica que los datos se están pasando correctamente
 </script>
-@elseif ($user_session->rol == 5 || $user_session->rol == 2 )
+@elseif ($user_session->rol == 5)
 <div class="row">
     <div class="col-3 p-3">
         <div class="counter h-100 w-100 bg-1"  id="rounded-container">

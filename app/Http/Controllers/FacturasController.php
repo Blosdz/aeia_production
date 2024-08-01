@@ -48,7 +48,7 @@ class FacturasController extends Controller
 	public function show_index()
 	{
 		// Obtener los ClientPayment donde fondo_name es null y rescue_money es false
-		$clientPayments = ClientPayment::whereNotNUll('fondo_name')	
+		$clientPayments = ClientPayment::get()	
 			->pluck('payment_id');
 	
 		// Obtener los pagos asociados a los ClientPayment anteriores con estado 'PAGADO'

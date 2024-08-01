@@ -80,17 +80,20 @@
                                 <i class="fa fa-solid fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;" ></i>
                             </a>
                             <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
-                            <div class="dropdown-menu dropdown-menu-left bg-1" aria-labelledby="dropdownMenuButton" id="content-alert">
-                                <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px;">
+                            <div class="dropdown-menu bg-1 box-timeline" aria-labelledby="dropdownMenuButton" id="content-alert" style="max-height: 300px; overflow-y: auto;">
+                                <ul class="timeline" style="margin:10px;width:100vw;">
                                     @foreach($notificaciones as $notificacion)
-                                        <li>
-                                            <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
-                                            <span class="timeline-icon"><i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="color:white"></i></span>
-                                            <span class="timeline-date">{{ $notificacion->created_at->format('M d, H:i') }}</span>
+                                        <li class="event" data-date="12:30"> 
+                                            <i class="fa fa-bell timeline-icon"></i>
                                         </li>
+                                            <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
+                                            {{-- <span class="timeline-icon"><i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="color:white"></i></span> --}}
+                                            {{-- <span class="timeline-date">{{ $notificacion->created_at->format('M d, H:i') }}</span> --}}
+                                        {{-- </li> --}}
                                     @endforeach
                                 </ul>
                             </div>
+                            
                         </div>
                         <div class="dropdown-list toggle">
                             <input id="t1" type="checkbox">
