@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\ClientPayment;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Interfaces\BinanceTransferInterface;
+
+use App\Models\Notification;
 use App\Http\Requests\ClientPaymentRequest;
 use App\Http\Services\BinanceQRGeneratorService;
 use App\Http\Services\BinanceTransferMoneyToClientsService;
@@ -91,11 +93,19 @@ class FacturasController extends Controller
 				'route_path' => '/storage/' . $path,
 				'user_name' => $payment->user->name,
 				'user_id' => $payment->user_id,
-				'fondo_name' => $ClientPayment->fondo_name,
+				// 'fondo_name' => $ClientPayment->fondo_name,
 				'plan_id' => $ClientPayment->plan_id,
 				'total' => $payment->total,
 			]);
+			
+			Notification::create([
+				'title'=>"Documento Nuevo",
+				'body'=>"Se ha subido un comprobante por el pago realizado de ". $payment->total,
+				'user_id'=> $payment->user_id,
+				'expires_at'=>Carbon::now()->addDays(3),
+			]);
 		}
+
 	
 		return redirect()->route('admin_funciones.fondos')->with('success', 'PDF subido exitosamente');
 	}

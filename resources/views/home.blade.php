@@ -7,6 +7,11 @@
     $profile = $user->profile;
 
 @endphp
+@if($user->validated==0)
+<div class="alert alert-info" role="alert">
+        Tu perfil no está verificado. Ingresa a la opción Verificación del menú lateral y completa la información requerida.
+</div>
+@endif
 @if($user_session->rol==2)
     <strong>Dashboard</strong>
 <div class="row">
