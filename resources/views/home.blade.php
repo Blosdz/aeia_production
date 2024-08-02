@@ -10,24 +10,24 @@
 @if($user_session->rol==2)
     <strong>Dashboard</strong>
 <div class="row">
-    <div class="col-3 p-3">
-        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
-            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
-                <div class="col h-100">
-                    <h2>Invitar a nuevos usuarios</h2>
-                    <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
-                    <span class="text-success fw-bold">
-                        <button class="btn btn-primary" onclick="copyToClipboard('#inviteLink')">Copiar Enlace</button>
-                    </span>
-                </div>
-                <div class="col-3 h-100">
-                    <span class="rounded-span">
-                        <i class="fa-solid fa-link"></i>
-                    </span>
+        <div class="col-3 p-3">
+            <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+                <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                    <div class="col h-100">
+                        <h2>Invitar a nuevos usuarios</h2>
+                        <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
+                        <span class="text-success fw-bold">
+                            <button class="btn btn-primary" onclick="copyToClipboard('#inviteLink')">Copiar Enlace</button>
+                        </span>
+                    </div>
+                    <div class="col-3 h-100">
+                        <span class="rounded-span">
+                            <i class="fa-solid fa-link"></i>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     <div class="col-3 p-3">
         <div class="counter h-100 w-100 bg-1"  id="rounded-container">

@@ -83,7 +83,9 @@
                             <div class="dropdown-menu bg-1 box-timeline" aria-labelledby="dropdownMenuButton" id="content-alert" style="max-height: 300px; overflow-y: auto;">
                                 <ul class="timeline" style="margin:10px;width:100vw;">
                                     @foreach($notificaciones as $notificacion)
+                                        {{-- edit with time line here --}}
                                         <li class="event" data-date="12:30"> 
+
                                             <i class="fa fa-bell timeline-icon"></i>
                                         </li>
                                             <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
@@ -95,27 +97,24 @@
                             </div>
                             
                         </div>
-                        <div class="dropdown-list toggle">
-                            <input id="t1" type="checkbox">
-                            <label for="t1">
+                        <div class="dropdown-list toggle" onclick="toggleDropdown()">
+                            <div class="container-rounded">
                                 @if ($profile && $profile->profile_picture)
                                     <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" style="width:45px !important; border-radius:100%;" />
                                 @else 
-                                    <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 32%;"/>
+                                    <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
                                 @endif
-                            </label>
-
-                            <ul>
+                            </div>
+                            <ul class="dropdown-items" id="dropdown-menu" style="display: none;">
                                 <li>
                                     <button class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         Log-Out
                                     </button>
                                 </li>
                             </ul>
-                            
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
-                            </form>
+                            </form>                           
                         </div>
                    </div>
                 </div>
@@ -125,6 +124,16 @@
             </div>
         </div>
     </div>
+<script>
+    function toggleDropdown() {
+        var dropdownMenu = document.getElementById('dropdown-menu');
+        if (dropdownMenu.style.display === "none") {
+            dropdownMenu.style.display = "block";
+        } else {
+            dropdownMenu.style.display = "none";
+        }
+    }
+</script>
     
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> --}}
