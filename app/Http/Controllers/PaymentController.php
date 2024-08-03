@@ -659,7 +659,7 @@ class PaymentController extends AppBaseController
             $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
             $path = $filePath . $name;
             $request->file('voucher_picture')->storeAs('public/' . $filePath, $name);
-            $input["voucher_picture"] = 'vouchers/' . $name; // Corrige la ruta de almacenamiento
+            $input["voucher_picture"] = '/storage/vouchers/' . $name; // Corrige la ruta de almacenamiento
         }
     
         // Actualiza el registro del pago con la nueva imagen
