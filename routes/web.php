@@ -84,7 +84,9 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
     Route::get('/payments/client/{id}', [PaymentController::class, 'client_detail'])->name('payment.client.detail');
     Route::put('/payments/{id}/update-status', [PaymentController::class,'updateStatus'])->name('payments.update.status');
-
+    Route::put('/payments/{id}/edit-payment', [PaymentController::class, 'editPayment'])->name('payments.edit.payment');
+    Route::get('/payments/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
+    
     Route::get('/invite/user/link', [App\Http\Controllers\UserController::class, 'generateInviteLink'])->name('invite.user');
 
     Route::post('/invite/link/store', [App\Http\Controllers\UserController::class, 'link'])->name('users.link');

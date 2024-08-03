@@ -638,4 +638,35 @@ class PaymentController extends AppBaseController
         return  $pdf->stream();
     }
 
+    public function editPayment($id, Request $request)
+    {
+        $payment = Payment::find($id);
+        $input = $request->all();
+        
+        // Elimina el archivo de imagen anterior si existe
+        if ($payment->voucher_picture) {
+            Storage::delete('public/' . $payment->voucher_picture);
+        }
+    
+        // Verifica si hay un nuevo archivo de imagen cargado
+        if ($request->hasFile('voucher_picture')) {
+            $filePath = 'vouchers/';
+            if (!Storage::exists($filePath)) {
+                Storage::makeDirectory($filePath, 0777, true);
+            }
+            
+            // Genera un nombre único para el archivo
+            $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
+            $path = $filePath . $name;
+            $request->file('voucher_picture')->storeAs('public/' . $filePath, $name);
+            $input["voucher_picture"] = 'vouchers/' . $name; // Corrige la ruta de almacenamiento
+        }
+    
+        // Actualiza el registro del pago con la nueva imagen
+        $payment->update([
+            'voucher_picture' => $input["voucher_picture"]
+        ]);
+    
+        return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+    }
 }

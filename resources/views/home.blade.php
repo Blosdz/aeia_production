@@ -21,13 +21,11 @@
                     <div class="col h-100">
                         <h2>Invitar a nuevos usuarios</h2>
                         <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
-                        <span class="text-success fw-bold">
-                            <button class="btn btn-primary" onclick="copyToClipboard('#inviteLink')">Copiar Enlace</button>
-                        </span>
+
                     </div>
                     <div class="col-3 h-100">
                         <span class="rounded-span">
-                            <i class="fa-solid fa-link"></i>
+                            <i class="fa-solid fa-link" style="cursor:pointer;" onclick="copyToClipboard('#inviteLink')"></i>
                         </span>
                     </div>
                 </div>
@@ -87,8 +85,12 @@
                 <div class="container w-60 p-4">
                     <h1 class="display-4">Bienvenido</h1>
                     <br>
-                    <p class="lead">¡Qué gusto verte de nuevo!</p>
-                    <p>Controla tus inversiones</p>
+                    <p class="lead">¡Qué gusto verte de nuevo! {{ $userProfile->first_name ?? '' }}</p>
+                    @if($user->validated == 1)
+                        <h4 class="text-success fw-bold">Su cuenta ha sido verificada, ya puedes invertir</h4>
+                    @else
+                        <h4 class="text-danger fw-bold">Su cuenta aún no esta verificada</h4>
+                    @endif
                 </div>
                 <div class="container w-40 h-100">
                     <div class="content h-100 justify-content-center align-items-center text-center mt-5">
@@ -161,9 +163,16 @@
         @if (!empty($totalVentas ?? ''))
             <div id="chart_monto_generado" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
         @else
-            <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
-        @endif
+            {{-- <div class="  bg-1 container-size"> --}}
+                <div class="chart-container">
+                    <div class="chart-overlay">Ejemplo</div>
+                    <div id="chart-demo" style="height: 16vw; width: 35vw;"></div>
 
+                </div>
+                {{-- <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p> --}}
+           {{-- </div> --}}
+  
+        @endif
       </div>
     </div>
     <div class="col p-3">
@@ -172,7 +181,12 @@
         @if (!empty($porcentajeInvitados ?? '')) 
             <div id="porcentaje_subs" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
         @else
-            <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
+            <div class="chart-container">
+                <div class="chart-overlay">Ejemplo</div>
+                <div id="chart-demo-dona" style="width: 26vw;" ></div>
+
+            </div>
+            {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
         @endif
 
       </div>
