@@ -540,26 +540,26 @@ class PaymentController extends AppBaseController
     
         // Datos de membresías
         $dataSuscriptor = [
-            1 => 4, 
+            1 => 14, 
+            2 => 35, 
+            3 => 70, 
+            4 => 84, 
+            5 => 140
+        ];
+        $dataGerente = [
+            1 => 4  , 
             2 => 10, 
             3 => 20, 
             4 => 24, 
             5 => 40
         ];
-        $dataGerente = [
-            1 => 18, 
-            2 => 45, 
-            3 => 90, 
-            4 => 108, 
-            5 => 180
-        ];
         // admin con comision 
         $dataAdmin = [
-            1 => 2, 
-            2 => 5, 
-            3 => 10, 
-            4 => 12, 
-            5 => 20
+            1 => 6, 
+            2 => 15, 
+            3 => 30, 
+            4 => 36, 
+            5 => 60
         ];
         // admin vende sin comision
         $dataAdminNew = [
@@ -570,11 +570,11 @@ class PaymentController extends AppBaseController
             5 => 240
         ];
         $dataAdminRef = [
-            1 => 20,
-            2 => 50, 
-            3 => 100, 
-            4 => 120, 
-            5 => 200
+            1 => 10,
+            2 => 25, 
+            3 => 50, 
+            4 => 60, 
+            5 => 100
         ];
         $result = DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminNew, $dataAdminRef) {
             $payment->update();
