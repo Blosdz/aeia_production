@@ -26,6 +26,7 @@ use App\Traits\BinanceMoneySplitterTrait;
 use App\Traits\BinanceDoughSenderTrait;
 use App\Traits\BinanceBalanceCheckerTrait;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\SuscriptorHistorial;
 
 
 //use Symfony\Component\HttpFoundation\Response;
@@ -526,7 +527,6 @@ class PaymentController extends AppBaseController
             return $e->getMessage();
         }
     }
-
     public function updateStatus($id)
     {
         $payment = Payment::find($id);
@@ -538,80 +538,176 @@ class PaymentController extends AppBaseController
         // Actualiza el estado del pago a "PAGADO"
         $payment->status = 'PAGADO';
     
-        // Asegurarse de que la actualización del pago esté en una transacción
+        // Datos de membresías
         $dataSuscriptor = [
-            1 => 4,
-            2 => 10,
-            3 => 20,
-            4 => 24,
+            1 => 4, 
+            2 => 10, 
+            3 => 20, 
+            4 => 24, 
             5 => 40
         ];
         $dataGerente = [
-            1 => 18,
-            2 => 45,
-            3 => 90,
-            4 => 108,
+            1 => 18, 
+            2 => 45, 
+            3 => 90, 
+            4 => 108, 
             5 => 180
         ];
+        // admin con comision 
         $dataAdmin = [
-            1 => 2,
-            2 => 5,
-            3 => 10,
-            4 => 12,
+            1 => 2, 
+            2 => 5, 
+            3 => 10, 
+            4 => 12, 
             5 => 20
-        ]; 
-    
-        $result = DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin) {
+        ];
+        // admin vende sin comision
+        $dataAdminNew = [
+            1 => 24, 
+            2 => 60, 
+            3 => 120, 
+            4 => 144, 
+            5 => 240
+        ];
+        $dataAdminRef = [
+            1 => 20,
+            2 => 50, 
+            3 => 100, 
+            4 => 120, 
+            5 => 200
+        ];
+        $result = DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminNew, $dataAdminRef) {
             $payment->update();
     
             // Buscar el registro de ClientPayment asociado al pago
             $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
-            
+            if (!$clientPayment) {
+                throw new Exception('ClientPayment no encontrado');
+            }
+    
             // Buscar el usuario asociado al pago
             $user = User::find($payment->user_id);
+            if (!$user) {
+                throw new Exception('Usuario no encontrado');
+            }
+    
+            // Obtener el perfil del cliente
+            $clientProfile = Profile::where('user_id', $user->id)->first();
+            if (!$clientProfile) {
+                throw new Exception('Perfil del cliente no encontrado');
+            }
+    
+            $referredCode = $user->refered_code;
+            $user_referee = User::where('unique_code', $referredCode)->first();
+            if (!$user_referee) {
+                throw new Exception('Usuario referenciado no encontrado');
+            }
     
             $suscriptorData = [];
+            $suscriptorHistorial = [];
     
-            if ($user) {
-                $referredCode = $user->refered_code;
+            if ($referredCode == "aeia") {
+                $suscriptorData[] = SuscriptorHistorial::create([
+                    'name' => $clientProfile->first_name,
+                    'refered_code' => 'aeia',
+                    'plan_id' => $clientPayment->plan_id,
+                    'user_id' => $user->id,
+                    'membership_collected' => $dataAdminNew[$clientPayment->plan_id]
+                ]);
+                $suscriptorHistorial[] = SubscriptorDataModel::where('user_table_id', $user_referee->id)->update([
+                    'membership_collected' => DB::raw("membership_collected + " . $dataAdminNew[$clientPayment->plan_id])
+                ]);
+            } else {
+                $suscriptor = User::where('unique_code', $user->refered_code)->first();
+                if (!$suscriptor) {
+                    throw new Exception('Suscriptor no encontrado');
+                }
                 
-                if ($referredCode == "aeia") {
-                    $suscriptorData[] = SubscriptorDataModel::create([
-                        'name' => $user->name,
-                        'refered_code' => 'aeia',
+                $suscriptorData[] = SuscriptorHistorial::create([
+                    'name' => $clientProfile->first_name,
+                    'refered_code' => $user->refered_code,
+                    'plan_id' => $clientPayment->plan_id,
+                    'user_id' => $user->id,
+                    'membership_collected' => $dataSuscriptor[$clientPayment->plan_id]
+                ]);
+                
+                $suscriptorHistorial[] = SubscriptorDataModel::where('user_table_id', $user_referee->id)->update([
+                    'membership_collected' => DB::raw("membership_collected + " . $dataSuscriptor[$clientPayment->plan_id])
+                ]);
+                
+                if ($suscriptor->refered_code != 'aeia') {
+                    $suscriptor_data = User::where('unique_code', $suscriptor->refered_code)->first();
+                    if (!$suscriptor_data) {
+                        throw new Exception('Suscriptor de segundo nivel no encontrado');
+                    }
+    
+                    $suscriptor_name = Profile::where('user_id', $suscriptor->id)->first();
+                    if (!$suscriptor_name) {
+                        throw new Exception('Nombre del suscriptor no encontrado');
+                    }
+    
+                    $suscriptorDataGerenteHistorial[] = SuscriptorHistorial::create([
+                        'name' => $suscriptor_name->first_name,
+                        'refered_code' => $suscriptor_data->unique_code,
                         'plan_id' => $clientPayment->plan_id,
-                        'membership_collected' => $dataAdmin[$clientPayment->plan_id]
-                    ]);
-                } else {
-                    $suscriptor = User::where('unique_code', $user->refered_code)->first();
-                    $suscriptorData[] =SubscriptorDataModel::create([
-                        'name' => $user->name,
-                        'refered_code' => $suscriptor->unique_code,
-                        'plan_id' => $clientPayment->plan_id,
-                        'membership_collected' => $dataSuscriptor[$clientPayment->plan_id]
-                    ]);
-                    
-                    $suscriptorGerente = User::where('unique_code', $suscriptor->refered_code)->first();
-                    $suscriptorData[] =  SubscriptorDataModel::create([
-                        'name' => $suscriptor->name,
-                        'refered_code' => $suscriptorGerente->unique_code,
-                        'plan_id' => $clientPayment->plan_id,
+                        'user_id' => $suscriptor->id,
                         'membership_collected' => $dataGerente[$clientPayment->plan_id]
                     ]);
-                    
+    
+                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $suscriptor_data->id)->update([
+                        'membership_collected' => DB::raw("membership_collected + " . $dataGerente[$clientPayment->plan_id])
+                    ]);
+    
+                    $gerente_name = Profile::where('user_id', $suscriptor_data->id)->first();
+                    if (!$gerente_name) {
+                        throw new Exception('Nombre del gerente no encontrado');
+                    }
+    
                     $suscriptorData[] = SubscriptorDataModel::create([
-                        'name' => 'aeia',
+                        'name' => $gerente_name->first_name,
                         'refered_code' => 'aeia',
                         'plan_id' => $clientPayment->plan_id,
                         'membership_collected' => $dataAdmin[$clientPayment->plan_id]
                     ]);
+    
+                    $admin_code = User::where('unique_code', 'aeia')->first();
+                    if (!$admin_code) {
+                        throw new Exception('Código de administrador no encontrado');
+                    }
+    
+                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $admin_code->id)->update([
+                        'membership_collected' => DB::raw("membership_collected + " . $dataAdmin[$clientPayment->plan_id])
+                    ]);
+                }else{
+                    $suscriptor_data = User::where('unique_code', $suscriptor->refered_code)->first();
+                    if (!$suscriptor_data) {
+                        throw new Exception('Suscriptor de segundo nivel no encontrado');
+                    }
+    
+                    $suscriptor_name = Profile::where('user_id', $suscriptor->id)->first();
+                    if (!$suscriptor_name) {
+                        throw new Exception('Nombre del suscriptor no encontrado');
+                    }
+    
+                    $suscriptorDataGerenteHistorial[] = SuscriptorHistorial::create([
+                        'name' => $suscriptor_name->first_name,
+                        'refered_code' => $suscriptor_data->unique_code,
+                        'plan_id' => $clientPayment->plan_id,
+                        'user_id' => $suscriptor->id,
+                        'membership_collected' => $dataAdminRef[$clientPayment->plan_id]
+                    ]);
+    
+                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $suscriptor_data->id)->update([
+                        'membership_collected' => DB::raw("membership_collected + " . $dataAdminRef[$clientPayment->plan_id])
+                    ]);
+    
                 }
             }
         });
-
-	    return redirect()->back()->with('success','pago realizado con exito');
-    
+        
+	    return redirect()->back()->with('success','pago actualizado con exito');
     }
+    
     
     public function updateComments(Request $request, $id){
 	    $payment=Payment::findOrFail($id);

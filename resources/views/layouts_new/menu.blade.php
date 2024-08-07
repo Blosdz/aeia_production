@@ -8,6 +8,13 @@
   if( $user->rol == 1 ) { //admin
 @endphp
 
+<li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('home.index') }}">
+        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <span>Inicio</span>
+    </a>
+</li>
+
 <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('users.index') }}">
         <img src="{{URL::asset('/images/dashboard/clientes_subscriptores.png')}}" alt="">
@@ -80,6 +87,13 @@
     <a class="nav-link {{ Request::is('suscriptores*') ? 'active' : '' }}" href="{{ route('tableClientes') }}">
         <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
         <span>Clientes</span>
+    </a>
+</li>
+
+<li class="nav-item {{ Request::is('historial*') ? 'active' : '' }}">
+    <a class="nav-link {{ Request::is('historial*') ? 'active' : '' }}" href="{{ route('Historial') }}">
+        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
+        <span>Historial</span>
     </a>
 </li>
 
@@ -173,6 +187,7 @@
 @php
   } if( $user->rol == 6) { //Verificador
 @endphp
+
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
         <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">

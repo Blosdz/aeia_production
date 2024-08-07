@@ -11,7 +11,7 @@ use App\Models\Event;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\SubscriptorDataModel;
 use Illuminate\Support\Facades\Mail as MailCustom;
 use App\Mail\SendMail;
 use Illuminate\Support\Str;
@@ -83,6 +83,17 @@ class RegisterController extends Controller
             'unique_code' => Str::random(5),
             'refered_code' => $data['refered_code'] ?? 'aeia',
         ]);
+
+    // Crear el registro en SubscritorData si el rol es 1, 2 o 5
+        if (in_array($data['rol'], [1, 2, 5])) {
+            $suscriptor_data=SubscriptorDataModel::create([
+                'name' => $data['name'],
+                'membership_collected' => 0,
+                'user_table_id' => $user->id, // Aquí asignamos el ID del usuario recién creado
+            ]);
+        }
+
+        // dd($suscriptor_data);
 
         $profile = Profile::create([
             'user_id' => $user->id

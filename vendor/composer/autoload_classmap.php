@@ -100,6 +100,7 @@ return array(
     'App\\Models\\Provider' => $baseDir . '/app/Models/Provider.php',
     'App\\Models\\RejectionHistory' => $baseDir . '/app/Models/RejectionHistory.php',
     'App\\Models\\SubscriptorDataModel' => $baseDir . '/app/Models/SubscriptorDataModel.php',
+    'App\\Models\\SuscriptorHistorial' => $baseDir . '/app/Models/SuscriptorHistorial.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\UserEvent' => $baseDir . '/app/Models/UserEvent.php',
     'App\\Providers\\ApiService' => $baseDir . '/app/Providers/ApiService.php',

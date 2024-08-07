@@ -11,21 +11,21 @@ class RemoveFondoNameFromFacturasAdminTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('facturas_admin', function (Blueprint $table) {
-            $table->dropColumn('fondo_name');
-        });
-    }
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('facturas_admin', function (Blueprint $table) {
-            //
-        });
-    }
+    // public function up()
+    // {
+    //     Schema::table('facturas_admin', function (Blueprint $table) {
+    //         $table->dropColumn('fondo_name');
+    //     });
+    // }
+    // /**
+    //  * Reverse the migrations.
+    //  *
+    //  * @return void
+    //  */
+    // public function down()
+    // {
+    //     Schema::table('facturas_admin', function (Blueprint $table) {
+    //         //
+    //     });
+    // }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FondoClientes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Profile;
@@ -15,7 +15,8 @@ use App\Models\ClientPayment;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Mail as MailCustom;
 use App\Mail\SendMail;
-use Illuminate\Support\Facades\Auth;
+use App\Models\SuscriptorHistorial;
+use App\Models\FondoClientes;
 use App\Models\FondoHistoriaClientes;
 use App\Models\SubscriptorDataModel;
 use Carbon\Carbon;
@@ -151,51 +152,48 @@ class HomeController extends Controller
         ], 200);
 
     }
+
     public function getUserReferidos(){
-       $user = Auth::user();
-       $uniqueCode = $user->unique_code;
-       if (!$uniqueCode) {
-           // Generar un unique_code si el usuario no tiene uno
-           $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
-           $user->unique_code = $uniqueCode;
-           $user->save();
-       }
-	    $inviteLink=route('register',['refered_code'=>$uniqueCode]);
+        $user = Auth::user();
+        $uniqueCode = $user->unique_code;
+        if (!$uniqueCode) {
+            // Generar un unique_code si el usuario no tiene uno
+            $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
+            $user->unique_code = $uniqueCode;
+            $user->save();
+        }
+        $inviteLink = route('register', ['refered_code' => $uniqueCode]);
 
-        $dataInvitados=User::where('refered_code',$uniqueCode)->count();
-        // si el cliente se registra un pago se va a SuscriptorDataModel ahi se ven todas las transacciones mas su total de data
-        $totalPlanesVendidos=SubscriptorDataModel::where('refered_code',$uniqueCode)->count();
-    
-        $montoGenerado=SubscriptorDataModel::where('refered_code',$uniqueCode)->sum('membership_collected');
-        
-        // conseguir el SubscriptorDataModel para generar el chart de barras  a cada array agregar 0 de inicio pues el grafico se incializa en 0 
-        // el primer grafico de barras nos muestra cuanto genero con membership_collected
-        //el segundo barras se hace con cuantas personas trae con su codigo y 
-            // Preparar datos para los gráficos de barras (ejemplo)
-        $chartData = SubscriptorDataModel::selectRaw('DATE(created_at) as date, SUM(membership_collected) as total_collected')
-        ->where('refered_code', $uniqueCode)
-        ->groupBy('date')
-        ->orderBy('date', 'asc')
-        ->get();
-    
-        $totalInvitados = User::all()->count();
+        $dataInvitados = User::where('refered_code', $uniqueCode)->count();
+        $totalClientes = User::all()->count();
 
-        $porcentajeInvitados = $totalInvitados>0 ? ($dataInvitados/$totalInvitados) *100 : 0 ;
+        $montoGenerado = SubscriptorDataModel::where('user_table_id', $user->id)->pluck('membership_collected')->first();
+        $infoSuscriptor = SuscriptorHistorial::where('refered_code', $user->unique_code)->get();
 
-        $chartLabels = $chartData->pluck('date')->prepend('0')->toArray(); // Agregar '0' para iniciar en 0
-        $chartValues = $chartData->pluck('total_collected')->prepend(0)->toArray(); // Agregar 0 para iniciar en 0
+        // Generar los datos para el gráfico
+        $chartDataSus = [];
+        $totalCollected = 0;
+        foreach ($infoSuscriptor as $historial) {
+            $totalCollected += $historial->membership_collected;
+            $chartDataSus[] = [
+                'date' => $historial->created_at->format('Y-m-d'),
+                'total_collected' => $totalCollected
+            ];
+        }
 
-        return view('home', compact('inviteLink' ,'totalPlanesVendidos' ,'dataInvitados','montoGenerado','chartValues','porcentajeInvitados','chartLabels'));
+        // dd($chartDataSus);
+        $porcentajeInvitados = $totalClientes > 0 ? ($dataInvitados / $totalClientes) * 100 : 0;
 
-
+        return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus'));
     }
+
 
 
 
     public function getUserCliente()
     {
         $user = Auth::user();
-    // Obtener el primer día del mes actual
+        // Obtener el primer día del mes actual
         $primerDiaMesActual = Carbon::now()->startOfMonth()->toDateString();
     
         // Obtener el último día del mes actual
@@ -308,6 +306,7 @@ class HomeController extends Controller
         }
 
         $plans = Plan::all();
+        // dd($planData);
         return view('home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans' ,'paymentsTotal','userProfile'));
     }
 

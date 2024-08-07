@@ -64,8 +64,8 @@
                     </div>
                 </div>
                 @else
-                <div class="col-5 d-none" id="alert_wrapper_dni_r">
-                </div>
+                    <div class="col-5 d-none" id="alert_wrapper_dni_r">
+                    </div>
                 @endif
 
             </div>
@@ -145,6 +145,21 @@
         <div class="form-group col-sm-8">
             {!! Form::label('address', 'Dirección de recidencia:') !!}
             {!! Form::text('address', null, ['class' => 'form-control','maxlength' => '50']) !!}
+        </div>
+        <div class="form-group col-sm-6">
+            {!! Form::label('phone_code', 'Código de país:') !!}
+            {!! Form::select('phone_code', [
+                '+51' => '+51 (Peru)',
+                '+1' => '+1 (USA/Canada)',
+                '+44' => '+44 (UK)',
+                '+52' => '+52 (Mexico)',
+                '+91' => '+91 (India)',
+            ], null, ['class' => 'form-control']) !!}
+        </div>
+
+        <div class="form-group col-sm-6" >
+            {!! Form::label('phone', 'Número de celular:') !!}
+            {!! Form::text('phone', null, ['class' => 'form-control', 'value'=>'-']) !!}
         </div>
         <div class="form-group col-sm-8" style="display: none;">
             {!! Form::label('phone', 'Número de celular:') !!}

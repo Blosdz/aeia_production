@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FacturasController;
 use App\Http\Controllers\FondoController;
@@ -182,6 +183,8 @@ Route::middleware(['auth'])->group(function() {
     // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
     Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
     Route::post('/table-fondo/edit/{id}/update-add-payments', [FondoController::class, 'editUpdateFondo'])->name('fondos.update-add-payments');
+    // Suscriptor Historial
+    Route::get('/historial-suscriptor',[HistorialController::class,'dataHistorial'])->name('Historial');
 
 });
 

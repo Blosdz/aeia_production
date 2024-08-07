@@ -36,6 +36,7 @@
     {!! Form::text('country_document',null, ['class' => 'form-control','autocomplete'=>'off']) !!}
 </div>
 
+
 <!-- Sex Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('sex', 'Sexo:') !!}

@@ -804,6 +804,7 @@ class ComposerStaticInit4c7b52f50ef60af4e5ebede09cbf10ef
         'App\\Models\\Provider' => __DIR__ . '/../..' . '/app/Models/Provider.php',
         'App\\Models\\RejectionHistory' => __DIR__ . '/../..' . '/app/Models/RejectionHistory.php',
         'App\\Models\\SubscriptorDataModel' => __DIR__ . '/../..' . '/app/Models/SubscriptorDataModel.php',
+        'App\\Models\\SuscriptorHistorial' => __DIR__ . '/../..' . '/app/Models/SuscriptorHistorial.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\UserEvent' => __DIR__ . '/../..' . '/app/Models/UserEvent.php',
         'App\\Providers\\ApiService' => __DIR__ . '/../..' . '/app/Providers/ApiService.php',

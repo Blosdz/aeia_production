@@ -362,7 +362,7 @@
     });
     
 </script>
-<script src="{{ mix('js/charts.js') }}"></script>    
+{{-- <script src="{{ mix('js/charts.js') }}"></script>     --}}
 
 <script>
     $( document ).ready(function() {

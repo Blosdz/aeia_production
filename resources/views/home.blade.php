@@ -113,27 +113,27 @@
                         <tbody>
                             <tr>
                                 <td>Bronce</td>
-                                <td>$ 4</td>
+                                <td>$ 14</td>
                             </tr>
                             <tr class="active-row">
                                 <td>Plata</td>
-                                <td>$ 10</td>
+                                <td>$ 35</td>
                             </tr>
-                            <tr>
+                            <tr>    
                                 <td>Oro</td>
-                                <td>$ 20</td>
+                                <td>$ 70</td>
                             </tr>
                             <tr>
                                 <td>Platino</td>
-                                <td>$ 24</td>
+                                <td>$ 84</td>
                             </tr>
                             <tr>
                                 <td>Diamante</td>
-                                <td>$ 40</td>
+                                <td>$ 140</td>
                             </tr>
                             <tr>
                                 <td>Vip</td>
-                                <td>$ 60</td>
+                                <td>Consulta con el administrador</td>
                             </tr>
                             <!-- and so on... -->
                         </tbody>
@@ -160,8 +160,8 @@
     <div class="col p-3">
       <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
 
-        @if (!empty($totalVentas ?? ''))
-            <div id="chart_monto_generado" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+        @if (!empty($chartDataSus ?? ''))
+            <div id="chart-sus" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
         @else
             {{-- <div class="  bg-1 container-size"> --}}
                 <div class="chart-container">
@@ -171,20 +171,18 @@
                 </div>
                 {{-- <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p> --}}
            {{-- </div> --}}
-  
         @endif
       </div>
     </div>
     <div class="col p-3">
       <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
 
-        @if (!empty($porcentajeInvitados ?? '')) 
-            <div id="porcentaje_subs" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+        @if (!empty($porcentajeInvitados ?? '' )) 
+            <div id="porcentaje_subs"  style="width: 26vw;"></div>
         @else
             <div class="chart-container">
                 <div class="chart-overlay">Ejemplo</div>
                 <div id="chart-demo-dona" style="width: 26vw;" ></div>
-
             </div>
             {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
         @endif
@@ -194,10 +192,12 @@
 
 </div>
 <script>
-    var chartValues=@json($chartValues ?? '');
+    var chartDataSus=@json($chartDataSus ?? []);
+    // console.log(chard)
     var porcentajeInvitados=@json($porcentajeInvitados ?? '');
     var chartLabels=@json($chartLabels ?? '');
 </script>
+<script src="{{mix('js/suscriptor.js')}}"></script>
 
 <script>
     function copyToClipboard(element) {
@@ -359,7 +359,7 @@
             <div class="counter bg-1 w-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
                 @if (!empty($porcentajeInvertido ?? ''))
-                    <div id="chart_dona" class="" style="height: 16vw; width: 35vw;"></div>
+                    <div id="chart-dona" class="" style="width: 26vw;"></div>
                 @else
                     <div class="chart-container">
                         <div class="chart-overlay">Ejemplo</div>
@@ -392,9 +392,9 @@
             </div>
             <div class="col p-3 md-3">
                 <div class="w-100 p-3   bg-1 " id="rounded-container">
-                    <div class="counter h-100 w-70 bg-1">
+                    <div class="counter h-100 w-70">
                         @if (!empty($data['data']))
-                          <div id="chart_{{ $planName }}" class="p-5 bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
+                          <div id="chart_{{ $planName }}" class="p-5 rounded" style="height: 16vw; width: 35vw;"></div>
                         @else
                             <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
                         @endif
@@ -471,11 +471,14 @@
 
 <script>
     var planData = @json($planData ?? '');
-    var donaData = @json($porcentajeInvertido ?? '');
-    donaSeries=[donaData,100-donaData]
-    console.log(planData); // Verifica que los datos se están pasando correctamente
-    console.log(donaData); // Verifica que los datos se están pasando correctamente
+    var donaDataClient = @json($porcentajeInvertido ?? '');
+    var donaSeries=[donaDataClient,100-donaDataClient];
+    // console.log(planData); // Verifica que los datos se están pasando correctamente
+    // console.log(donaDataClient); // Verifica que los datos se están pasando correctamente
+    // console.log(donaSeries); // Verifica que los datos se están pasando correctamente
 </script>
+<script src="{{mix('js/charts.js')}}"></script>
+
 @elseif ($user_session->rol == 5)
 <div class="row">
     <div class="col-3 p-3">
@@ -603,7 +606,7 @@
     <div class="col p-3">
       <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
 
-        @if (!empty($porcentajeInvitados ?? '')) 
+        @if (!empty($porcentajeInvitados ?? '' ?? '')) 
             <div id="porcentaje_subs" class="bg-1 rounded" style="height: 16vw; width: 35vw;"></div>
         @else
             <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p>
@@ -615,7 +618,7 @@
 </div>
 <script>
     var chartValues=@json($chartValues ?? '');
-    var porcentajeInvitados=@json($porcentajeInvitados ?? '');
+    var porcentajeInvitados=@json($porcentajeInvitados ?? '' ?? '');
     var chartLabels=@json($chartLabels ?? '');
 </script>
 
