@@ -16,9 +16,9 @@
 </li>
 
 <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('users.index') }}">
+    <a class="nav-link" href="{{ route('detalles') }}">
         <img src="{{URL::asset('/images/dashboard/clientes_subscriptores.png')}}" alt="">
-        <span>Suscriptores y clientes</span>
+        <span>Usuarios</span>
     </a>
 </li>
 

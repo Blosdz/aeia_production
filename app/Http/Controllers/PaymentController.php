@@ -628,7 +628,9 @@ class PaymentController extends AppBaseController
                     'refered_code' => $user->refered_code,
                     'plan_id' => $clientPayment->plan_id,
                     'user_id' => $user->id,
-                    'membership_collected' => $dataSuscriptor[$clientPayment->plan_id]
+                    'membership_collected' => $dataSuscriptor[$clientPayment->plan_id],
+                    'updated_at' => now(),
+                    'created_at' => now()
                 ]);
                 
                 $suscriptorHistorial[] = SubscriptorDataModel::where('user_table_id', $user_referee->id)->update([

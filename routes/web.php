@@ -61,7 +61,7 @@ Route::post('/mail/sendmail', [HomeController::class, 'sendmail'])->name('send.m
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
-
+    Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
     ROute::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
     Route::get('/dataSuscriptor/{id}',[SuscriptorInfo::class,'detailSuscriptor'])->name('detailSuscriptor');
     Route::get('/dataSuscriptor',[SuscriptorInfo::class,'tableSuscriptors'])->name('tableSuscriptor');

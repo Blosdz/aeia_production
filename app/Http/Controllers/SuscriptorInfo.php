@@ -13,6 +13,60 @@ use dd;
 class SuscriptorInfo extends Controller
 {
 
+    public function tableAdmin() {
+        $suscriptores = User::where('rol', 2)->get();
+        $clientes = User::where('rol', 3)->get(); 
+        $business = User::where('rol', 4)->get();
+        $administradores = User::where('rol', 5)->get();
+        
+        $suscriptores_data = [];
+        
+        foreach ($suscriptores as $suscriptor) {
+            $profile = Profile::where('user_id', $suscriptor->id)->first();
+            $suscriptores_data[] = [
+                'user' => $suscriptor,
+                'profile' => $profile,
+            ];
+        }
+        $business_data = [];
+
+        foreach($business as $bus){
+            $profile = Profile::where('user_id', $bus->id)->first();
+            $business_data[] = [
+                'user' => $bus,
+                'profile' => $profile,
+            ];
+        }
+        $client_data = [];
+        foreach($clientes as $client){
+            $profile = Profile::where('user_id', $client->id)->first();
+            $client_data[] = [
+                'user' => $client,
+                'profile' => $profile,
+            ];
+        }
+        $administrador_data = [];
+        foreach($administradores as $admin){
+            $profile = Profile::where('user_id', $admin->id)->first();
+            $administrador_data[] = [
+                'user' => $admin,
+                'profile' => $profile,
+            ];
+        }
+        return view('users_new.index', compact('suscriptores_data', 'client_data', 'business_data', 'administrador_data'));
+    }
+    
+    public function tableAdminInfo($id){
+        $user = User::find($id);
+        if($user->rol != 2 || $user->rol!=5){
+            $payments_data = Payments::where('user_id',$user->id)->get();
+
+        }else{
+            $data_suscriptor= ClientPaymet::where('referred_code',$user->unique_code)->get();
+        }
+        return view('gerente_funciones.detailDataSuscriptores', compact('suscriptor', 'users_with_payments'));
+    }
+
     public function tableSuscriptors()
     {
         $user = Auth::user();
