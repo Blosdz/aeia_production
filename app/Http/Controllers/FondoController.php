@@ -473,7 +473,7 @@ class FondoController extends Controller
         ]);
     
         // Actualizar la ganancia de capital del fondo
-        $fondo->ganancia_de_capital += $request->ganancia_de_capital;
+        $fondo->ganancia_de_capital = $request->ganancia_de_capital;
         $fondo->save();
     
         // Calcular las comisiones y obtener los fondos de clientes actualizados
