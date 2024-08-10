@@ -6,8 +6,9 @@
     <div class="row h-100 w-100 p-4 bg-1" id="rounded-container">
         <strong> {{$fondo->fondo_name}} </strong>
         <div class="col">
+            Rendimiento: <br>
+            Fondo Inicial:  <br>
             Ganancia Neta: <br>
-            Fondo General:  <br>
             Balance AEIA: <br>
             Creado en: <br>
             Ultima Actualización <br>
@@ -15,6 +16,7 @@
         <div class="col">
             {{ $fondo->ganancia_de_capital }} <br>
             {{$fondo->total}} <br>
+            {{$fondo->ganancia_de_capital - $fondo->total}}<br>
             {{ $fondo->total_comisiones }} <br>
             {{ $fondo->created_at }} <br>
             {{ $fondo->updated_at }} <br>

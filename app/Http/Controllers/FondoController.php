@@ -446,8 +446,11 @@ class FondoController extends Controller
             // Calcular el porcentaje de inversión del cliente en relación al total
             $porcentajeInversion = $fondoCliente->monto_invertido / $totalInversiones;
 
+            // calcualar la ganancia neta
+            $gananciaNeta =$fondo->ganancia_de_capital - $fondo->total;
             // Calcular la ganancia del cliente en base al porcentaje de inversión y la ganancia del fondo
-            $gananciaCliente = $porcentajeInversion * $fondo->ganancia_de_capital;
+
+            $gananciaCliente = $porcentajeInversion * $gananciaNeta;
 
             $comision = $gananciaCliente * ($plan->commission / 100);
             $totalComisiones += $comision;
