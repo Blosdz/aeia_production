@@ -40,6 +40,13 @@
         z-index: -1; /* Asegura que la imagen esté detrás del contenido */
     }
 
+    .date{
+        position: fixed;
+        top:3px;
+        right:20px;
+        font-size:14px;
+        font-weight:bold;
+    }
 
     p,
     td {
@@ -48,6 +55,7 @@
 </style>
 
 <body>
+    <div class="date">{{ $timestamp }}</div>
     <div class="background-container"></div>
     <div style="width:100%; text-align:center"><u><b>CONTRATO DE ADMINISTRACIÓN DE CAPITAL </b></u></div>
     <p>Conste por el presente Contrato para Administración de Capital,
