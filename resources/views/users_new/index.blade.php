@@ -49,6 +49,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Correo</th>
+                            <th>Documentos</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,10 @@
                         <tr>
                             <td>{{ $data['profile']->first_name }} {{ $data['profile']->last_name }}</td>
                             <td>{{ $data['user']->email }}</td>
+                            <!-- Enlace que lleva a la descarga de documentos para este cliente -->
+                            <td>
+                                <a href="{{ route('download.documents', ['id' => $data['cliente_id']]) }}" class="btn btn-primary">Documentos</a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

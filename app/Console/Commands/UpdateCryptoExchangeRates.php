@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Services\ApiService;   
 use Illuminate\Console\Command;
+use App\Http\Controllers\CurrenciesController;
 
 class UpdateCryptoExchangeRates extends Command
 {
@@ -32,7 +33,7 @@ class UpdateCryptoExchangeRates extends Command
     public function __construct(ApiService $apiService)
     {
         parent::__construct();
-        $this->apiService = $apiService;
+        // $this->apiService = $apiService;
     }
 
     /**
@@ -42,8 +43,9 @@ class UpdateCryptoExchangeRates extends Command
      */
     public function handle()
     {
-        $data = $this->ApiService->getMultipleData();
-        $this->info('Crypto exchange rates update succesfully.');
+        $controller = new CurrenciesController();
+        $controller->getUpdateCurrencies();
+        $this->info('Currencies updated');
         return 0;
     }
 }

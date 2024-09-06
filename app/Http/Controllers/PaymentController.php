@@ -11,6 +11,7 @@ use App\Models\Profile;
 use App\Models\SubscriptorDataModel;
 use App\Models\Contract;
 use App\Models\Plan;
+use App\Models\Declaraciones;
 use App\Models\User;
 use App\Models\ClientPayment;
 use App\Http\Controllers\AppBaseController;
@@ -349,6 +350,17 @@ class PaymentController extends AppBaseController
             11 => 'Noviembre',
             12 => 'Diciembre'
         ];
+             // Procesar y guardar la imagen del canvas
+        if ($request->has('canvas_image')) {
+            $imageData = $request->input('canvas_image');
+            $imageParts = explode(";base64,", $imageData);
+            $imageBase64 = base64_decode($imageParts[1]);
+            $fileName = 'signatures/' . uniqid() . '.png'; // Ruta de guardado en 'storage/app/public/signatures'
+            // Guardar la imagen en el almacenamiento de Laravel (public disk)
+            Storage::disk('public')->put($fileName, $imageBase64);
+            // Asignar la ruta de la imagen al campo 'signature_image'
+            $input['signature_image'] = $fileName;
+        }
 
         $currentDate = Carbon::now();
         $dayOfMonth = (int)$currentDate->format('d');
@@ -365,39 +377,17 @@ class PaymentController extends AppBaseController
 		    if (!file_exists(storage_path($filePath))) {
                 	Storage::makeDirectory('public/'.$filePath, 0777, true);
             	}
-        //     $size = $request->file('voucher_picture')->getSize();
-        //     $name = $request->file('voucher_picture')->getClientOriginalName();
-        //     $request->file('voucher_picture')->storeAs('public/images/', $name);
-        //     // ... (rest of your code for photo object and saving)
-        //     $photo=new Photo();
-        //     $photo->name=$name;
-        //     $photo->size=$size;
-        //     $photo->save();
-        //     $input["voucher_picture"]=$photo->id;
-
-		$name=uniqid().'.'.$request->file('voucher_picture')->getClientOriginalExtension();
-		$path=$filePath.$name;
-		$request->file('voucher_picture')->storeAs('public/'.$filePath,$name);
-		$input["voucher_picture"] = '/storage/vouchers/' . $name;
+		    $name=uniqid().'.'.$request->file('voucher_picture')->getClientOriginalExtension();
+		    $path=$filePath.$name;
+		    $request->file('voucher_picture')->storeAs('public/'.$filePath,$name);
+		    $input["voucher_picture"] = '/storage/vouchers/' . $name;
         }else{
             $input["voucher_picture"]="noimgadded";
         }  	
 
-        //$qr = $this->generateQR($input);
-        //if ($qr->status !== "SUCCESS"){
-         //   return $this->sendError($qr, 400);
-       // }
-
         $input["user_id"] = Auth::user()->id;
 
         $input["date_transaction"] = Carbon::now()->format('Y-m-d H:i:s');
-        // $input["total"] = number_format($input["total"], 7);
-        //$input["prepay_code"] = $qr->data->prepayId;
-
-        //$expireTime = Carbon::createFromTimestamp($qr->data->expireTime / 1000)->format("Y-m-d H:i:s");
-
-        //$input["expire_time"] = $expireTime;
-        //$input["qr_url"] = $qr->data->qrcodeLink;
 
         $payment = $this->paymentRepository->create($input);
 
@@ -414,10 +404,27 @@ class PaymentController extends AppBaseController
             'type_document' => $profile->type_document,
             'identification_number' => $profile->identification_number,
             'code' => uniqid(),
+            'signature_image' => $fileName, // Usar la ruta guardada
             'payment_id' => $payment->id
         ];
-
+        
 	    $contract = Contract::create($contract);
+
+        $declaraciones = Declaraciones::create([
+            'user_id' => $profile->user_id,
+            'type' => 2,
+            'full_name' => $profile->first_name.' '.$profile->lastname,
+            'country' => $profile->country,
+            'city' => $profile->city,
+            'state' => $profile->state,
+            'address' => $profile->address,
+            'country_document' => $profile->country_document,
+            'type_document' => $profile->type_document,
+            'identification_number' => $profile->identification_number,
+            'code' => uniqid(),
+            'signature_image' => $fileName, // Usar la ruta guardada
+            'payment_id' => $payment->id
+        ]);
 
         $referred_user = Auth::user()->refered_code;
 
@@ -449,33 +456,21 @@ class PaymentController extends AppBaseController
     public function pay(Request $request)
     {
         $input = $request->all();
-        //$qr = $this->generateQR($input);
-        //if ($qr->status !== "SUCCESS"){
-         //   return $this->sendError($qr, 400);
-        //}
-
-
         $input["user_id"] = Auth::user()->id;
-
         $input["date_transaction"] = Carbon::now();
-        // $input["total"] = number_format($input["total"], 7);
-        //$input["prepay_code"] = $qr->data->prepayId;
-
-        $expireTime = Carbon::now()->dat(15);
-
+    
+        $expireTime = Carbon::now()->addDays(15);
         $input["expire_time"] = $expireTime;
-
-        //$input["qr_url"] = $qr->data->qrcodeLink;
         $input['month'] = 'annual_subscription';
-
+    
         $payment = $this->paymentRepository->create($input);
-
-
-        $profile = Profile::where('user_id',$payment->user_id)->first();
+    
+    
+        $profile = Profile::where('user_id', $payment->user_id)->first();
         $contract = [
             'user_id' => $profile->user_id,
             'type' => 1,
-            'full_name' => $profile->first_name.' '.$profile->lastname,
+            'full_name' => $profile->first_name . ' ' . $profile->lastname,
             'country' => $profile->country,
             'city' => $profile->city,
             'state' => $profile->state,
@@ -484,14 +479,15 @@ class PaymentController extends AppBaseController
             'type_document' => $profile->type_document,
             'identification_number' => $profile->identification_number,
             'code' => uniqid(),
+            'signature_image' => $fileName, // Usar la ruta guardada
             'payment_id' => $payment->id
         ];
 
         $contract = Contract::create($contract);
-        // Flash::success('Deposito recibido correctamente.');
-
-	    return redirect()->back()->with('success','pago realizado con exito');
+    
+        return redirect()->back()->with('success', 'Pago realizado con éxito');
     }
+    
 
     public function webhook(Request $request){
         $input = $request->input();

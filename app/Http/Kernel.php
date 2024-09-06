@@ -3,9 +3,13 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule;
 
 class Kernel extends HttpKernel
 {
+    protected function schedule(Schedule $schedule){
+        $schedule->commmand('currencies:update')->daily();
+    }
     /**
      * The application's global HTTP middleware stack.
      *
@@ -64,4 +68,11 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+    // app/Console/Kernel.php
+
+    protected $commands = [
+        \App\Console\Commands\UpdateCryptoExchangeRates::class, // Add this line
+    ];
+
 }
+

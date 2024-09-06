@@ -6,7 +6,7 @@
     <div class="row h-100 w-100 p-4 bg-1" id="rounded-container">
         <strong> {{$fondo->fondo_name}} </strong>
         <div class="col">
-            Rendimiento: <br>
+            Valor Actual: <br>
             Fondo Inicial:  <br>
             Ganancia Neta: <br>
             Balance AEIA: <br>

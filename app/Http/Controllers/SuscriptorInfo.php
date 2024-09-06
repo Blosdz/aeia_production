@@ -8,8 +8,14 @@ use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Payment;
 use App\Models\ClientPayment;
+use App\Models\Contract;
+use App\Models\Declaraciones;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
+use Carbon\Carbon;
 use dd;
+
 class SuscriptorInfo extends Controller
 {
 
@@ -26,6 +32,7 @@ class SuscriptorInfo extends Controller
             $suscriptores_data[] = [
                 'user' => $suscriptor,
                 'profile' => $profile,
+                'suscriptor_id' => $suscriptor->id,
             ];
         }
         $business_data = [];
@@ -43,6 +50,7 @@ class SuscriptorInfo extends Controller
             $client_data[] = [
                 'user' => $client,
                 'profile' => $profile,
+                'cliente_id' => $client->id,
             ];
         }
         $administrador_data = [];
@@ -56,6 +64,71 @@ class SuscriptorInfo extends Controller
         return view('users_new.index', compact('suscriptores_data', 'client_data', 'business_data', 'administrador_data'));
     }
     
+    public function downloadDocuments($id)
+    {
+        // Obtener el perfil del cliente
+        $profile = User::where('id', $id)->first();
+    
+        if (!$profile) {
+            return redirect()->back()->with('error', 'No se encontró el perfil del cliente.');
+        }
+    
+        // Obtener los documentos relacionados con el cliente
+        $clientContracts = Contract::where('user_id', $id)->get();
+        $clientDeclaraciones = Declaraciones::where('user_id', $id)->first();
+    
+        // Verificar si al menos uno de los documentos existe
+        // if ($clientContracts->isEmpty() && !$clientDeclaraciones) {
+        //     return redirect()->back()->with('error', 'No se encontraron documentos del cliente.');
+        // }
+        
+    
+        // Crear PDFs para los datos comunes del cliente
+        $pdfDeclaraciones = $clientDeclaraciones ? Pdf::loadView('documentos.declaracionVoluntaria', compact('profile', 'clientDeclaraciones'))->output() : null;
+    
+        // Crear un archivo ZIP y agregar los PDFs
+        $zipFileName = 'documentos_cliente_' . $profile->name . '.zip';
+        $zipPath = storage_path($zipFileName);
+        $zip = new \ZipArchive;
+    
+        if ($zip->open($zipPath, \ZipArchive::CREATE) === TRUE) {
+            // Base PDF with static data
+            // $pdfBase = Pdf::loadView('documentos_new.contrato', compact('profile'))->output();
+    
+            // Agregar los PDFs de contratos con diferentes timestamps
+            foreach ($clientContracts as $contract) {
+                $timestamp = Carbon::parse($contract->created_at);
+
+                
+                // Create a new PDF with varying details
+                $pdfWithDetails = Pdf::loadView('documentos_new.contrato', array_merge(
+                    compact('profile'),
+                    [
+                        'code' => $contract->code,
+                        'payment_id' => $contract->payment_id,
+                        'timestamp' => $timestamp,
+                    ]
+                ))->output();
+    
+                $formattedTimestamp = $timestamp->format('Y-m-d_H-i-s');
+                $zip->addFromString("Contrato_{$formattedTimestamp}.pdf", $pdfWithDetails);
+            }
+    
+            // Agregar el PDF de declaraciones si existe
+            if ($pdfDeclaraciones) {
+                $zip->addFromString('Declaraciones.pdf', $pdfDeclaraciones);
+            }
+    
+            $zip->close();
+        } else {
+            return redirect()->back()->with('error', 'Error al crear el archivo ZIP.');
+        }
+    
+        // Descargar el archivo ZIP y eliminarlo después de enviar
+        return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
+    
+
     public function tableAdminInfo($id){
         $user = User::find($id);
         if($user->rol != 2 || $user->rol!=5){

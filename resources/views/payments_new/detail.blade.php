@@ -1,7 +1,7 @@
 @extends('layouts_new.app')
 
 @section('content')
-    <div class="row p-4 h-100 w-100">
+    <div class="row p-4 h-100 w-100" >
         <strong>Depósitos</strong>
         <div class="detail-payment-card p-4 bg-1" id="rounded-container">
             Selecciona tu plan
@@ -88,7 +88,6 @@
                     </div>
                     {!! Form::hidden('plan_id', $plan->id, []) !!}
                     {!! Form::hidden('name', $plan->id, []) !!}
-                    {!! Form::close() !!}
                 </div>
             </div>
         </div>
@@ -104,6 +103,18 @@
                     <input type="checkbox" id="myCheckbox" name="terminos" value="opcion">
                     <label for="terminos">Al hacer clic acepta el <a href="{{ route('pdf', ['id' => $plan->id]) }}" target="_blank">contrato</a> y las condiciones del servicio</label>
                 </div>
+
+                             <!-- Integración del Canvas -->
+                <!-- <div class="image_signature"> -->
+                    <canvas id="can" width="400" height="400" style="border:2px solid; z-index:7"></canvas>
+                    <input type="button" value="clear" id="clr" onclick="erase()">
+                    <img id="canvasimg" style="display:none;" src="" alt="">
+                <!-- </div> -->
+
+                <!-- Campo oculto para la firma -->
+                {!! Form::hidden('canvas', null, ['id' => 'canvas_image']) !!}
+
+                {!! Form::close() !!}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-success" id="submitButton" disabled>Ya realicé el pago</button>
@@ -114,6 +125,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            init();
             let anual = parseFloat({{ $plan->annual_membership }});
 
             document.getElementById('amount-input').addEventListener('input', function() {
@@ -160,17 +172,45 @@
                 send();
             });
 
+
+            function save() {
+                document.getElementById("canvasimg").style.border = "2px solid";
+                var dataURL = canvas.toDataURL();
+                document.getElementById("canvasimg").src = dataURL;
+                document.getElementById("canvasimg").style.display = "inline";
+            }
+
             function send() {
                 let form = document.getElementById('pay-form');
                 if (!form.checkValidity()) {
                     form.querySelector(':submit').click();
                     return false;
                 }
-
+            
                 let formData = new FormData(form);
                 let submitButton = document.getElementById('submitButton');
                 submitButton.disabled = true;
-
+            
+                // Guardar la imagen del canvas antes de enviar
+                save();
+            
+                // Convertir el canvas a base64
+                let canvas = document.getElementById('can');
+                let dataURL = canvas.toDataURL('image/png'); // Convertir a formato PNG
+            
+                // Añadir el valor de base64 al formulario
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'canvas_image'; // Nombre del campo que se enviará al backend
+                input.value = dataURL; // Imagen en base64
+            
+                // Asegurarse de añadir el input al formulario antes de enviarlo
+                form.appendChild(input);
+            
+                // Agregar el input a formData para asegurarse de que se envíe
+                formData.append('canvas_image', dataURL);
+            
+                // Enviar el formulario a través de AJAX
                 $.ajax({
                     type: "POST",
                     url: "{{ route('client.payment') }}",
@@ -179,9 +219,7 @@
                     contentType: false,
                     success: function(data) {
                         console.log(data);
-                        // Cierra la ventana modal
                         $('#exampleModal').modal('hide');
-                        // Aquí puedes manejar la respuesta del servidor si es necesario
                         window.location.href = "{{ route('payment.plan') }}";
                     },
                     error: function(error) {
@@ -191,5 +229,90 @@
                 });
             }
         });
-    </script>
+</script>
+<script>
+    var canvas, ctx, flag = false,
+        prevX = 0,
+        currX = 0,
+        prevY = 0,
+        currY = 0,
+        dot_flag = false;
+
+    var x = "black",  // Color de trazo inicializado a negro
+        y = 2;  // Grosor del trazo
+
+    function init() {
+        canvas = document.getElementById('can');
+        ctx = canvas.getContext("2d");
+        w = canvas.width;
+        h = canvas.height;
+
+        // Configurar eventos del mouse
+        canvas.addEventListener("mousemove", function (e) {
+            findxy('move', e)
+        }, false);
+        canvas.addEventListener("mousedown", function (e) {
+            findxy('down', e)
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {
+            findxy('up', e)
+        }, false);
+        canvas.addEventListener("mouseout", function (e) {
+            findxy('out', e)
+        }, false);
+    }
+
+    function draw() {
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        ctx.strokeStyle = x;  // Asegura el color del trazo
+        ctx.lineWidth = y;  // Asegura el grosor del trazo
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    function erase() {
+        var m = confirm("¿Quieres borrar?");
+        if (m) {
+            ctx.clearRect(0, 0, w, h);
+            document.getElementById("canvasimg").style.display = "none";
+        }
+    }
+
+    function findxy(res, e) {
+        let canvasRect = canvas.getBoundingClientRect();  // Obtener la posición precisa del canvas
+
+        if (res == 'down') {
+            prevX = currX;
+            prevY = currY;
+            currX = e.clientX - canvasRect.left;  // Ajuste de coordenadas usando getBoundingClientRect
+            currY = e.clientY - canvasRect.top;
+
+            flag = true;
+            dot_flag = true;
+            if (dot_flag) {
+                ctx.beginPath();
+                ctx.fillStyle = x;
+                ctx.fillRect(currX, currY, 2, 2);
+                ctx.closePath();
+                dot_flag = false;
+            }
+        }
+        if (res == 'up' || res == "out") {
+            flag = false;
+        }
+        if (res == 'move') {
+            if (flag) {
+                prevX = currX;
+                prevY = currY;
+                currX = e.clientX - canvasRect.left;  // Ajuste de coordenadas
+                currY = e.clientY - canvasRect.top;
+                draw();
+            }
+        }
+    }
+</script>
+
+
 @endsection

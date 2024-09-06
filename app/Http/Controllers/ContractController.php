@@ -174,6 +174,10 @@ class ContractController extends AppBaseController
                 table, th, td {
                     border: 0px solid;
                 }
+                p,
+                td {
+                    text-align: justify;
+                }
             </style>
             ';
 
@@ -187,10 +191,7 @@ class ContractController extends AppBaseController
 
             $body = '
                 <p>Conste por el presente Contrato para Administración de Capital, que celebran de una parte 
-                <b>AEIA INVESTMENT E.I.R.L.</b> identificado con RUC Nº 20608381741, debidamente representado por 
-                DIEGO ELI BUTRON NUÑEZ, identificado con DNI N° 71400723, con domicilio en Urb. El solar de 
-                Challapampa A-25´ distrito de Cerro Colorado, provincia y departamento de 
-                Arequipa país Perú, a quien en adelante se le denominará <b>LA EMPRESA</b>; y de otra parte el Sr(a)'.
+                <b>AEIA INVESTMENT E.I.R.L.</b> identificado con RUC Nº 20608381741, a quien en adelante se le denominará <b>LA EMPRESA</b>; y de otra parte el Sr(a)'.
                 $contract->full_name.', con DNI '.$contract->identification_number.', con domicilio fiscal '.$contract->address.
                 ', '.$contract->state.', '.$contract->city.', '.$contract->country.', a quien en lo sucesivo se le denominará 
                 <b>EL SUSCRIPTOR</b>. El presente contrato, se celebra en los términos y condiciones siguientes:</p>
@@ -298,6 +299,10 @@ class ContractController extends AppBaseController
                 table, th, td {
                     border: 0px solid;
                 }
+                p,
+                td {
+                    text-align: justify;
+                }
             </style>
             ';
 
@@ -311,10 +316,7 @@ class ContractController extends AppBaseController
 
             $body = '
                 <p>Conste por el presente Contrato para Administración de Capital, que celebran de una parte 
-                <b>AEIA INVESTMENT E.I.R.L.</b> identificado con RUC Nº 20608381741, debidamente representado por su 
-                Gerente General Sr. DIEGO ELI BUTRON NUÑEZ, identificado con DNI N° 71400723, con domicilio 
-                en Urb. El solar de Challapampa A-25´ distrito de Cerro Colorado, provincia y departamento de 
-                Arequipa país Perú, a quien en adelante se le denominará <b>EL COMISIONISTA</b>; y de otra parte '.
+                <b>AEIA INVESTMENT E.I.R.L.</b> identificado con RUC Nº 20608381741, a quien en adelante se le denomirá <b>EL COMISIONISTA</b>; y de otra parte '.
                 $contract->full_name.', de nacionalidad '.$contract->country_document.' identificado con documento de identidad Nº '.
                 $contract->identification_number.', domiciliado en '.$contract->address.', '.$contract->state.', '.$contract->city.', '.$contract->country.' 
                 a quien en lo sucesivo se le denominará <b>EL MANDANTE</b>. El presente contrato, se celebra en los términos y condiciones siguientes:</p>

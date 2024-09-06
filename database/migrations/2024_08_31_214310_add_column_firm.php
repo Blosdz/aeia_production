@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFondoGeneralTable extends Migration
+class AddColumnFirm extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateFondoGeneralTable extends Migration
      */
     public function up()
     {
-        Schema::create('fondo_general', function (Blueprint $table) {
-            $table->id();
-	        $table->bigInteger('monto')->default(0);
-	        $table->bigInteger('monto_manual')->default(0);
-    	    $table->timestamps();
-
+        //
+        Schema::table('contracts',function(Blueprint $table){
+            $table->string('signature_image')->nullable();
         });
     }
 
@@ -29,6 +26,9 @@ class CreateFondoGeneralTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fondo_general');
+        //
+        Schema::table('contracts',function(Blueprint $table){
+            $table->dropColumn('signature_image');
+        });
     }
 }

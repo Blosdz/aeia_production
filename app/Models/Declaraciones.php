@@ -2,46 +2,16 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-use App\Models\User;
-use App\Models\Payment;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-/**
- * Class Contract
- * @package App\Models
- * @version April 26, 2022, 8:31 am UTC
- *
- * @property integer $user_id
- * @property integer $type
- * @property string $full_name
- * @property string $country
- * @property string $city
- * @property string $state
- * @property string $address
- * @property string $country_document
- * @property string $type_document
- * @property string $identification_number
- * @property string $code
- * @property integer $payment_id
- */
-class Contract extends Model
+class Declaraciones extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
-    public $table = 'contracts';
+    protected $table = 'declaraciones';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
-    public $fillable = [
+    protected $fillable = [
         'user_id',
         'type',
         'full_name',
@@ -57,11 +27,6 @@ class Contract extends Model
         'signature_image'
     ];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'user_id' => 'integer',
         'type' => 'integer',
@@ -78,11 +43,6 @@ class Contract extends Model
         'signature_image' => 'string'
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
     public static $rules = [
         'user_id' => 'required',
         'type' => 'required',
@@ -98,14 +58,4 @@ class Contract extends Model
         'payment_id' => 'required',
         'signature_image' => 'required'
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function payment(): BelongsTo
-    {
-        return $this->belongsTo(Payment::class);
-    }
 }

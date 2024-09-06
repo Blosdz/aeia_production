@@ -41,9 +41,9 @@ Route::get('/', function () {
     return view('newFront');
 })->name('welcome');
 
-Route::get('/test1', function () {
-    return view('auth.test1');
-})->name('test');
+// Route::get('/test1', function () {
+//     return view('auth.test1');
+// })->name('test');
 
 Route::get('/welcome_default2', function () {
     return view('welcome_default2');
@@ -60,6 +60,9 @@ Route::get('/start', [HomeController::class, 'start'])->name('start');
 Route::post('/mail/sendmail', [HomeController::class, 'sendmail'])->name('send.mail');
 
 Route::middleware(['auth'])->group(function() {
+    // descargar documentos 
+    Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
+    // 
     Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
     Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
     ROute::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
@@ -188,6 +191,10 @@ Route::middleware(['auth'])->group(function() {
 
 });
 
+
+Route::get('/testing',function(){
+    return view('test');
+})->name('test');
 
 Route::get('/api/data',[ApiController::class,'getData']);
 // Fallback route for session timeout redirection
