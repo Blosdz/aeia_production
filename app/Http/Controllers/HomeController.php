@@ -18,13 +18,16 @@ use App\Mail\SendMail;
 use App\Models\SuscriptorHistorial;
 use App\Models\FondoClientes;
 use App\Models\FondoHistoriaClientes;
+use App\Models\FondoHistorial;
 use App\Models\SubscriptorDataModel;
 use Carbon\Carbon;
+
+use Illuminate\Session\SessionManager;  
 
 use DateTime;
 use Str;
 use dd;
-use FondoHistorial;
+// use FondoHistorial;
 
 class HomeController extends Controller
 {
@@ -55,7 +58,7 @@ class HomeController extends Controller
     public function DataUsers($user){
         switch($user->rol){
             case 1:
-                return $this->getUserReferidos();
+                return $this->data_admin();
             case 2:
                 return $this->getUserReferidos();
             case 3:
@@ -73,6 +76,26 @@ class HomeController extends Controller
         }
 
     }
+
+    public function data_admin()
+    {
+        // $users = User::all(); // Asegúrate de tener el modelo User correctamente configurado
+        $activeUsers=0;
+        // foreach($users as $user){
+        //     if($user->isUsingApplication()){
+        //         $activeUsers++;
+        //     }
+        // }
+
+        $user=Auth::user();
+        $get_fondos=Fondo::get();
+        $get_historials=FondoHistorial::get();
+        $membresias=SubscriptorDataModel::where('user_table_id',$user->id)->first(); 
+        $totalsumado= Fondo::sum('total_comisiones');
+
+        return view('adminDashboard',compact('get_fondos','get_historials','membresias','totalsumado'));
+    }
+
     public function data_idk()
     {
         // Obtén el usuario autenticado actualmente
@@ -186,9 +209,6 @@ class HomeController extends Controller
 
         return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus'));
     }
-
-
-
 
     public function getUserCliente()
     {
