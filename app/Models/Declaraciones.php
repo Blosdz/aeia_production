@@ -2,8 +2,14 @@
 
 namespace App\Models;
 
+
+use Eloquent as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+
+use App\Models\User;
+use App\Models\Payment;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Declaraciones extends Model
 {
@@ -58,4 +64,13 @@ class Declaraciones extends Model
         'payment_id' => 'required',
         'signature_image' => 'required'
     ];
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function payment(): BelongsTo
+    {
+        return $this->belongsTo(Payment::class);
+    }
 }

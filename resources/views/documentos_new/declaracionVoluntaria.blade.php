@@ -7,6 +7,29 @@
     <title>Contrato de administración de capital</title>
 </head>
 <style>
+    .date{
+        position: fixed;
+        top:3px;
+        right:20px;
+        font-size:14px;
+        font-weight:bold;
+    }
+    .image-container {
+        position: absolute;
+        z-index: -1; /* Asegura que el contenedor esté por encima de los elementos con menor z-index */
+        /* top:-4px; */
+        /* top:-1000vw; */
+    }
+    .signature-img {
+        /* bottom: 40vw; */
+        width: 300px; /* Ajusta el tamaño de la imagen si es necesario */
+        height: 200px;
+        /* bottom: -8%; */
+        z-index: -1;
+        position:relative;
+        /* top: -300000vw; */
+        /* bottom: -45555px; */
+    }
     body {
         margin: 20px 10px;
     }
@@ -42,6 +65,7 @@
 </style>
 
 <body>
+    <div class="date">{{$timestamp}}</div>
     <div class="background-container"></div>
     <div class="" style="text-align: center"> <b> DECLARACION VOLUNTARIA DE ORIGEN DE FONDOS</b> </div>
 
@@ -111,14 +135,35 @@
     </table>
 
 
-    <p> <b>Arequipa. {{ \Carbon\Carbon::now()->format('d') }} de {{ \Carbon\Carbon::now()->format('m') }} del
-            {{ \Carbon\Carbon::now()->format('Y') }}</b></p> <br>
+    <p><b> Arequipa {{ date_format($declaracion->created_at, 'd') }} del mes de {{ $months[date_format($declaracion->created_at, 'n')] }} del {{ date_format($declaracion->created_at, 'Y') }}.</b></p><br>
+
+    <?php
+        $path2 = storage_path('app/public/' . $declaracion->signature_image); // Ajusta la ruta si es necesario
+        
+        if (file_exists($path2)) {
+            $type2 = pathinfo($path2, PATHINFO_EXTENSION);
+            $data2 = file_get_contents($path2);
+            $base642 = 'data:image/' . $type2 . ';base64,' . base64_encode($data2);
+        } else {
+            $base642 = null; // Si no existe la imagen, evita errores
+        }
+    ?>
 
     <table style="text-align: center">
+        
+        <tr>
+            <td width="5%">
+            </td>
+            <td width="40%">
+                <img src="<?php echo $base642; ?>" alt="Firma del Cliente" class="signature-img">
+            </td>
+        </tr>
         <tr>
             <td width="5%"></td>
             <td width="40%" style="border-top: 1px solid">
-                <b>EL MANDANTE</b>
+                <b>EL MANDANTE</b> <br>
+                <b>{{$profile->first_name}} {{$profile->lastname}}</b><br>
+                <b>{{$profile->identification_number}}</b>
             </td>
             <td width="5%"></td>
         </tr>

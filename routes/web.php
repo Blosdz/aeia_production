@@ -60,6 +60,9 @@ Route::get('/start', [HomeController::class, 'start'])->name('start');
 Route::post('/mail/sendmail', [HomeController::class, 'sendmail'])->name('send.mail');
 
 Route::middleware(['auth'])->group(function() {
+
+    Route::post('/client/update_signature/{id}', [PaymentController::class, 'client_update_signature'])->name('client.update_signature');
+
     // descargar documentos 
     Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
     // 
@@ -124,6 +127,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::resource('contracts', App\Http\Controllers\ContractController::class);
     Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
+    Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
     Route::resource('plans', App\Http\Controllers\PlanController::class);
     Route::resource('clientPayments', App\Http\Controllers\ClientPaymentController::class);

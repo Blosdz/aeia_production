@@ -10,20 +10,21 @@
     body {
         margin: 20px 10px;
     }
-
     table,
     th,
     td {
         border: 0px solid;
     }
     .image-container {
-        position: relative;
+        position: absolute;
         z-index: -1; /* Asegura que el contenedor esté por encima de los elementos con menor z-index */
+        /* top:-4px; */
+        /* top:-1000vw; */
     }
 
     .overlay-image {
         position: absolute;
-        top: -40px; /* Ajusta la posición según sea necesario */
+        top: -400px; /* Ajusta la posición según sea necesario */
         left: 0; /* Ajusta la posición según sea necesario */
         z-index: -1; /* Asegura que la imagen esté encima del contenido */
     }
@@ -51,6 +52,36 @@
     p,
     td {
         text-align: justify;
+    }
+    .footer-table {
+        position: absolute;
+        bottom: 90%;
+        width: 100%;
+    }
+
+    .signature-left {
+        text-align: left;
+        border-top: 1px solid;
+        /* bottom: 50vw; */
+        padding-left: 20px; /* Ajusta si necesitas más separación */
+    }
+
+    .signature-right {
+        text-align: right;
+        /* bottom: 50vw; */
+        border-top: 1px solid;
+        padding-right: 20px; /* Ajusta si necesitas más separación */
+    }
+
+    .signature-img {
+        /* bottom: 40vw; */
+        width: 300px; /* Ajusta el tamaño de la imagen si es necesario */
+        height: 200px;
+        bottom: -8%;
+        z-index: -1;
+        position:relative;
+        /* top: -300000vw; */
+        /* bottom: -45555px; */
     }
 </style>
 
@@ -126,7 +157,7 @@
                     COMISIONISTA</b>y <b>EL MANDANTE</b>,
                 asumiendo los riesgos derivados del empleo de estos medios. </td>
         </tr>
-    </table><br>
+    </table><br><br<br>
     <p><u><b>CUARTA: FACULTADES DEL COMISIONISTA</b></u></p><br>
     <table>
         <tr>
@@ -204,18 +235,17 @@
     <table>
         <tr>
             <td width="5%">6.1</td>
-            <td width="95%">Por el presente contrato <b>EL MANDANTE</b>entrega a <b>EL COMISIONISTA</b>en custodia y
-                administración,
-                el importe invertido,
-                para que éste pueda administrarlo conforme las facultades conferidas en la cláusula cuarta. </td>
+            <td width="95%">
+                Por el presente contrato <b>EL MANDANTE</b> entrega a <b>EL COMISIONISTA</b> en custodia y administración, la suma de US$. '.{{ $contract->payment->total}}.' (00/100 Dólares Americanos), para que éste pueda administrarlo conforme las facultades conferidas en la cláusula cuarta.
+            </td>
         </tr>
-    </table><br>
+    </table><br><br><br><br>
     <p><u><b>SEPTIMA: PLAN DE INVERSIÓN</b></u></p><br>
     <table>
         <tr>
             <td width="5%">7.1</td>
             <td width="95%">De manera expresa,
-                <b>EL MANDANTE</b>elige el plan de inversión “…….”,
+                <b>EL MANDANTE </b>elige el plan de inversión,
                 cuyas condiciones se encuentran detalladas en el Anexo Nro. 01,
                 que adjunto al presente contrato,
                 forma parte integrante e indesligable de este instrumento.
@@ -254,7 +284,7 @@
                 esto durante la vigencia del contrato,
                 el pago deberá ser realizado en el momento de suscribirse al plan de inversión. </td>
         </tr>
-    </table><br>
+    </table><br><br><br><br>
     <p><u><b>DÉCIMA: PLAZO DE DURACIÓN DEL CONTRATO</b></u></p><br>
     <table>
         <tr>
@@ -320,12 +350,13 @@
                 </ol>
             </td>
         </tr>
-    </table><br>
-    <p><u><b>DECIMO CUARTA: DE LAS OBLIGACIONES DEL MANDANTE </b></u></p><br>
+    </table>
+    <br><br><br><br><br><br><br>
+    <p><b>DECIMO CUARTA: DE LAS OBLIGACIONES DEL MANDANTE </b></p>
     <table>
         <tr>
             <td width="5%">14.1</td>
-            <td width="95%"><b>EL MANDANTE</b>durante la ejecución del presente asume las siguientes obligaciones:
+            <td width="95%" height="20%"><b>EL MANDANTE</b>durante la ejecución del presente asume las siguientes obligaciones:
                 <ol type="a">
                     <li>Realizar el pago anual de la membresía,
                         según el plan elegido,
@@ -412,8 +443,7 @@
                 Personales (Ley Nº 29733) y su Reglamento (Decreto Supremo Nº 003-2013-JUS), así como revocar su
                 consentimiento para el uso de sus datos),
                 son los siguientes: <br><b>AEIA INVESTMENT E.I.R.L..</b>,
-                con RUC N° 20608381741 Dirección: Urb. El Solar de Challapampa A -25´ distrito de Cerro Colorado,
-                provincia y departamento de Arequipa. Correo electrónico: XXXXXXXXXXXXXX </td>
+                con RUC N° 20608381741 departamento de Arequipa. Correo electrónico: dbutron@aeia.capital </td>
         </tr>
     </table><br>
     <p><u><b>DECIMO NOVENA: REGIMEN LEGAL APLICABLE</b></u></p><br>
@@ -456,7 +486,7 @@
                 que las partes no puedan resolver por negociación directa,
                 será sometida a los jueces y tribunales del distrito judicial de Arequipa. </td>
         </tr>
-    </table><br>
+    </table><br><br><br><br><br><br><br><br><br>
     <p><u><b>VIGÉSIMO SEGUNDA: DOMICILIO DE LAS PARTES</b></u></p><br>
     <table>
         <tr>
@@ -467,28 +497,71 @@
                 motivo de la ejecución del presente contrato. El cambio de domicilio de cualquiera de las partes surtirá
                 efecto recién a partir del día siguiente de notificado por escrito a la otra parte. </td>
         </tr>
-    </table>'En señal de conformidad las partes suscriben este documento que se extiende por triplicado el día
-    {{ \Carbon\Carbon::now()->format('d') }} del mes de {{ \Carbon\Carbon::now()->format('m') }} del
-    {{ \Carbon\Carbon::now()->format('Y') }} <br><br><br><br>
+        </table>
+            En señal de conformidad las partes suscriben este documento que se extiende por triplicado el día
+            {{ date_format($contract->created_at, 'd') }} del mes de {{ $months[date_format($contract->created_at, 'n')] }} del {{ date_format($contract->created_at, 'Y') }}.<br><br><br><br>
+
+
     <?php
-        $path = public_path('images/dashboard/firmadiego.jpeg');
+        $path = public_path('images/dashboard/firmadiego.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+
+
+        $path2 = storage_path('app/public/' . $contract->signature_image); // Ajusta la ruta si es necesario
+        
+        if (file_exists($path2)) {
+            $type2 = pathinfo($path2, PATHINFO_EXTENSION);
+            $data2 = file_get_contents($path2);
+            $base642 = 'data:image/' . $type2 . ';base64,' . base64_encode($data2);
+        } else {
+            $base642 = null; // Si no existe la imagen, evita errores
+        }
     ?>
-    <table style="text-align: center">
+
+
+    <table class="footer-table">
         <tr>
             <td width="5%"></td>
-
-            <td width="40%" style="border-top: 1px solid">
-                <div class="image-container">
-                    <img src="<?php echo $base64; ?>" alt="Firma Diego" width="100" height="100" class="overlay-image">
-                </div>
-                <b>AEIA INVESTMENT E.I.R.L.</b><br>RUC N° 20608381741
-                <br><b>EL COMISIONISTA</b></td>
+            <td widht="40%">
+                <img src="<?php echo $base64; ?>" alt="Firma Diego" class="signature-img" >
+            </td>
+            <td width="10%"></td>
+            <td width="40%" >
+                <img src="<?php echo $base642; ?>" alt="Firma del Cliente" class="signature-img">
+            </td>
+        </tr>
+        <tr>
             <td width="5%"></td>
-            <td width="40%" style="border-top: 1px solid"><b>{{ $profile->first_name }}
-                    {{ $profile->lastname }}</b><br><b>EL MANDANTE</b></td>
+            <!-- Celda para AEIA INVESTMENT a la izquierda -->
+                <!-- <div class="image-container"> -->
+                <!-- </div> -->
+            <td width="40%" class="signature-left" >
+
+                <center>
+                <b>AEIA INVESTMENT E.I.R.L.</b><br>
+                RUC N° 20608381741<br>
+
+                </center>
+                <center>
+                <b>EL COMISIONISTA</b>
+                </center>
+            </td>
+
+    
+            <!-- Espacio entre las dos firmas -->
+            <td width="10%"></td>
+    
+            <!-- Celda para el Mandante a la derecha -->
+            <td width="40%" class="signature-right">
+                <center>
+                    <b>{{ $contract->full_name}}</b><br>
+                    <b>DNI: {{$contract->identification_number}}</b><br>
+                    <b>EL MANDANTE</b>
+                </center>
+            </td>
+    
             <td width="5%"></td>
         </tr>
     </table>

@@ -121,15 +121,15 @@
                             </tr>
                             <tr>    
                                 <td>Oro</td>
-                                <td>$ 70</td>
+                                <td>$ 70 + 1 % de rentabilidad</td>
                             </tr>
                             <tr>
                                 <td>Platino</td>
-                                <td>$ 84</td>
+                                <td>$ 84 + 2 % de rentabilidad</td>
                             </tr>
                             <tr>
                                 <td>Diamante</td>
-                                <td>$ 140</td>
+                                <td>$ 140 + 3 % de rentabilidad</td>
                             </tr>
                             <tr>
                                 <td>Vip</td>

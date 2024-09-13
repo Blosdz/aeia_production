@@ -103,11 +103,11 @@
         </div>
     </div>
     
+    <strong>Tokens </strong> 
     <div class="row">
         <div class="col">
-            <div class="h-100 w-100 bg-1 d-flex justify-content-center" id="rounded-container">
-                Tokens   
-                <table class="w-100">
+            <div class="h-100 w-100 bg-1 d-flex justify-content-center p-2" id="rounded-container">
+                <table class="w-100" id="rounded-container">
                     <tbody>
                         <tr>
                             <th>Name</th>

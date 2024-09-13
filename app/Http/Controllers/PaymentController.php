@@ -254,13 +254,13 @@ class PaymentController extends AppBaseController
         return $binanceQR->getResponse();
     }
 
-    public function client_index(Request $request)
-    {
+    public function client_index(Request $request){
         $input = $request->all();
 
         $payments = $this->paymentRepository->all();
         $payments = Payment::where("user_id", Auth::user()->id)
                   ->with('contract')
+                  ->with('declaracion')
                   ->with('client_payment')
                   ->when( (isset($input['plan']) && $input['plan']!= 0) , function($query) use ($input){
                       return $query->whereHas('client_payment', function($query2) use ($input) {
@@ -288,6 +288,11 @@ class PaymentController extends AppBaseController
                       return $query->where('month',$months[$input['funds']]);
                   } )
                   ->get()
+                  ->map(function ($payment) {
+                    // Formateamos la fecha con minutos y segundos en el formato Y-m-d H:i:s
+                    $payment->formatted_date = $payment->created_at->format('Y-m-d H:i:s');
+                    return $payment;
+                })
                   ->sortBy(function ($payment) {
                       switch ($payment->status) {
                           case 'PENDIENTE':
@@ -306,6 +311,81 @@ class PaymentController extends AppBaseController
             ->with(compact('payments', 'plans'));
     }
 
+    public function client_update_signature(Request $request, $id)
+    {
+        // Obtener el pago asociado por su ID
+        $payment = Payment::find($id);
+        if (!$payment) {
+            return response()->json(['error' => 'Pago no encontrado.'], 404);
+        }
+    
+        // Obtener el perfil del usuario asociado al pago
+        $profile = Profile::where('user_id', $payment->user_id)->first();
+        if (!$profile) {
+            return response()->json(['error' => 'Perfil no encontrado.'], 404);
+        }
+    
+        // Procesar la imagen si existe en la solicitud
+        $fileName = null;
+        if ($request->has('canvas_image')) {
+            $imageData = $request->input('canvas_image');
+            $imageParts = explode(";base64,", $imageData);
+            if (count($imageParts) > 1) {
+                $imageBase64 = base64_decode($imageParts[1]);
+                $fileName = 'signatures/' . uniqid() . '.png'; // Ruta para guardar la firma
+                Storage::disk('public')->put($fileName, $imageBase64); // Guardar la imagen en disco
+            } else {
+                return response()->json(['error' => 'Formato de imagen inválido.'], 400);
+            }
+        }
+    
+        // Crear o actualizar el contrato asociado al pago
+        $contractData = [
+            'user_id' => $profile->user_id,
+            'type' => 2,
+            'full_name' => $profile->first_name . ' ' . $profile->lastname,
+            'country' => $profile->country,
+            'city' => $profile->city,
+            'state' => $profile->state,
+            'address' => $profile->address,
+            'country_document' => $profile->country_document,
+            'type_document' => $profile->type_document,
+            'identification_number' => $profile->identification_number,
+            'code' => uniqid(),
+            'signature_image' => $fileName, // Guardar la imagen si existe
+            'payment_id' => $payment->id
+        ];
+    
+        $contract = Contract::updateOrCreate(
+            ['payment_id' => $payment->id], // Buscar contrato por payment_id
+            $contractData
+        );
+    
+        // Crear o actualizar la declaración asociada al pago
+        $declarationData = [
+            'user_id' => $profile->user_id,
+            'type' => 2,
+            'full_name' => $profile->first_name . ' ' . $profile->lastname,
+            'country' => $profile->country,
+            'city' => $profile->city,
+            'state' => $profile->state,
+            'address' => $profile->address,
+            'country_document' => $profile->country_document,
+            'type_document' => $profile->type_document,
+            'identification_number' => $profile->identification_number,
+            'code' => uniqid(),
+            'signature_image' => $fileName, // Guardar la imagen si existe
+            'payment_id' => $payment->id
+        ];
+    
+        $declaration = Declaraciones::updateOrCreate(
+            ['payment_id' => $payment->id], // Buscar declaración por payment_id
+            $declarationData
+        );
+    
+        return response()->json(['success' => 'Firma actualizada correctamente.'], 200);
+    }
+       
     public function client_detail($id)
     {
         $payment = $this->paymentRepository->find($id);

@@ -210,7 +210,6 @@
                 // Agregar el input a formData para asegurarse de que se envíe
                 formData.append('canvas_image', dataURL);
             
-                // Enviar el formulario a través de AJAX
                 $.ajax({
                     type: "POST",
                     url: "{{ route('client.payment') }}",
@@ -219,14 +218,10 @@
                     contentType: false,
                     success: function(data) {
                         console.log(data);
-                        $('#exampleModal').modal('hide');
                         window.location.href = "{{ route('payment.plan') }}";
-                    },
-                    error: function(error) {
-                        console.error(error);
-                        submitButton.disabled = false; // Habilita el botón si hay un error
                     }
                 });
+
             }
         });
 </script>

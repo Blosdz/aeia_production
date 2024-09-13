@@ -77,13 +77,6 @@ class SuscriptorInfo extends Controller
         $clientContracts = Contract::where('user_id', $id)->get();
         $clientDeclaraciones = Declaraciones::where('user_id', $id)->first();
     
-        // Verificar si al menos uno de los documentos existe
-        // if ($clientContracts->isEmpty() && !$clientDeclaraciones) {
-        //     return redirect()->back()->with('error', 'No se encontraron documentos del cliente.');
-        // }
-        
-    
-        // Crear PDFs para los datos comunes del cliente
         $pdfDeclaraciones = $clientDeclaraciones ? Pdf::loadView('documentos.declaracionVoluntaria', compact('profile', 'clientDeclaraciones'))->output() : null;
     
         // Crear un archivo ZIP y agregar los PDFs

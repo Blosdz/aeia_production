@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\Models\User;
+use App\Models\Declaraciones;
 use App\Models\Contract;
 use App\Models\ClientPayment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -78,6 +79,10 @@ class Payment extends Model
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class, 'id', 'payment_id');
+    }
+    public function declaracion():BelongsTo
+    {
+        return $this->belongsTo(Declaraciones::class,'id','payment_id');
     }
 
     public function client_payment(): BelongsTo
