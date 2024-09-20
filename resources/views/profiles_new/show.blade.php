@@ -18,7 +18,7 @@
                                   <a href="{{ url()->previous() }}" class="btn btn-light">Atrás</a>
                              </div>
                              <div class="card-body">
-                                 @include('profiles.show_fields')
+                                 @include('profiles_new.show_fields')
                              </div>
                          </div>
                      </div>

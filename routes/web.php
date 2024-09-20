@@ -75,10 +75,18 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('profiles/subscribers', [App\Http\Controllers\ProfileController::class, 'indexSubscribers'])->name('profiles.subscribers');
     Route::resource('profiles', App\Http\Controllers\ProfileController::class);
+    Route::get('/profiles/data-suscriptor/{id}', [App\Http\Controllers\ProfileController::class, 'data_suscriptor'])->name('data_suscriptor');
+    Route::get('/profiles/data-user/{id}', [App\Http\Controllers\ProfileController::class, 'data_user'])->name('data_user');
+    Route::get('/profiles/data-gerente/{id}', [App\Http\Controllers\ProfileController::class, 'data_gerente'])->name('data_gerente');
+
+
 
     Route::get('/profiles/user/data', [App\Http\Controllers\ProfileController::class, 'edit2'])->name('profiles.user');
     Route::post('/profiles/user/data/{id}', [App\Http\Controllers\ProfileController::class, 'update2'])->name('profiles.update2');
     Route::get('/profiles/user/verified', [App\Http\Controllers\ProfileController::class, 'verified'])->name('profiles.verified');
+    // En routes/web.php
+    Route::delete('profiles/delete/{id}', [App\Http\Controllers\ProfileController::class, 'delete'])->name('deleteUser');
+
 
     Route::resource('payments', PaymentController::class);
     Route::put('payments/{payment}/updatecomment', [PaymentController::class, 'updateComments'])->name('payments.update.comments');

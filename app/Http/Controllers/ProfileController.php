@@ -6,9 +6,11 @@ use App\Http\Requests\CreateProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Repositories\ProfileRepository;
 use App\Models\Profile;
+use App\Models\Bells;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\RejectionHistory;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
@@ -41,15 +43,82 @@ class ProfileController extends AppBaseController
      *
      * @return Response
      */
+
     public function index(Request $request)
     {
-        $profiles = Profile::orderBy('verified')
-                  ->filterByNameOrLastName($request['name'])
-                  ->filterByStatus($request['status'])
-                  ->get();
+        $search = $request->input('search');
+        $userType = $request->input('userType');
+        $status = $request->input('status');
 
-        return view('profiles_new.index')
-            ->with('profiles', $profiles);
+        $profiles = Profile::query();
+
+        // Aplicar filtros
+        if ($search) {
+            $profiles->filterByNameOrLastName($search);
+        }
+
+        if ($userType) {
+            $profiles->whereHas('user', function ($query) use ($userType) {
+                $query->where('rol', $userType);
+            });
+        }
+
+        if ($status) {
+            $profiles->filterByStatus($status);
+        }
+
+        // Ordenar por el estado de verificación
+        $profiles = $profiles->orderByRaw("CASE
+            WHEN verified = 2 THEN 1
+            WHEN verified = 1 THEN 2
+            WHEN verified = 3 THEN 3
+            WHEN verified = 0 THEN 4
+            ELSE 5
+        END")->with('user')->get();
+
+        return view('profiles_new.index', compact('profiles'));
+    }
+
+
+    public function delete($id)
+    {
+        DB::transaction(function () use ($id) {
+            $profile = Profile::find($id);
+            if (!$profile) {
+                Flash::error('Perfil no encontrado');
+                return redirect()->back();
+            }
+    
+            $user = User::find($profile->user_id);
+    
+            if ($user) {
+                // Eliminar registros asociados en bells
+                Bells::where('user_id', $user->id)->delete(); // Eliminar registros físicamente
+                
+                // Eliminar el perfil y el usuario
+                $profile->delete(); // Esto usa SoftDeletes
+                $user->delete(); // También esto usa SoftDeletes
+            } else {
+                // Eliminar solo el perfil si no se encuentra el usuario
+                $profile->delete();
+            }
+        });
+    
+        Flash::success('Perfil eliminado correctamente.');
+        return redirect()->route('profiles.index');
+    }
+    
+
+    
+    public function data_user($id){
+        
+
+    }
+    public function data_suscriptor($id){
+
+    }
+    public function data_gerente($id){
+
     }
 
     public function indexSubscribers(Request $request)
@@ -274,7 +343,7 @@ class ProfileController extends AppBaseController
 	    $profile->verified = 1; // Otra forma de actualizar el campo "verified" del perfil	
 	    $profile=$this->profileRepository->update($data,$id);
 		
-//	    return redirect()->route('show-form-pdf');
+        //	    return redirect()->route('show-form-pdf');
         // dd($data);
 
         // session()->flash('success', 'Información enviada con éxito');

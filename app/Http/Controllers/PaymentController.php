@@ -375,7 +375,8 @@ class PaymentController extends AppBaseController
             'identification_number' => $profile->identification_number,
             'code' => uniqid(),
             'signature_image' => $fileName, // Guardar la imagen si existe
-            'payment_id' => $payment->id
+            'payment_id' => $payment->id,
+            'created_at'=> $contract->created_at
         ];
     
         $declaration = Declaraciones::updateOrCreate(

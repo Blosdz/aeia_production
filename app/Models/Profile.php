@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
+// use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model; // Cambia esto
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

@@ -71,10 +71,6 @@
 
     <p>Yo {{ $profile->first_name }}, de nacionalidad {{ $profile->country_document }} identificado con documento de
         identidad Nº {{ $profile->identification_number }},
-        @if ($user->rol == 4)
-            en calidad de GERENTE GENERAL de la empresa XXXXXXXXXX identificado con RUC Nº xxxxxxxxxx, inscrita en la
-            partida N° xxxxxxxx del Registro de Personas Jurídicas de xxxxxxxxxx;
-        @endif
         en calidad de EL MANDANTE manifiesto en calidad de declaración jurada lo siguiente:
     </p>
 
@@ -135,7 +131,7 @@
     </table>
 
 
-    <p><b> Arequipa {{ date_format($declaracion->created_at, 'd') }} del mes de {{ $months[date_format($declaracion->created_at, 'n')] }} del {{ date_format($declaracion->created_at, 'Y') }}.</b></p><br>
+    <p><b> Arequipa {{ $declaracion->created_at->format('d')  }} del mes de {{ $months[$declaracion->created_at->format('n')] }} del {{$declaracion->created_at->format('Y') }}.</b></p><br>
 
     <?php
         $path2 = storage_path('app/public/' . $declaracion->signature_image); // Ajusta la ruta si es necesario

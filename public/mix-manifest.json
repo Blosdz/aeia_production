@@ -3,5 +3,6 @@
     "/js/charts.js": "/js/charts.js",
     "/js/client.js": "/js/client.js",
     "/js/suscriptor.js": "/js/suscriptor.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/table.css": "/css/table.css"
 }

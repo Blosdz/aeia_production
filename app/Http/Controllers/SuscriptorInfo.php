@@ -75,10 +75,25 @@ class SuscriptorInfo extends Controller
     
         // Obtener los documentos relacionados con el cliente
         $clientContracts = Contract::where('user_id', $id)->get();
-        $clientDeclaraciones = Declaraciones::where('user_id', $id)->first();
+        $clientDeclaraciones = Declaraciones::where('user_id', $id)->get();
     
-        $pdfDeclaraciones = $clientDeclaraciones ? Pdf::loadView('documentos.declaracionVoluntaria', compact('profile', 'clientDeclaraciones'))->output() : null;
     
+        // $pdfDeclaraciones = $clientDeclaraciones ? Pdf::loadView('documentos.declaracionVoluntaria', compact('profile', 'clientDeclaraciones'))->output() : null;
+    
+        $months = [
+            0 => 'Enero',
+            1 => 'Febrero',
+            2 => 'Marzo',
+            3 => 'Abril',
+            4 => 'Mayo',
+            5 => 'Junio',
+            6 => 'Julio',
+            7 => 'Agosto',
+            8 => 'Setiembre',
+            9 => 'Octubre',
+            10 => 'Noviembre',
+            11 => 'Diciembre'
+        ];
         // Crear un archivo ZIP y agregar los PDFs
         $zipFileName = 'documentos_cliente_' . $profile->name . '.zip';
         $zipPath = storage_path($zipFileName);
@@ -90,9 +105,9 @@ class SuscriptorInfo extends Controller
     
             // Agregar los PDFs de contratos con diferentes timestamps
             foreach ($clientContracts as $contract) {
+                
                 $timestamp = Carbon::parse($contract->created_at);
 
-                
                 // Create a new PDF with varying details
                 $pdfWithDetails = Pdf::loadView('documentos_new.contrato', array_merge(
                     compact('profile'),
@@ -100,6 +115,10 @@ class SuscriptorInfo extends Controller
                         'code' => $contract->code,
                         'payment_id' => $contract->payment_id,
                         'timestamp' => $timestamp,
+                        'profile' => $profile,
+                        'contract'=>$contract,
+                        'months'=>$months
+
                     ]
                 ))->output();
     
@@ -107,10 +126,24 @@ class SuscriptorInfo extends Controller
                 $zip->addFromString("Contrato_{$formattedTimestamp}.pdf", $pdfWithDetails);
             }
     
-            // Agregar el PDF de declaraciones si existe
-            if ($pdfDeclaraciones) {
-                $zip->addFromString('Declaraciones.pdf', $pdfDeclaraciones);
+            foreach($clientDeclaraciones as $declaraciones){
+                $timestamp=$declaraciones->created_at;
+                $pdfWithDetails=Pdf::loadView('documentos_new.declaracionVoluntaria',array_merge(
+                    compact('profile'),[
+                        'code' => $declaraciones->code,
+                        'payment_id' => $declaraciones->payment_id,
+                        'timestamp' => $declaraciones->created_at,
+                        'profile' => $profile,
+                        'declaracion'=>$declaraciones,
+                        'months'=>$months                       
+                    ]
+                ))->output();
+
+                $formattedTimestamp = $timestamp->format('Y-m-d_H-i-s');
+                $zip->addFromString("Declaracion_{$formattedTimestamp}.pdf",$pdfWithDetails);
             }
+
+            // Agregar el PDF de declaraciones si existe
     
             $zip->close();
         } else {

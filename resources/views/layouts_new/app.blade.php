@@ -1,8 +1,7 @@
 @php
     $user = Auth::user();
-    $profile = Auth::user()->with('profile')->first(); 
 
-    $profile = $profile->profile->where('user_id', $user->id)->first();
+    $profile = Auth::user()->with('profile')->first(); 
 
     use App\Models\Notification;
 
@@ -41,18 +40,12 @@
     <meta charset="UTF-8">
     <title>{{ config('app.name') }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> --}}
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/css/coreui.min.css"> --}}
-    {{-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.6.96/css/materialdesignicons.min.css" rel="stylesheet"> --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css"> --}}
     <link rel="stylesheet" href="{{ url('welcome_new/events.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/app.css')}}"/>
+    <link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>
 </head>
 <body>
     <style>
@@ -131,183 +124,175 @@
     }
 </script>
     
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    {{-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script> --}}
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script>
-    {{-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-{{-- <link rel="stylesheet" href="https://unpkg.com/jolty-ui/dist/jolty-ui.min.css"> --}}
-
+<script src ={{URL::asset('/newDashboard/js/app_new.js')}}></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     {{-- quedooo  --}}
-    <script>
-        function hexToRgb(hex) {
-            let bigint = parseInt(hex.substring(1), 16);
-            let r = (bigint >> 16) & 255;
-            let g = (bigint >> 8) & 255;
-            let b = bigint & 255;
-            return { r: r, g: g, b: b };
-        }
-        let darkModeColor = '#ff7518';
-        let lightModeColor = '#1C305C';
-        let currentColor = localStorage.getItem('particleColor') || lightModeColor;
-        function toggleParticleColor() {
-            $('#particles-js').addClass('toggle-color');
-            currentColor = (currentColor === lightModeColor) ? darkModeColor : lightModeColor;
-            localStorage.setItem('particleColor', currentColor); 
-            $.each(pJSDom[0].pJS.particles.array, function (i, p) {
-                pJSDom[0].pJS.particles.array[i].color.value = currentColor;
-                pJSDom[0].pJS.particles.array[i].color.rgb = hexToRgb(currentColor);
-                pJSDom[0].pJS.particles.line_linked.color_rgb_line = hexToRgb(currentColor);
-            });
-        }
+<script>
+    function hexToRgb(hex) {
+        let bigint = parseInt(hex.substring(1), 16);
+        let r = (bigint >> 16) & 255;
+        let g = (bigint >> 8) & 255;
+        let b = bigint & 255;
+        return { r: r, g: g, b: b };
+    }
+    let darkModeColor = '#ff7518';
+    let lightModeColor = '#1C305C';
+    let currentColor = localStorage.getItem('particleColor') || lightModeColor;
+    function toggleParticleColor() {
+        $('#particles-js').addClass('toggle-color');
+        currentColor = (currentColor === lightModeColor) ? darkModeColor : lightModeColor;
+        localStorage.setItem('particleColor', currentColor); 
+        $.each(pJSDom[0].pJS.particles.array, function (i, p) {
+            pJSDom[0].pJS.particles.array[i].color.value = currentColor;
+            pJSDom[0].pJS.particles.array[i].color.rgb = hexToRgb(currentColor);
+            pJSDom[0].pJS.particles.line_linked.color_rgb_line = hexToRgb(currentColor);
+        });
+    }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            particlesJS("particles-js", {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": currentColor
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                        "polygon": {
-                            "nb_sides": 5
-                        },
-                        "image": {
-                            "src": "img/github.svg",
-                            "width": 100,
-                            "height": 100
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false,
-                        "anim": {
-                            "enable": false,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": false,
-                            "speed": 40,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
+    document.addEventListener("DOMContentLoaded", function () {
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
                         "enable": true,
-                        "distance": 150,
-                        "color": currentColor,
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 2,
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
+                        "value_area": 800
                     }
                 },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "repulse"
-                        },
-                        "onclick": {
-                            "enable": false,
-                            "mode": "repulse"
-                        },
-                        "resize": true
+                "color": {
+                    "value": currentColor
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
                     },
-                    "modes": {
-                        "grab": {
-                            "distance": 400,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "bubble": {
-                            "distance": 400,
-                            "size": 40,
-                            "duration": 2,
-                            "opacity": 8,
-                            "speed": 3
-                        },
-                        "repulse": {
-                            "distance": 80,
-                            "duration": 0.4
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        },
-                        "remove": {
-                            "particles_nb": 2
-                        }
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
                     }
                 },
-                "retina_detect": true
-            });
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": currentColor,
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": false,
+                        "mode": "repulse"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 80,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
 
-            $('#theme-toggle').on('click', toggleParticleColor);
+        $('#theme-toggle').on('click', toggleParticleColor);
 
-            var toggleLink = document.getElementById("theme-toggle");
-            var icon = toggleLink.querySelector("i");
+        var toggleLink = document.getElementById("theme-toggle");
+        var icon = toggleLink.querySelector("i");
 
-            if (localStorage.getItem("theme") === "dark") {
-                document.body.classList.add("dark-theme");
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-theme");
+            icon.className = "fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center";
+            // window.updateChartTheme('dark');
+        } else {
+            icon.className = "fa fa-solid fa-moon d-flex text-align-center align-items-center justify-content-center";
+            // window.updateChartTheme('light');
+        }
+
+        toggleLink.onclick = function () {
+            document.body.classList.toggle("dark-theme");
+            if (document.body.classList.contains("dark-theme")) {
                 icon.className = "fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center";
-                // window.updateChartTheme('dark');
+                localStorage.setItem("theme", "dark");
+                window.dispatchEvent(new Event('themeChanged'));
             } else {
                 icon.className = "fa fa-solid fa-moon d-flex text-align-center align-items-center justify-content-center";
-                // window.updateChartTheme('light');
+                localStorage.setItem("theme", "light");
+                window.dispatchEvent(new Event('themeChanged'));
             }
+        }
 
-            toggleLink.onclick = function () {
-                document.body.classList.toggle("dark-theme");
-                if (document.body.classList.contains("dark-theme")) {
-                    icon.className = "fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center";
-                    localStorage.setItem("theme", "dark");
-                    window.dispatchEvent(new Event('themeChanged'));
-                } else {
-                    icon.className = "fa fa-solid fa-moon d-flex text-align-center align-items-center justify-content-center";
-                    localStorage.setItem("theme", "light");
-                    window.dispatchEvent(new Event('themeChanged'));
-                }
-            }
-
-        });
-    </script> 
+    });
+</script> 
 
 <script>
     $(document).ready(function() {
@@ -362,8 +347,6 @@
     });
     
 </script>
-{{-- <script src="{{ mix('js/charts.js') }}"></script>     --}}
-
 <script>
     $( document ).ready(function() {
         
@@ -422,77 +405,6 @@
             $("#hide_taxes_file").val($("#hide_taxes_file").val().substring($("#hide_taxes_file").val().lastIndexOf('/') + 1)) ;
 
     });
-
-    // principal 
-    /*$(document).on("click", "#alert_wrapper_dni", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_dni_r", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni_r");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_profile_picture", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_profile_picture");
-        alert_wrapper.innerHTML = ``;
-    });
-
-    // socio 1
-    $(document).on("click", "#alert_wrapper_dni2", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni2");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_dni2_r", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni2_r");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_profile_picture2", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_profile_picture2");
-        alert_wrapper.innerHTML = ``;
-    });
-
-    // socio 2
-    $(document).on("click", "#alert_wrapper_dni3", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni3");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_dni3_r", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_dni3_r");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_profile_picture3", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_profile_picture3");
-        alert_wrapper.innerHTML = ``;
-    });
-
-    //user bi
-    $(document).on("click", "#alert_wrapper_business_file", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_business_file");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_power_file", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_power_file");
-        alert_wrapper.innerHTML = ``;
-    });
-    $(document).on("click", "#alert_wrapper_taxes_file", function(event){
-
-        var alert_wrapper = document.getElementById("alert_wrapper_taxes_file");
-        alert_wrapper.innerHTML = ``;
-    });
-
-    */
-
 
     function check_progress_bar(e){
 

@@ -28,6 +28,7 @@ class Declaraciones extends Model
         'country_document',
         'type_document',
         'identification_number',
+        'created_at',
         'code',
         'payment_id',
         'signature_image'
@@ -46,8 +47,10 @@ class Declaraciones extends Model
         'identification_number' => 'string',
         'code' => 'string',
         'payment_id' => 'integer',
+        'created_at'=>'datetime',
         'signature_image' => 'string'
     ];
+    public $timestamps = false; 
 
     public static $rules = [
         'user_id' => 'required',

@@ -76,6 +76,7 @@ class Contract extends Model
         'code' => 'string',
         'payment_id' => 'integer',
         'signature_image' => 'string'
+        
     ];
 
     /**

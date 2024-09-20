@@ -317,3 +317,8 @@ ul{
     background-color: #1cbb17;
 }
 
+/* responsive */
+
+@media(max-width: 767px){
+    
+}

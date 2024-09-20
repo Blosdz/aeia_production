@@ -1,7 +1,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="{{URL::asset('/newDashboard/menu.css')}}"/>
 
 
 @php
@@ -10,21 +10,21 @@
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('detalles') }}">
-        <img src="{{URL::asset('/images/dashboard/clientes_subscriptores.png')}}" alt="">
+        <i class="fa-solid fa-users"></i>
         <span>Usuarios</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('profiles.index') }}">
-        <img src="{{URL::asset('/images/dashboard/verificar_clientes.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Perfiles a verificar</span>
     </a>
 </li>
@@ -47,13 +47,7 @@
         <span>Actualizar Fondos</span>
     </a>
 </li>
-<li class="nav-item {{ Request::is('notifications*') ? 'active' : '' }}">
-    <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
-        <img src="{{URL::asset('/images/dashboard/alertas.png')}}" alt="">
-        Notificaciones
-        <span class="badge badge-success notification" style="display: none;"><i class="fa fa-bell"></i></span>
-    </a>
-</li>
+
 
 
 
@@ -65,7 +59,7 @@
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
@@ -76,7 +70,7 @@
     @else
         <a class="nav-link {{ Request::is('profiles*') ? 'active' : '' }}" href="{{ route('profiles.user') }}">
     @endif
-        <img src="{{URL::asset('/images/dashboard/perfil_nav.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Verificación</span>
     </a>
 </li>
@@ -103,20 +97,20 @@
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('profiles.user') }}">
-        <img src="{{URL::asset('/images/dashboard/perfil_nav.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Verificación</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('clients.index') }}">
-        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Depositar</span>
     </a>
 </li>
@@ -134,20 +128,20 @@
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('profiles.user') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Verificación</span>
     </a>
 </li>
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('clients.index') }}">
-        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Depositar</span>
     </a>
 </li>
@@ -167,12 +161,14 @@
 {{-- inicio ver los suscriptores etc - crear notificaciones para sus suscriptores --}}
 <li class="nav-item {{ Request::is('subscriptor-data*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('suscriptores*') ? 'active' : '' }}">
     <a class="nav-link {{ Request::is('suscriptores*') ? 'active' : '' }}" href="{{ route('tableSuscriptor') }}">
+        <i class="fa-solid fa-users"></i>
         <span>Suscriptores</span>
     </a>
 </li>
@@ -190,21 +186,21 @@
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('profiles.index') }}">
-        <img src="{{URL::asset('/images/dashboard/verificar_clientes.png')}}" alt="">
+        <i class="fa-solid fa-user-check"></i>
         <span>Perfiles a verificar</span>
     </a>
 </li>
 
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('payments.index') }}">
-        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
+        <i class="fa-solid fa-money-bill-transfer"></i>
         <span>Depositos</span>
     </a>
 </li>
@@ -224,13 +220,13 @@
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('home.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 <li class="nav-item {{ Request::is('bank*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('showUsers') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
+        <i class="fa-solid fa-users"></i>
         <span>Clientes</span>
     </a>
 </li>
