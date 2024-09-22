@@ -10,6 +10,46 @@
 
 @if($user_session->rol==1)
     <strong>Dashboard</strong>
+    <div class="row">
+    <!-- Dropdown para seleccionar el fondo -->
+    <div class="col-8">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="fondoDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Seleccionar Fondo
+            </button>
+            <div class="dropdown-menu" aria-labelledby="fondoDropdown">
+                @foreach($fondos as $fondo)
+                    <a class="dropdown-item" href="#" onclick="showFondoData({{ $fondo->id }})">
+                        {{ $fondo->name }} ({{ $fondo->created_at->format('d-m-Y') }})
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de velas para el fondo seleccionado -->
+    <div class="col-7 p-3">
+        <div class="counter h-100 w-100 bg-1" id="rounded-container">
+            <div class="col h-100 p-3">
+                <div class="chart_general_data">
+                    <div id="fondoChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información adicional -->
+<div class="col-3 p-3">
+    <div class="counter h-100 w-100 bg-1" id="rounded-container">
+        <div class="col h-100 p-3">
+            <h5>Información del Fondo</h5>
+            <p><strong>Nombre:</strong> <span id="fondoName">{{ $fondos->first()->name }}</span></p>
+            <p><strong>Fecha:</strong> <span id="fondoDate">{{ $fondos->first()->created_at->format('d-m-Y') }}</span></p>
+            <p><strong>Total Comisiones:</strong> <span id="fondoComisiones">{{ $fondos->first()->total_comisiones }}</span></p>
+        </div>
+    </div>
+</div>
 
     <div class="row">
         <div class="col-3 p-3">
@@ -122,4 +162,13 @@
     </div>
 @endif
 
+<script>
+    // Pasar los datos de Blade a una variable JavaScript
+
+    var fondosChartData = @json($fondosChartData);
+    var fondos = @json($fondos);
+
+</script>
+
+<script src="{{URL::asset('/js/app_admin.js')}}"></script>
 @endsection

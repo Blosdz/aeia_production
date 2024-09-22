@@ -79,22 +79,53 @@ class HomeController extends Controller
 
     public function data_admin()
     {
-        // $users = User::all(); // Asegúrate de tener el modelo User correctamente configurado
-        $activeUsers=0;
-        // foreach($users as $user){
-        //     if($user->isUsingApplication()){
-        //         $activeUsers++;
-        //     }
-        // }
-
-        $user=Auth::user();
-        $get_fondos=Fondo::get();
-        $get_historials=FondoHistorial::get();
-        $membresias=SubscriptorDataModel::where('user_table_id',$user->id)->first(); 
-        $totalsumado= Fondo::sum('total_comisiones');
-
-        return view('adminDashboard',compact('get_fondos','get_historials','membresias','totalsumado'));
+        $user = Auth::user();
+        
+        // Obtener todos los fondos con su historial
+        $fondos = Fondo::with('historial')->get();
+    
+        // Crear la estructura de datos para cada fondo
+        $fondosChartData = [];
+    
+        foreach ($fondos as $fondo) {
+            $fondoData = [];
+            foreach ($fondo->historial as $historial) {
+                $fondoData[] = [
+                    'x' => $historial->created_at->format('Y-m-d H:i:s'),  // Fecha
+                    'y' => [
+                        $historial->ganancia_neta,   // Open (precio al abrir)
+                        $historial->total,           // High (pico más alto)
+                        $historial->total_comisiones,// Low (punto más bajo)
+                        $historial->ganancia_neta    // Close (precio al cerrar)
+                    ]
+                ];
+            }
+            $fondosChartData[$fondo->id] = $fondoData;  // Asociar el fondo con su historial
+        }
+    
+        // Otros datos
+        $membresias = SubscriptorDataModel::where('user_table_id', $user->id)->first(); 
+        $totalsumado = Fondo::sum('total_comisiones');
+    
+        // Pasar los datos a la vista
+        return view('adminDashboard', compact('fondos', 'fondosChartData', 'membresias', 'totalsumado'));
     }
+    
+
+    public function getFondoData($id)
+    {
+        $fondo = Fondo::find($id);
+        $historial = FondoHistorial::where('fondo_id', $id)->get();
+
+        return response()->json([
+            'name' => $fondo->name,
+            'created_at' => $fondo->created_at->format('d-m-Y'),
+            'total_comisiones' => $fondo->total_comisiones,
+            'historial' => $historial
+        ]);
+    }
+
+    
 
     public function data_idk()
     {

@@ -95,7 +95,7 @@
                 <div class="product-cell">
                     <div class="btn">
                         @if ($profile->user->rol == 3) <!-- admin -->
-                            <a href="{{ route('data_user', [$profile->user_id]) }}"></a>
+                            <a href="{{ route('data_user', [$profile->user_id]) }}">
                                 <i class="fa-solid fa-plus"></i>
                             </a>
                         @elseif ($profile->user->rol == 2) <!-- suscriptor -->

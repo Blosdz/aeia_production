@@ -1,7 +1,7 @@
 @extends('layouts_new.app')
 
 @section('content')
-
+<strong>Suscriptores</strong>
     <div class="app-content-actions">
         <input class="search-bar" placeholder="Search..." type="text" value="{{ request('search') }}">
         <div class="app-content-actions-wrapper">
@@ -39,16 +39,12 @@
             </div>
         </div>
     </div>
-
     <div class="product-area-wrapper tableView">
         <div class="products-header">
-            <div class="product-cell">Usuario</div>
             <div class="product-cell">Nombres</div>
-            <div class="product-cell">Estado</div>
-            <div class="product-cell">Rol</div>
-            <div class="product-cell">Documento</div>
-            <div class="product-cell">Accion</div>
-            <div class="product-cell">Mas Información</div>
+            <div class="product-cell">Monto Generado</div>
+            <div class="product-cell">Usuarios Invitados</div>
+            <div class="product-cell">General</div>
         </div>
 
         @foreach($profiles as $profile)

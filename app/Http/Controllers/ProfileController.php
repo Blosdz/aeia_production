@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Repositories\ProfileRepository;
+use App\Models\Payment;
 use App\Models\Profile;
 use App\Models\Bells;
+use App\Models\Declaraciones;
+use App\Models\Contract;
 use App\Models\User;
 use App\Models\Notification;
 use App\Models\RejectionHistory;
@@ -111,9 +114,15 @@ class ProfileController extends AppBaseController
 
     
     public function data_user($id){
+        $payments = Payment::where("user_id", $id)
+            ->with('contract', 'declaracion', 'client_payment') // Asegúrate de tener una relación con documentos si existe
+            // Agrega los filtros necesarios
+            ->get();
         
-
+        return view('profiles_new.user', compact('payments'));
     }
+
+
     public function data_suscriptor($id){
 
     }
@@ -340,7 +349,7 @@ class ProfileController extends AppBaseController
         $profile = $this->profileRepository->find($id);
 	    $data=$request->all();
         $data['phone']=$data['phone_code'].''.$data['phone'];
-	    $profile->verified = 1; // Otra forma de actualizar el campo "verified" del perfil	
+	    $data['verified'] = 1; // Otra forma de actualizar el campo "verified" del perfil	
 	    $profile=$this->profileRepository->update($data,$id);
 		
         //	    return redirect()->route('show-form-pdf');

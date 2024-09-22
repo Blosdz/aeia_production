@@ -155,6 +155,8 @@ Route::middleware(['auth'])->group(function() {
     
     // Route::get('/home', [HomeController::class, 'showClientHistory'])->name('home');
     Route::resource('home',HomeController::class);
+    Route::get('/get-fondo-data/{id}', [HomeController::class, 'getFondoData']);
+
     // Route::get('/home/{userId}', [HomeController::class, 'dataUsers'])->name('home');
 
     // ******************Facturas***********************
