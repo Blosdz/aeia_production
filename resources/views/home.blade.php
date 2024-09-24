@@ -14,7 +14,7 @@
 @endif
 @if($user_session->rol==2)
     <strong>Dashboard</strong>
-<div class="row">
+<div class="row ">
         <div class="col-3 p-3">
             <div class="counter h-100 w-100 bg-1"  id="rounded-container">
                 <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
@@ -215,10 +215,10 @@
 @elseif($user_session->rol == 3)
     <strong>Dashboard</strong>
 
-    <div class="row">
-        <div class="col-3 p-3">
-            <div class="counter h-100 w-100 bg-1" id="rounded-container">
-                <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+    <div class="row row-fil1-client">
+        <div class="col p-3">
+            <div class="counter h-100 w-100" >
+                <div class="row w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
                         <div class="col h-100">
                             <h2 class="fw-bolder">$ {{$totalInversionYBeneficio ?? ''}} </h2>
                             <span>Balance General</span>
@@ -242,9 +242,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 p-3">
-            <div class="counter h-100 w-100 bg-1 "  id="rounded-container">
-                <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+        <div class="col p-3">
+            <div class="counter h-100 w-100">
+                <div class="row w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
                     <div class="col h-100">
                         <h2 class="fw-bolder">${{$paymentsTotal ?? ''}}</h2>
                         <span>Capital Invertido</span>
@@ -270,9 +270,9 @@
             </div>
         </div>
 
-        <div class="col-3 p-3">
-            <div class="counter h-100 w-100 bg-1 "  id="rounded-container">
-                <div class="w-100 p-3 d-flex justify-content-between align-items-center">
+        <div class="col p-3">
+            <div class="counter h-100 w-100"  >
+                <div class="w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
                     {{-- count down to this 28 timer --}}
                     <div class="col h-100">
                         <h2 id="countdown"></h2>
@@ -334,12 +334,12 @@
         {{-- </div> --}}
     </div>
 
-    <div class="row">
+    <div class="row  row-fil3-client">
         <div class="col p-3">
-          <div class="counter w-100 bg-1   d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
+          <div class="counter w-100 h-100 bg-1 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
             @if (!empty($planData ?? ''))
-                <div id="chart" class="rounded" style="height: 16vw; width: 35vw;"></div>
+                <div id="chart" class="rounded p-4"></div>
             @else
                 {{-- <div class="  bg-1 container-size"> --}}
                     <div class="chart-container">
@@ -354,16 +354,16 @@
 
           </div>
         </div>
-
+    
         <div class="col p-3">
-            <div class="counter bg-1 w-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
+            <div class="counter bg-1 w-100 h-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
                 @if (!empty($porcentajeInvertido ?? ''))
-                    <div id="chart-dona" class="" style="width: 26vw;"></div>
+                    <div id="chart-dona" class="p-4"></div>
                 @else
                     <div class="chart-container">
                         <div class="chart-overlay">Ejemplo</div>
-                        <div id="chart-demo-dona" style="width: 26vw;" ></div>
+                        <div id="chart-demo-dona" style="height:16vw ; width: 35vw;" ></div>
 
                     </div>
                     {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
@@ -375,9 +375,9 @@
 
     @if($planData ?? '')
         @foreach($planData ?? '' as $planName => $data)
-        <div class="row">
-            <div class="col-3 p-3">
-                <div class="w-100 p-3 d-flex justify-content-between align-items-center bg-1 " id="rounded-container">
+        <div class="row row-fil1-client h-100 w-100">
+            <div class="col-4">
+                <div class="w-100 p-4 d-flex justify-content-between align-items-center bg-1 " id="rounded-container">
                     <div class="h-100 w-100 row">
                         <div class="col   d-flex text-align-center align-items-center justify-content-center  ">
                             <img src="/welcome_new/images/icons/{{$planName}}.png" alt="Logo" style="width:3vw">
@@ -390,15 +390,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col p-3 md-3">
-                <div class="w-100 p-3   bg-1 " id="rounded-container">
-                    <div class="counter h-100 w-70">
+            <div class="col-7 p-4">
+                <div class="w-100 h-100 d-flex bg-1 " id="rounded-container">
                         @if (!empty($data['data']))
-                          <div id="chart_{{ $planName }}" class="p-5 rounded" style="height: 16vw; width: 35vw;"></div>
+                          <div id="chart_{{ $planName }}" class="rounded p-4"></div>
                         @else
                             <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
                         @endif
-                    </div>
                 </div>
             </div>
         </div>

@@ -55,12 +55,12 @@
     <div id="particles-js"></div>
     <div class="container-fluid">
         <div class="row h-100">
-            <div class="side-bar col-auto me-auto " id="sidebar-col">
+            <div class="side-bar " id="sidebar-col">
                 @include('layouts_new.sidebar_new')
             </div>
             <div class="col h-100 p-0 w-100 content-wrapper">
                 <div class="nbar w-100 d-flex justify-content-end ">
-                    <div class="nbar-r h-75 w-25 d-flex align-items-center text-align-center justify-content-end bg-2">
+                    <div class="nbar-r h-75 d-flex align-items-center text-align-center justify-content-end bg-2">
                         <div class="container">
                             <ul class="note_list">
                             </ul>
@@ -802,6 +802,20 @@
 
 </script>
 
+<script>
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+    var sidebar = document.getElementById('sidebar-col');
+    sidebar.classList.toggle('expanded');
+
+    var contentWrapper = document.querySelector('.content-wrapper');
+
+    if (contentWrapper) {
+        contentWrapper.classList.toggle('expanded');
+    }
+});
+
+</script>
 </body>
 </html>
+
 

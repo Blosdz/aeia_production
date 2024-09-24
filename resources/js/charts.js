@@ -126,10 +126,15 @@ document.addEventListener("DOMContentLoaded", function() {
     var porcentaje_cliente ={
         series:donaSeries,
         chart:{
-            type:'donut'
+            type:'donut',
+            width: 500,
+            height: 500,
         },
+        responsive:[{
+            breakpoint:undefined,
+            options:{},
+        }],
         labels:['porcentaje de fondo','fondo total'],
-        responsive:[{breakpoint:480,}]
     };
     var chartDona = new ApexCharts(document.querySelector('#chart-dona'),porcentaje_cliente);
     chartDona.render();
@@ -159,8 +164,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }],
             chart: {
                 height: 350,
+                width:600,
                 type: 'area'
             },
+            responsive:[{
+                breakpoint:undefined,
+                options:{},
+            }],
             dataLabels: {
                 enabled: false
             },
@@ -186,11 +196,16 @@ document.addEventListener("DOMContentLoaded", function() {
         series: seriesData,
         chart: {
             height: 350,
+            width: 600, 
             type: 'area'
         },
         dataLabels: {
             enabled: false
         },
+        responsive:[{
+            breakpoint:undefined,
+            options:{},
+        }],
         stroke: {
             curve: 'smooth'
         },
