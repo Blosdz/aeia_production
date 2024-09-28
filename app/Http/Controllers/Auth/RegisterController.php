@@ -37,7 +37,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = "/start";
+    protected $redirectTo = "/home";
 
     /**
      * Create a new controller instance.
@@ -117,7 +117,7 @@ class RegisterController extends Controller
             "view" => "emails.register",
             "subject" => "AEIA EMPIEZA A INVERTIR [REGISTRO]",
         ];
-        $MailCustom = MailCustom::to($data['email_send'])->queue(new SendMail($data));
+        // $MailCustom = MailCustom::to($data['email_send'])->queue(new SendMail($data));
 
         return $user;
     }
