@@ -21,6 +21,7 @@
         "laravel/ui": "^3.0",
         "laravelcollective/html": "^6.2",
         "monarobase/country-list": "^3.3",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "twbs/bootstrap-icons": "*",
         "twilio/sdk": "^8.2"
     },

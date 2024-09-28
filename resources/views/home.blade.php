@@ -4,6 +4,7 @@
 @php
     $user_session = Auth::user();
     $user = Auth::user();
+    $user_code = $user->unique_code; 
     $profile = $user->profile;
 
 @endphp
@@ -145,12 +146,7 @@
         </div>
     <div class="col-3">
         <div class="counter bg-1  h-100  d-flex text-align-center align-items-center justify-content-center"  id="rounded-container">
-
-            @if (!empty($Total ?? ''))
-                <div id="chart_dona" class="" style="height: 16vw; width: 35vw;"></div>
-            @else
-                <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
-            @endif         
+            {{$qrCode ?? ''}}
 
         </div>
     </div>

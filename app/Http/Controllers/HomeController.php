@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
@@ -220,6 +221,7 @@ class HomeController extends Controller
 
         $dataInvitados = User::where('refered_code', $uniqueCode)->count();
         $totalClientes = User::all()->count();
+        $qrCode =  QrCode::size(250)->generate($inviteLink);
 
         $montoGenerado = SubscriptorDataModel::where('user_table_id', $user->id)->pluck('membership_collected')->first();
         $infoSuscriptor = SuscriptorHistorial::where('refered_code', $user->unique_code)->get();
@@ -238,7 +240,7 @@ class HomeController extends Controller
         // dd($chartDataSus);
         $porcentajeInvitados = $totalClientes > 0 ? ($dataInvitados / $totalClientes) * 100 : 0;
 
-        return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus'));
+        return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus','qrCode'));
     }
 
     public function getUserCliente()
