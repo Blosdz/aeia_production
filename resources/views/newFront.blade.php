@@ -14,35 +14,50 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <div class="navbar">
+    <div class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
             <a href="#" class="navbar-brand"><img src="{{URL::asset('welcome_new/images/logo/image 9.png')}}" alt="logo"></a>
-            <div class="d-flex">
-                <ul class="nav-total me-auto mb-2 mb-lg-0 justify-content-end">
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center">
+            <a href="/login" class="btn1">
+                <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
+                        <span>INGRESAR</span>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse " id="navbarSupportedContent ">
+                <ul class=" navbar-nav me-auto mb-2 mb-lg-0 nav-total me-auto mb-2 mb-lg-0 justify-content-end">
+
+                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home1" class="nav-link">INICIO</a>
                     </li>
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center">
+                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home2" class="nav-link">SUSCRIPTOR</a>
                     </li>                
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center">
+                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home3" class="nav-link">BENEFICIOS</a>
                     </li>                
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center">
+                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home4" class="nav-link">¿ CÓMO FUNCIONA ?</a>
                     </li>
                 </ul>
-                <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
-                    <a href="/login" class="btn1">
-                        <span>INGRESAR</span>
-                    </a>
-                </div>
-
             </div>
+
         </div>
     </div>
+    <!-- <iframe 
+        src="{{ URL::asset('images/dashboard/VID_20221207_221942_982.mp4') }}?autoplay=1" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen 
+        class="video-iframe">
+    </iframe> -->
     <div class="content">
+
+
         <canvas></canvas>
+
+
         <div class="section" id="home1">
             <div class="row w-100 padding">
                 <div class="col-sm-6 appear2">
@@ -61,7 +76,14 @@
 
 
                 </div>      
-                <div class="col-sm-6 z_image appear2 ">
+                <div class="col-sm-6 z_image ">
+                    <!-- <iframe 
+                            src="{{ URL::asset('images/dashboard/VID_20221207_221942_982.mp4') }}?autoplay=1" 
+                            frameborder="0" 
+                            allow="autoplay; encrypted-media" 
+                            allowfullscreen 
+                            class="video-iframe">
+                        </iframe> -->
                     <img src="{{URL::asset('/newDashboard/images/cel1.jpeg')}}" alt="" id="image-container">
                 </div>
             </div> 
@@ -69,10 +91,10 @@
         </div>
         <div class="section" id="home2">
             <div class="row p-4 padding appear3">
-                <div class="col-sm-6">
+                <div class="col">
                     <img src="{{URL::asset('/newDashboard/images/suscriptor.jpg')}}" alt="" id="suscriptor-img">
                 </div>
-                <div class="col-sm-6 ">
+                <div class="col">
                     <div class="card-subs p-4">
                         <div class="subtitle "> ¿Quién es un suscriptor?</div> <br>
                         Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas. 
@@ -94,7 +116,7 @@
                 </div>
             </div>
             <div class="row" id="beneficios">
-                <div class="col-sm-6 appear2">
+                <div class="col appear2">
                     <div class="container-glow">
                         <div class="card p-3">
                             <div class="col-sm-6">
@@ -113,7 +135,7 @@
                    </div>
 
                 </div>
-                <div class="col-sm-6  appear2">
+                <div class="col  appear2">
                     <div class="container-glow">
                         <div class="card p-3">
                             <div class="col-sm-6">
@@ -132,7 +154,7 @@
                 </div>
             </div>    
             <div class="row" id="beneficios">
-                <div class="col-sm-6  appear2">
+                <div class="col  appear2">
                     <div class="container-glow">
                         <div class="card p-3">
                             <div class="col-sm-6">
@@ -150,7 +172,7 @@
                    </div>
                 </div>
 
-                <div class="col-sm-6  appear2">
+                <div class="col  appear2">
                     <div class="container-glow">
                         <div class="card p-3">
                             <div class="col-sm-6">
@@ -270,7 +292,9 @@
 
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script>
+
         //-------------------------------------------
 const turnRatio = 0.1;   //how much the lines turns
 const bc = '0, 255, 233' //RGB line color

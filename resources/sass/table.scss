@@ -281,18 +281,24 @@ $font-large: 24px;
 
 .tableView {
   .products-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
     align-items: center;
     border-radius: 4px;
     background-color: var(--app-content-secondary-color);
     position: sticky;
     top: 0;
+    padding: 8px;
   }
   
   .products-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
     align-items: center;
     border-radius: 4px;
+    flex-wrap:wrap;
+    padding: 8px;
+
     
     &:hover {
       box-shadow: var(--filter-shadow);
@@ -305,13 +311,13 @@ $font-large: 24px;
   }
   
   .product-cell {
-    flex: 1;
     padding: 8px 16px;
     color: var(--app-content-main-color);
     font-size: $font-small;
     display: flex;
     align-items: center;
         
+    min-height: 60px;
     img {
       width: 32px;
       height: 32px;
@@ -325,7 +331,11 @@ $font-large: 24px;
       &.image { flex: 0.2; }
     }}
       
-    @media screen and (max-width: 520px) {&{      
+    @media screen and (max-width: 520px) {
+      flex: 1 1 100%; // Asegura que las celdas ocupen el ancho completo en pantallas pequeñas
+      font-size: 12px;
+      text-align: center;
+      &{      
       &.category, &.sales {
         display: none;
       }

@@ -463,7 +463,7 @@
     {{ \Carbon\Carbon::now()->format('d') }} del mes de {{ \Carbon\Carbon::now()->format('m') }} del
     {{ \Carbon\Carbon::now()->format('Y') }} <br><br><br><br>
     <?php
-        $path = public_path('images/dashboard/firmadiego.jpeg');
+        $path = public_path('images/dashboard/firmadiego.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);

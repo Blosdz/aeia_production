@@ -258,17 +258,22 @@
 }
 
 .tableView .products-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   align-items: center;
   border-radius: 4px;
   background-color: var(--app-content-secondary-color);
   position: sticky;
   top: 0;
+  padding: 8px;
 }
 .tableView .products-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   align-items: center;
   border-radius: 4px;
+  flex-wrap: wrap;
+  padding: 8px;
 }
 .tableView .products-row:hover {
   box-shadow: var(--filter-shadow);
@@ -278,12 +283,12 @@
   display: none;
 }
 .tableView .product-cell {
-  flex: 1;
   padding: 8px 16px;
   color: var(--app-content-main-color);
   font-size: 14px;
   display: flex;
   align-items: center;
+  min-height: 60px;
 }
 .tableView .product-cell img {
   width: 32px;
@@ -303,6 +308,11 @@
   }
 }
 @media screen and (max-width: 520px) {
+  .tableView .product-cell {
+    flex: 1 1 100%;
+    font-size: 12px;
+    text-align: center;
+  }
   .tableView .product-cell.category, .tableView .product-cell.sales {
     display: none;
   }

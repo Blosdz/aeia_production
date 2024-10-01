@@ -149,12 +149,8 @@ document.addEventListener("DOMContentLoaded", function() {
             type: 'area',
             data: planInfo.data.map(Number) // Asegurarse de que los datos son números
         });
-
-        if (months.length === 0) {
-            months = planInfo.months.map(function(monthNumber) {
-                return monthNames[monthNumber - 1]; // Convertir el número del mes a su nombre correspondiente
-            });
-        }
+        months = planInfo.months
+        
 
         // Crear gráficos individuales para cada plan
         var individualOptions = {
@@ -210,9 +206,13 @@ document.addEventListener("DOMContentLoaded", function() {
             curve: 'smooth'
         },
         xaxis: {
-            categories: months
+            categories: months,
+            labels:{
+                format: 'dd/MM/yy HH::mm',
+            }
         },
         tooltip: {
+
             x: {
                 format: 'dd/MM/yy HH:mm'
             },
