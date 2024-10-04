@@ -54,7 +54,10 @@
 
         @foreach($profiles as $profile)
         <div class="products-row">
-                <div class="product-cell">{{$profile->first_name . ' ' . $profile->lastname}}</div>
+                <div class="product-cell">{{$profile->first_name . ' ' . $profile->lastname}}
+                <br>
+                {{$profile->user->email}}
+                 </div>
                 @if($profile->verified == 2)
                         <div class="product-cell status-cell">
                             <div class="status active">Verificado</div>

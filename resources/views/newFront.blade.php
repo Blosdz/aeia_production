@@ -17,15 +17,11 @@
     <div class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
             <a href="#" class="navbar-brand"><img src="{{URL::asset('welcome_new/images/logo/image 9.png')}}" alt="logo"></a>
-            <a href="/login" class="btn1">
-                <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
-                        <span>INGRESAR</span>
-                </div>
-            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse justify-content-end d-flex" id="navbarSupportedContent ">
+            <div class="navbar-collapse collapse justify-content-end d-flex " id="navbarSupportedContent ">
                 <ul class=" navbar-nav me-auto mb-2 mb-lg-0 me-auto mb-2 mb-lg-0">
 
                     <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
@@ -40,6 +36,14 @@
                     <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home4" class="nav-link">¿ CÓMO FUNCIONA ?</a>
                     </li>
+                    <li>
+                        <a href="/login" class="btn1">
+                            <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
+                                    <span>INGRESAR</span>
+                            </div>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
 
