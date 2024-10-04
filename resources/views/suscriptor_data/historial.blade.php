@@ -17,6 +17,21 @@ use Carbon\Carbon;
     <div class="tab-content" id="myTabContent">
         @foreach($historialByYear as $year => $data)
         <div class="tab-pane fade @if ($loop->first) show active @endif" id="{{ $year }}" role="tabpanel" aria-labelledby="{{ $year }}-tab">
+        {{-- further develop needs to be made 
+        <div class="product-area-wrapper tableView">
+                <div class="products-header">
+                    <div class="product-cell">Plan</div>
+                    @for($i=1;$i<=12;$i++)
+                        <div class="product-cell"> 
+                            {{DateTime::createFromFormat('!m',$i)->format('F')}}
+                        </div>
+                    @endfor
+                </div>
+                <div class="products-row">
+
+                </div>
+            </div>
+        --}}
             <div class="table-responsive">
                 <table class="table table-striped" id="payments-table-{{ $year }}">
                     <thead>

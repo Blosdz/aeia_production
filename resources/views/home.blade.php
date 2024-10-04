@@ -81,7 +81,7 @@
     </div>
 </div>
 <div class="row">
-        <div class="col-md-6">
+        <div class="col">
             <div class="h-100 w-100 bg-1 d-flex justify-content-center "  id="rounded-container">
                 <div class="container w-60 p-4">
                     <h1 class="display-4">Bienvenido</h1>
@@ -102,9 +102,38 @@
         </div>
 
         <div class="col-3">
-            <div class="h-100 w-100 bg-1 "  id="rounded-container">
-                <div class="h-100 w-100 justify-content-center align-content-center">
-                    <table class="styled-table ">
+            <div class="bg-1 p-3 overflow-auto"  id="rounded-container" style="max-height:16vw;">
+                    <div class="product-area-wrapper tableView">
+                        <div class="products-header">
+                            <div class="product-cell">Planes</div>
+                            <div class="product-cell">Comisión</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">Bronce</div>
+                            <div class="product-cell">$14</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">Plata</div>
+                            <div class="product-cell">$35</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">Oro</div>
+                            <div class="product-cell">$70</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">Platino</div>
+                            <div class="product-cell">$84</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">Diamante</div>
+                            <div class="product-cell">$140</div>
+                        </div>
+                        <div class="products-row">
+                            <div class="product-cell">VIP</div>
+                            <div class="product-cell"></div>
+                        </div>
+                    </div>
+                    {{-- <table class="styled-table ">
                         <thead>
                             <tr>
                                 <th>Tipo de Plan</th>
@@ -138,9 +167,8 @@
                             </tr>
                             <!-- and so on... -->
                         </tbody>
-                    </table>
+                    </table> --}}
                      
-                </div>
             </div>
 
         </div>

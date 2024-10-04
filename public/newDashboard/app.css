@@ -52,6 +52,39 @@
 }
 
 
+/* Estilos para el modo oscuro */
+.form-control {
+  background-color: var(--form-background);  /* Fondo oscuro */
+  color: var(--text-color);  /* Texto blanco */
+  border: 1px solid var(--line-colors); /* Borde personalizado */
+}
+
+/* Estilos para las opciones dentro del select */
+.form-control option {
+  background-color: var(--form-background); /* Fondo oscuro en los elementos de opción */
+  color: var(--text-color); /* Texto blanco en las opciones */
+}
+
+/* Asegura que cuando esté seleccionado, los estilos persistan */
+.form-control:focus {
+  background-color: var(--form-background);
+  color: var(--text-color);
+  border: 1px solid var(--line-colors); /* Borde del focus */
+}
+
+/* Estilos para modo claro (si es necesario modificar) */
+.form-control {
+  background-color: var(--input-background);  /* Fondo claro */
+  color: var(--text-color);  /* Texto oscuro */
+  border: 1px solid var(--line-colors); /* Borde para modo claro */
+}
+
+.form-control option {
+  background-color: var(--input-background); /* Fondo claro en las opciones */
+  color: var(--text-color); /* Texto oscuro en las opciones */
+}
+
+
 /* main-box */
 .flx-box{
     min-width: 100%;
@@ -245,6 +278,7 @@ tr{
 
 
 
+
 /* ****************************navbar******************************* */
 
 
@@ -325,6 +359,9 @@ tr{
 
 
 /* top nav */
+.note_list li {
+  color:white!important;
+}
 
 /* .topnav{
     overflow:hidden;
