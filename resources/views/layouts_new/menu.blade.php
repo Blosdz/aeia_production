@@ -15,13 +15,6 @@
     </a>
 </li>
 
-<li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('detalles') }}">
-        <i class="fa-solid fa-users"></i>
-        <span>Usuarios</span>
-    </a>
-</li>
-
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('profiles.index') }}">
         <i class="fa-solid fa-user-check"></i>
