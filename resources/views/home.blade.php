@@ -236,7 +236,7 @@
 
 
 
-@elseif($user_session->rol == 3)
+@elseif($user_session->rol == 3 || $user_session->rol == 4)
     <strong>Dashboard</strong>
 
     <div class="row row-fil1-client">
