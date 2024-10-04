@@ -199,6 +199,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('table-fondo',[FondoController::class,'view_fondos'])->name('tableFondos');
     // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
     Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
+    // edit currencies
+    Route::post('/table-fondo/edit/{id}/update-invested-currencies', [FondoController::class, 'updateInvestedCurrencies'])->name('fondos.update-invested-currencies');
+
     Route::post('/table-fondo/edit/{id}/update-add-payments', [FondoController::class, 'editUpdateFondo'])->name('fondos.update-add-payments');
     // Suscriptor Historial
     Route::get('/historial-suscriptor',[HistorialController::class,'dataHistorial'])->name('Historial');

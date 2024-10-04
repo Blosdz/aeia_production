@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fondo;
 use App\Models\FondoHistorial;
+use App\Models\Currencies;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plan;
 use App\Models\Payment;
@@ -158,7 +159,8 @@ class FondoController extends Controller
         // dd($clientPayments);
         $fondo= Fondo::findOrFail($id);
 
-        return view('admin_funciones_new.fondoEdit', compact('payments', 'total_payments', 'paymentsR','fondo'));
+        $currencies = Currencies::get();
+        return view('admin_funciones_new.fondoEdit', compact('payments', 'total_payments', 'paymentsR','fondo','currencies'));
     }
 
     public function editUpdateFondo(Request $request, $id)
@@ -478,12 +480,27 @@ class FondoController extends Controller
     public function updateGanancia(Request $request, $id)
     {
         $fondo = Fondo::findOrFail($id);
-        $request->validate([
-            'ganancia_de_capital' => 'required|numeric',
+
+        $usd_to_eur = Currencies::where('base', 'USD')->first()->rates['EUR'];
+        $eur_to_usd = Currencies::where('base', 'EUR')->first()->rates['USD'];
+
+        $validated = $request->validate([
+            'ganancia_de_capital_usd' => 'nullable|numeric',
+            'ganancia_de_capital_eur' => 'nullable|numeric',
         ]);
     
+
+        // Si el usuario introduce la ganancia en EUR, conviértelo a USD
+        if ($request->filled('ganancia_de_capital_eur')) {
+            $ganancia_en_usd = $validated['ganancia_de_capital_eur'] * $eur_to_usd;
+        } else {
+            // Si el valor está en USD, úsalo directamente
+            $ganancia_en_usd = $validated['ganancia_de_capital_usd'];
+        }
+
         // Actualizar la ganancia de capital del fondo
-        $fondo->ganancia_de_capital = $request->ganancia_de_capital;
+        $fondo->ganancia_de_capital = $ganancia_en_usd;
+
         $fondo->save();
     
         // Calcular las comisiones y obtener los fondos de clientes actualizados
@@ -523,6 +540,44 @@ class FondoController extends Controller
         $this->enviarNotificacionesUsuarios($fondo);
     
         return redirect()->back()->with('success', 'Fondo actualizado');   
+    }
+    
+
+    public function updateInvestedCurrencies(Request $request, $id)
+    {
+        $fondo = Fondo::findOrFail($id);
+    
+        // Validar que el array de porcentajes y monedas sea requerido
+        $validated = $request->validate([
+            'moneda' => 'required|array',  // Un array de monedas
+            'moneda.*' => 'required|string',  // Cada moneda debe ser un string
+            'precio_usd' => 'required|array',  // Un array de precios en USD
+            'precio_usd.*' => 'required|numeric',  // Cada precio debe ser numérico
+            'porcentaje' => 'required|array',  // Un array de porcentajes
+            'porcentaje.*' => 'required|numeric',  // Cada porcentaje debe ser numérico
+        ]);
+    
+        // Decodificar el campo `invested_currencies` si no está vacío
+        $invested_currencies = json_decode($fondo->invested_currencies, true) ?? [];
+    
+        // Procesar las nuevas inversiones
+        $new_investments = [];
+        foreach ($validated['moneda'] as $index => $moneda) {
+            $new_investments[] = [
+                'moneda' => $moneda,
+                'precio_usd' => $validated['precio_usd'][$index],
+                'porcentaje' => $validated['porcentaje'][$index],
+            ];
+        }
+    
+        // Merge las nuevas inversiones con las ya existentes
+        $invested_currencies = array_merge($invested_currencies, $new_investments);
+    
+        // Guardar el array actualizado en el campo `invested_currencies` como JSON
+        $fondo->invested_currencies = json_encode($invested_currencies);
+        $fondo->save();
+    
+        return redirect()->back()->with('success', 'Monedas invertidas actualizadas correctamente');
     }
     
 

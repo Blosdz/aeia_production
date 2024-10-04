@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use App\Models\Currencies;
 use Illuminate\Support\Facades\File;
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,11 +28,14 @@ class AppServiceProvider extends ServiceProvider
         $result = file_get_contents(public_path() . "/countries.js");
         preg_match('#\[(.*?)\]#', preg_replace('/\s+/', '',preg_replace('/(?:\h*<!--|(?<!\A|-->\n)\G).*\R/','',str_replace("*/", "-->", str_replace("/*", "<!--", $result)))), $match);
         $result = json_decode($match[0]); 
-        $filledArray;
+        $filledArray = [];
         foreach($result as $key => $value) {
             $filledArray[$value->name] = $value->name;
         }
         View::share('countries', $filledArray);
-
+        View::composer('layouts_new.app',function($view){
+            $currencies = Currencies::all();
+            $view->with('currencies',$currencies);
+        });   
     }
 }

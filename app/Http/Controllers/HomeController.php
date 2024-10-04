@@ -86,6 +86,7 @@ class HomeController extends Controller
         $fondos = Fondo::with('historial')->get();
     
         // Crear la estructura de datos para cada fondo
+        // dd($fondos);
         $fondosChartData = [];
     
         foreach ($fondos as $fondo) {
@@ -94,10 +95,8 @@ class HomeController extends Controller
                 $fondoData[] = [
                     'x' => $historial->created_at->format('Y-m-d H:i:s'),  // Fecha
                     'y' => [
-                        $historial->ganancia_neta,   // Open (precio al abrir)
-                        $historial->total,           // High (pico más alto)
-                        $historial->total_comisiones,// Low (punto más bajo)
-                        $historial->ganancia_neta    // Close (precio al cerrar)
+                        $historial->ganancia_neta           // valor de actualizacion en historial
+                         
                     ]
                 ];
             }

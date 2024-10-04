@@ -296,45 +296,45 @@
 
 <script>
     $(document).ready(function() {
-        $.ajax({
-            url: '/api/data',
-            method: 'GET',
-            success: function(data) {
-                console.log(data); // Agrega esta línea para ver los datos completos
-                let content = '';
-                data.forEach((item, index) => {
-                    const exchangeRate = item['Realtime Currency Exchange Rate']['5. Exchange Rate'];
-                    const fromCurrency = item['Realtime Currency Exchange Rate']['1. From_Currency Code'];
-                    const toCurrency = item['Realtime Currency Exchange Rate']['3. To_Currency Code'];
-                    const activeClass = index === 0 ? 'active' : '';
-                    content += `<li class="${activeClass}">${fromCurrency} to ${toCurrency}: ${exchangeRate}</li>`;
-                });
-                $('.note_list').html(content);
-                autoChange();
-            },
-            error: function(error) {
-                console.error('Error fetching data:', error);
-                $('.note_list').html('<li class="active">Error fetching data</li>');
-            }
-        });
-    });
+        const currencies = @json($currencies); // Convierte la variable de PHP a un objeto JavaScript
 
-    function autoChange() {
-        $('.note_list li.active').each(function () {
-            if (!$(this).is(':last-of-type')) {
-                $(this).delay(5000).fadeOut(1000, function () {
-                    $(this).removeClass('active').next().addClass('active').fadeIn(1000);
-                    autoChange();
-                });
-            } else {
-                $(this).delay(6000).fadeOut(1000, function () {
-                    $(this).removeClass('active').parent().find('li:eq(0)').addClass('active').fadeIn(1000);
-                    autoChange();
-                });
+        // Ahora puedes usar "currencies" en tu lógica AJAX
+        let content = '';
+
+        currencies.forEach((currency) => {
+            const rates = currency.rates; // Asegúrate de que rates sea un string JSON
+            const usdRate = rates.USD;
+            const eurRate = rates.EUR;
+
+            // Verificamos que usdRate y eurRate estén definidos y no sean undefined
+            if (usdRate !== undefined && eurRate !== undefined) {
+                content += `<li>${currency.base}: USD ${usdRate}, EUR ${eurRate}</li>`;
             }
         });
-    }
+
+        $('.note_list').html(content); // Muestra el contenido en el HTML
+        console.log(content); // Para verificar el contenido final
+        $('.note_list li').first().addClass('active').show(); // Muestra el primer elemento y agrega la clase active
+        autoChange(); // Llama a tu función de auto cambio
+
+        function autoChange() {
+            $('.note_list li.active').each(function () {
+                if (!$(this).is(':last-of-type')) {
+                    $(this).delay(5000).fadeOut(1000, function () {
+                        $(this).removeClass('active').next().addClass('active').fadeIn(1000);
+                        autoChange();
+                    });
+                } else {
+                    $(this).delay(6000).fadeOut(1000, function () {
+                        $(this).removeClass('active').parent().find('li:eq(0)').addClass('active').fadeIn(1000);
+                        autoChange();
+                    });
+                }
+            });
+        }
+    });
 </script>
+
 
 <script>
     $(document).click(function(event) {

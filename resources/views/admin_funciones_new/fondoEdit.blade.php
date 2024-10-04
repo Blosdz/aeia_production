@@ -22,15 +22,71 @@
             {{ $fondo->updated_at }} <br>
         </div>
    </div>
+
+   <!-- Formulario para actualizar ganancia de capital -->
     <div class="row p-2">
-         Actualizar Ganancia
-            <form action="{{ route('fondos.update-ganancia', $fondo->id) }}" method="POST">
-            @csrf
-                <input type="number" name="ganancia_de_capital" class="form-control" placeholder="Nueva ganancia" required>
-            <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
-            </form>
+        <form action="{{ route('fondos.update-ganancia', $fondo->id) }}" method="POST">
+        @csrf
+        <div class="product-area-wrapper tableView">
+            <div class="products-header">
+                <div class="product-cell">Moneda</div>
+                <div class="product-cell">Tipo de Cambio</div>
+                <div class="product-cell">Actualizar Ganancia</div>
+            </div>
+            <div class="products-row">
+                <div class="product-cell">EUR - USD </div>
+                <div class="product-cell"> {{$currencies->where('base','EUR')->first()->rates['USD']}}</div>
+                <div class="product-cell">
+                    <input type="number" name="ganancia_de_capital_usd" class="form-control w-100" placeholder="Valor en USD" >
+                </div> 
+            </div>
+            <div class="products-row">
+                <div class="product-cell">USD - EUR</div>
+                <div class="product-cell"> {{$currencies->where('base','USD')->first()->rates['EUR']}}</div>
+                <div class="product-cell">
+                    <input type="number" name="ganancia_de_capital_eur" class="form-control" placeholder="Valor en EUR" >
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+        </form>
     </div>
 
+    <!-- Formulario para actualizar criptomonedas invertidas -->
+    <div class="row">
+        <form action="{{ route('fondos.update-invested-currencies', $fondo->id) }}" method="POST">
+            @csrf
+            <div class="product-area-wrapper tableView">
+                <div class="products-header">
+                    <div class="product-cell">Crypto</div>                
+                    <div class="product-cell">Precio USD</div>                
+                    <div class="product-cell">Precio EUR</div>                
+                    <div class="product-cell">Porcentaje</div>                
+                </div>
+                @foreach ($currencies as $currency)
+                    @if ($currency->base !== 'USD' && $currency->base !== 'EUR')
+                    <div class="products-row">
+                        <div class="product-cell">{{ $currency->base }}</div>                
+                        <div class="product-cell">{{ $currency->rates['USD'] }}</div>                
+                        <div class="product-cell">{{ $currency->rates['EUR'] }}</div>                
+                        <div class="product-cell"> 
+                            <!-- Aquí es donde corregimos el name para que se envíe un array -->
+                            <input type="hidden" name="moneda[]" value="{{ $currency->base }}">
+                            <input type="hidden" name="precio_usd[]" value="{{ $currency->rates['USD'] }}">
+                            <input type="number" name="porcentaje[]" class="form-control" placeholder="Porcentaje">
+                        </div>                                   
+                        <div class="product-cell"></div>                
+                    </div>
+                    @endif
+                @endforeach
+              
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para agregar pagos -->
     <div class="row">
         <form method="POST" action="{{ route('fondos.update-add-payments', $fondo->id) }}" id="add-payments-form">
             @csrf

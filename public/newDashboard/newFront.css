@@ -278,15 +278,13 @@ canvas{
     font-weight: bold !important;
 
 }
-.nav-f {
-    margin-right: 2vw;
-}
+
 
 .nav-total{
     display: flex;
     flex-direction: row;
     text-decoration: none;
-    width: 44vw;
+    /* width: 44vw; */
 }   
 
 .navbar{
