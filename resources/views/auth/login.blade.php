@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid" id="login-form">
+    <div class="container-fluid d-none d-md-block" id="login-form">
         <div class="row h-100" id="login-left">
             <div class="col d-flex align-items-center justify-content-center outerring">
                 <div class="innerring"></div>
@@ -154,6 +154,62 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="container-fluid d-md-none">
+            <div class="row d-flex align-items-center justify-content-center outerring " style="width:auto !important;">
+                <div class="innerring" style="height:calc(150%) !important ; width:calc(170%)!important; "></div>
+                    <img src="welcome/images/logo2.png" alt="" data-position="center center" id="logo" style="width:45vw; !important"/>
+                {{-- </div> --}}
+            </div>
+            <div class="row ">
+                <div class="container form-container">
+                    <form method="post" action="{{ url('/login') }}">
+                        @csrf
+                        <h1>Iniciar Sesión</h1>
+                        {{-- <p class="text-muted">Inicio de se</p> --}}
+                        <br>    
+
+                       <label for="email">Email</label><br>
+                        <div class="input-group ">
+                            {{-- <div class="input-group-prepend p-3"> --}}
+                                {{-- <span class="input-group-text">@</span> --}}
+                            {{-- </div> --}}
+                            <input type="email" class="form-control p-3 {{ $errors->has('email')?'is-invalid':'' }}" name="email" value="{{ old('email') }}"
+                                   placeholder="Ingresa tu Correo">
+                            @if ($errors->has('email'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <label for="password">Contraseña</label>
+                        <div class="input-group ">
+                            {{-- <div class="input-group-prepend p-3">
+                                <span class="input-group-text">
+                                  <i class="icon-lock"></i>
+                                </span>
+                            </div> --}}
+                            <input type="password" class="form-control p-3 {{ $errors->has('password')?'is-invalid':'' }}" name="password"
+                                    placeholder="Ingresa tu Contraseña">
+                            @if ($errors->has('password'))
+                                <span class="invalid-feedback">
+                                   <strong>{{ $errors->first('password') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <a href="/register" class="p-3 "><p> Crear Cuenta </p></a>
+
+                        <div class="row p-3">
+                            <button class="btn btn-primary px-4" type="submit">Iniciar Sesión</button>
+                        </div>
+                        <div class="row p-3 p-3">
+                            <a href="{{ route('password.request') }}" class="btn btn-link px-0">Olvidé mi contraseña</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
     </div>
 
 {{-- <div class="container">

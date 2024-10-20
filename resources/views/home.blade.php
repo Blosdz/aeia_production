@@ -15,25 +15,25 @@
 @endif
 @if($user_session->rol==2)
     <strong>Dashboard</strong>
-<div class="row ">
-        <div class="col-3 p-3">
-            <div class="counter h-100 w-100 bg-1"  id="rounded-container">
-                <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
-                    <div class="col h-100">
-                        <h2>Invitar a nuevos usuarios</h2>
-                        <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
+<div class="row row-fil1-client">
+    <div class="col p-3">
+        <div class="counter h-100 w-100 bg-1"  id="rounded-container">
+            <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
+                <div class="col h-100">
+                    <h2>Invitar a nuevos usuarios</h2>
+                    <input type="text" class="form-control" id="inviteLink" value="{{$inviteLink ?? ''}}" readonly>
 
-                    </div>
-                    <div class="col-3 h-100">
-                        <span class="rounded-span">
-                            <i class="fa-solid fa-link" style="cursor:pointer;" onclick="copyToClipboard('#inviteLink')"></i>
-                        </span>
-                    </div>
+                </div>
+                <div class="col-3 h-100">
+                    <span class="rounded-span">
+                        <i class="fa-solid fa-link" style="cursor:pointer;" onclick="copyToClipboard('#inviteLink')"></i>
+                    </span>
                 </div>
             </div>
         </div>
+    </div>
 
-    <div class="col-3 p-3">
+    <div class="col p-3">
         <div class="counter h-100 w-100 bg-1"  id="rounded-container">
             <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
                 <div class="col h-100 ">
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="col-3 p-3">
+    <div class="col p-3">
         <div class="counter h-100 w-100 bg-1"  id="rounded-container">
             <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
                 <div class="col h-100 w-50">
@@ -64,7 +64,7 @@
             </div>
         </div>
     </div>
-    <div class="col-3 p-3">
+    <div class="col p-3">
         <div class="counter h-100 w-100 bg-1"  id="rounded-container">
             <div class="row w-100 p-3 d-flex justify-content-between align-items-center">
                 <div class="col h-100 w-50">
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" id="row2-content-suscriber">
         <div class="col">
             <div class="h-100 w-100 bg-1 d-flex justify-content-center "  id="rounded-container">
                 <div class="container w-60 p-4">
@@ -101,8 +101,8 @@
             </div>
         </div>
 
-        <div class="col-3">
-            <div class="bg-1 p-3 overflow-auto"  id="rounded-container" style="max-height:16vw;">
+        <div class="col-3 p-3">
+            <div class="bg-1 p-3 overflow-auto table-comissions"  id="rounded-container" style="max-height:16vw;">
                     <div class="product-area-wrapper tableView">
                         <div class="products-header">
                             <div class="product-cell">Planes</div>
@@ -173,14 +173,14 @@
 
         </div>
     <div class="col-3">
-        <div class="counter bg-1  h-100  d-flex text-align-center align-items-center justify-content-center"  id="rounded-container">
+        <div class="counter bg-1  h-100  d-flex text-align-center align-items-center justify-content-center p-3"  id="rounded-container">
             {{$qrCode ?? ''}}
 
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row row-fil3-client">
     <div class="col p-3">
       <div class="counter h-100 w-100 bg-1   d-flex text-align-center align-items-center justify-content-center "  id="rounded-container">
 
@@ -691,6 +691,224 @@
 
         </div>
     </div>
+@endif
+
+@endsection
+
+
+@section('content_mobile')
+    @if($user_session->rol==3 || $user_session->rol==4)
+        <div class="row  p-3">
+            <div class="counter w-100 h-100 bg-1 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
+
+              @if (!empty($planData ?? ''))
+                  <div id="chart" class="rounded p-4"></div>
+              @else
+                  {{-- <div class="  bg-1 container-size"> --}}
+                      <div class="chart-container">
+                          <div class="chart-overlay">Ejemplo</div>
+                          <div id="chart-demo" style="height: 16vw; width: 35vw;"></div>
+
+                      </div>
+                      {{-- <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p> --}}
+                 {{-- </div> --}}
+  
+              @endif
+
+            </div> 
+        </div>
+        <div class="row p-3">
+            <div class="counter bg-1 w-100 h-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
+
+                @if (!empty($porcentajeInvertido ?? ''))
+                    <div id="chart-dona" class="p-4"></div>
+                @else
+                    <div class="chart-container">
+                        <div class="chart-overlay">Ejemplo</div>
+                        <div id="chart-demo-dona" style="height:16vw ; width: 35vw;" ></div>
+
+                    </div>
+                    {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
+                @endif         
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-3">
+                <div class="row p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
+                    <div class="col">
+                        <h2 class="fw-bolder">$ {{$totalInversionYBeneficio ?? ''}} </h2>
+                        <span>Balance General</span>
+                    </div>
+                    <div class="col">
+                        <span class="rounded-span">
+                            <i class="fa-duotone fa-solid fa-chart-line"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-3">
+                <div class="row p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
+                    <div class="col">
+                        <h2 class="fw-bolder">$ {{$paymentsTotal ?? ''}} </h2>
+                        <span>Capital Invertido</span>
+                    </div>
+                    <div class="col">
+                        <span class="rounded-span">
+                            <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-3">
+                <div class="counter w-100"  >
+                    <div class="w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
+                        {{-- count down to this 28 timer --}}
+                        <div class="col h-100">
+                            <h2 id="countdown"></h2>
+                            <span>Cierre de Ciclo </span>
+                        </div>
+                        <div class="col-3 h-100">
+                            <span class="rounded-span">
+                                <i class="fa-regular fa-clock"></i>
+                            </span>
+                        </div>
+                        {{-- .col-3 --}}
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="stack">
+                @if(isset($plans) && count($plans) > 0)
+                    @foreach($plans as $plan)
+                        <div class="card d-flex flex-row align-items-center m-2">
+                            <div class="d-flex justify-content-center p-3">
+                                <img src="/welcome_new/images/icons/{{ $plan->logo }}" alt="Logo" style="width:6vw">
+                            </div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <span>Plan: {{$plan->name}}</span>
+                                    <p>Depósito permitido desde:</p>
+                                <b>${{ $plan->minimum_fee }} a {{ $plan->maximum_fee ? '$' . $plan->maximum_fee : 'más' }}</b>
+                                <p>Membresía: ${{$plan->annual_membership}}</p>
+                                <p>Comisión: {{$plan->commission}}%</p>
+                            </div>
+                        </div>
+                    @endforeach
+                    @else
+                        <p>No hay planes disponibles.</p>
+                @endif
+            </div>
+        </div>
+        @if($planData ?? '')
+            @foreach($planData ?? '' as $planName => $data)
+            <div class="row row-fil1-client h-100 w-100">
+                <div class="col">
+                    <div class="w-100 p-4 d-flex justify-content-between align-items-center bg-1 " id="rounded-container">
+                        <div class="h-100 w-100 row">
+                            <div class="col   d-flex text-align-center align-items-center justify-content-center  ">
+                                <img src="/welcome_new/images/icons/{{$planName}}.png" alt="Logo" style="width:3vw">
+                            </div>
+                            <div class="col">
+                                <h2 class="fw-bolder">$ <span class="count">{{$data['inversion_inicial']}}</span></h2>
+                                <span>Total Invertido En plan {{ $planName }}</span>
+ 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col p-4">
+                    <div class="w-100 h-100 d-flex bg-1 " id="rounded-container">
+                            @if (!empty($data['data']))
+                              <div id="chart_{{ $planName }}" class="rounded p-4"></div>
+                            @else
+                                <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
+                            @endif
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let stack = document.querySelector(".stack");
+    
+        [...stack.children].reverse().forEach(i => stack.append(i));
+    
+        stack.addEventListener("click", swap);
+    
+        function swap(e) {
+            let card = document.querySelector(".card:last-child");
+            if (e.type === 'click' && e.target !== card) return;
+            card.style.animation = "swap 700ms forwards";
+        
+            setTimeout(() => {
+                card.style.animation = "";
+                stack.prepend(card);
+            }, 700);
+        }
+    
+        // Cambiar tarjeta automáticamente cada 5 segundos
+        setInterval(() => {
+            swap(new Event('autoSwap'));
+        }, 5000);
+    });
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const interval = @json($interval ?? '');
+        const days = interval.days;
+        const hours = interval.h;
+        const minutes = interval.i;
+        const seconds = interval.s;
+
+        let countdownDate = new Date();
+        countdownDate.setDate(countdownDate.getDate() + days);
+        countdownDate.setHours(countdownDate.getHours() + hours);
+        countdownDate.setMinutes(countdownDate.getMinutes() + minutes);
+        countdownDate.setSeconds(countdownDate.getSeconds() + seconds);
+
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = d + "d " + h + "h " + m + "m " + s + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                countdownElement.innerHTML = "EXPIRED";
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    });
+</script>
+
+<script>
+    var planData = @json($planData ?? '');
+    var donaDataClient = @json($porcentajeInvertido ?? '');
+    var donaSeries=[donaDataClient,100-donaDataClient];
+    // console.log(planData); // Verifica que los datos se están pasando correctamente
+    // console.log(donaDataClient); // Verifica que los datos se están pasando correctamente
+    // console.log(donaSeries); // Verifica que los datos se están pasando correctamente
+</script>
+<script src="{{mix('js/charts.js')}}"></script>
+
 @endif
 
 @endsection

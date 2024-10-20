@@ -46,6 +46,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/app.css')}}"/>
     <link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>
+    <link rel="stylesheet" href="{{URL::asset('/newDashboard/app_mobile.css')}}"/>
 </head>
 <body>
     <style>
@@ -53,7 +54,8 @@
         .note_list li.active { display: block; }
     </style>
     <div id="particles-js"></div>
-    <div class="container-fluid">
+    {{-- website view --}}
+    <div class="container-fluid d-none d-md-block">
         <div class="row h-100">
             <div class="side-bar " id="sidebar-col">
                 @include('layouts_new.sidebar_new')
@@ -68,26 +70,29 @@
                         <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
                             <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
                         </a>
-                        <div class="dropdown align-items-center text-align-center p-3">
-                            <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="text-align-center align-items-center">
-                                <i class="fa fa-solid fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;" ></i>
-                            </a>
+                        <div class="dropdown open text-align-center p-3">
+                            <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle has-notify" data-click="toggle-notify">
+                                <i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;" ></i>
+					        </a>
                             <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
-                            <div class="dropdown-menu bg-1 box-timeline" aria-labelledby="dropdownMenuButton" id="content-alert" style="max-height: 300px; overflow-y: auto;">
-                                <ul class="timeline" style="margin:10px;width:100vw;">
+                                <ul class="dropdown-menu dropdown-notification pull-right">
                                     @foreach($notificaciones as $notificacion)
-                                        {{-- edit with time line here --}}
-                                        <li class="event" data-date="12:30"> 
-
-                                            <i class="fa fa-bell timeline-icon"></i>
+                                        <li class="notification-item">
+                                            <a href="javascript:;">
+                                                {{--aqui entra los icons que queremos poner por notificacion--}}
+                                                <div class="media">
+                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                </div>
+                                                <div class="message">
+                                                    <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
+                                                </div>
+                                            </a>
                                         </li>
-                                            <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
                                             {{-- <span class="timeline-icon"><i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="color:white"></i></span> --}}
                                             {{-- <span class="timeline-date">{{ $notificacion->created_at->format('M d, H:i') }}</span> --}}
-                                        {{-- </li> --}}
                                     @endforeach
                                 </ul>
-                            </div>
+                            </>
                             
                         </div>
                         <div class="dropdown-list toggle" onclick="toggleDropdown()">
@@ -114,6 +119,33 @@
                 <div class="container-fluid">
                     @yield('content')
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid d-md-none">
+        <div class="row h-100">
+            <div class="col h-100 w-100">
+                <div class="nbar w-100 d-flex justify-content-end">
+                    <div class="nbar-r h-75 d-flex align-items-center text-align-center justify-content-end bg-2">
+                        <div class="container">
+                            <ul class="note_list">
+                            </ul>
+                        </div>
+                        <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
+                            <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="container">
+                    @yield('content_mobile')
+                </div>
+            </div>
+
+        </div>
+        <div class="row fixed-bottom">
+            <div class="d-flex justify-content-between w-100 p-3 " id="mobile_nav" style="background-color: #192541;">
+                @include('layouts_new.sidebar_new_mobile')
             </div>
         </div>
     </div>
@@ -802,17 +834,6 @@
 
 </script>
 
-<script>
-    document.getElementById('menu-toggle').addEventListener('click', function() {
-    var sidebar = document.getElementById('sidebar-col');
-    sidebar.classList.toggle('expanded');
-
-    var contentWrapper = document.querySelector('.content-wrapper');
-
-    if (contentWrapper) {
-        contentWrapper.classList.toggle('expanded');
-    }
-});
 
 </script>
 </body>

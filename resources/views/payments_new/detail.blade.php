@@ -177,7 +177,7 @@
                 document.getElementById("canvasimg").style.border = "2px solid";
                 var dataURL = canvas.toDataURL();
                 document.getElementById("canvasimg").src = dataURL;
-                document.getElementById("canvasimg").style.display = "inline";
+                document.getElementById("canvasimg").style.display = "none";
             }
 
             function send() {
@@ -289,7 +289,7 @@
             if (dot_flag) {
                 ctx.beginPath();
                 ctx.fillStyle = x;
-                ctx.fillRect(currX, currY, 2, 2);
+                ctx.fillRect(currX, currY, 0, 0);
                 ctx.closePath();
                 dot_flag = false;
             }

@@ -296,7 +296,7 @@ $font-large: 24px;
     grid-template-columns: repeat(6,1fr);
     align-items: center;
     border-radius: 4px;
-    flex-wrap:wrap;
+    gap: 16px; // Espacio entre columnas (opcional)
     padding: 8px;
 
     
@@ -316,8 +316,9 @@ $font-large: 24px;
     font-size: $font-small;
     display: flex;
     align-items: center;
-        
+    justify-content: center;
     min-height: 60px;
+    max-width: 100%;
     img {
       width: 32px;
       height: 32px;
@@ -511,4 +512,31 @@ $font-large: 24px;
   }
   
   .cell-label { opacity: 0.6; }
+}
+.MoreInformation {
+  display: none;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ccc;
+
+  .btn-group {
+    margin-top: 10px;
+  }
+}
+
+.accordion-button {
+  background-color: #06965c;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #8ee0c4;
+  }
+}
+
+.products-row.item.active + .MoreInformation {
+  display: block;
 }

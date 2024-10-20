@@ -272,7 +272,7 @@
   grid-template-columns: repeat(6, 1fr);
   align-items: center;
   border-radius: 4px;
-  flex-wrap: wrap;
+  gap: 16px;
   padding: 8px;
 }
 .tableView .products-row:hover {
@@ -288,7 +288,9 @@
   font-size: 14px;
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 60px;
+  max-width: 100%;
 }
 .tableView .product-cell img {
   width: 32px;
@@ -485,4 +487,30 @@
 }
 .gridView .cell-label {
   opacity: 0.6;
+}
+
+.MoreInformation {
+  display: none;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ccc;
+}
+.MoreInformation .btn-group {
+  margin-top: 10px;
+}
+
+.accordion-button {
+  background-color: #06965c;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.accordion-button:hover {
+  background-color: #8ee0c4;
+}
+
+.products-row.item.active + .MoreInformation {
+  display: block;
 }
