@@ -282,6 +282,7 @@
             </div>
             <div class="row" id="">
                 <div class="icons-socials d-flex justify-content-center">
+                    <a href="https://wa.pe/AEIAInvest" target="_blank"><i class="bi bi-whatsapp"></i></a>
                     <a href="https://www.facebook.com/aeiainvestments" target="_blank"><i class="bi bi-facebook"></i></a>
                     <a href="https://www.instagram.com/aeiainvestments" target="_blank"><i class="bi bi-instagram"></i></a>
                     <a href="https://www.linkedin.com/company/aeia-investment/" target="_blank"><i class="bi bi-linkedin"></i></a>
