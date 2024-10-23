@@ -36,6 +36,12 @@
                     <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
                         <a href="#home4" class="nav-link">¿ CÓMO FUNCIONA ?</a>
                     </li>
+
+                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
+                        <a href="https://wa.pe/AEIAInvest" target="_blank" class="nav-link"><i class="bi bi-whatsapp"></i>Contáctanos</a>
+
+                    </li>
+ 
                     <li>
                         <a href="/login" class="btn1">
                             <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
