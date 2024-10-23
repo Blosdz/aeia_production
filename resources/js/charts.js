@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var planInfo = planData[plan];
         seriesData.push({
             name: plan.charAt(0).toUpperCase() + plan.slice(1), // Capitalizar el nombre del plan
-            type: 'area',
+            type: 'line',
             data: planInfo.data.map(Number) // Asegurarse de que los datos son números
         });
         months = planInfo.months
@@ -161,7 +161,17 @@ document.addEventListener("DOMContentLoaded", function() {
             chart: {
                 height: 350,
                 width:600,
-                type: 'area'
+                type: 'line',
+                foreColor: '#6D6D6D',
+                dropShadow:{
+                    enabled:true,
+                    blur:5,
+                    opacity:0.45,
+                    color:'#63dcdc',
+                },
+                toolbar:{
+                    show:false,
+                },
             },
             responsive:[{
                 breakpoint:undefined,
@@ -171,10 +181,31 @@ document.addEventListener("DOMContentLoaded", function() {
                 enabled: false
             },
             stroke: {
-                curve: 'smooth'
+                width:4,
+            },
+            fill:{
+                type:"gradient",
+                gradient:{
+                    shadeIntensity:1,
+                    opacityFrom:0.7,
+                    opacityTo:0.9,
+                    type:"vertical",
+                    inverseColors:true,
+                    colorStops:[
+                        {offset:0,color:"#01893D",opacity:1},
+                        {offset:57.5,color:"#FFA300",opacity:1},
+                        {offset:100,color:"#F70000",opacity:1},
+
+                    ]
+
+                }
             },
             xaxis: {
-                categories: months
+                categories: months,
+                labels:{
+
+                    format: 'dd/MM/yy HH::mm',
+                }
             },
             tooltip: {
                 x: {
@@ -193,17 +224,45 @@ document.addEventListener("DOMContentLoaded", function() {
         chart: {
             height: 350,
             width: 600, 
-            type: 'area'
+            type: 'line',
+            foreColor: '#6D6D6D',
+            dropShadow:{
+                enabled:true,
+                blur:5,
+                opacity:0.45,
+                color:'#63dcdc',
+            },
+            toolbar:{
+                show:false,
+            },
         },
         dataLabels: {
             enabled: false
         },
+
         responsive:[{
             breakpoint:undefined,
             options:{},
         }],
         stroke: {
-            curve: 'smooth'
+            width:4,
+        },
+        fill:{
+            type:"gradient",
+            gradient:{
+                shadeIntensity:1,
+                opacityFrom:0.7,
+                opacityTo:0.9,
+                type:"vertical",
+                inverseColors:true,
+                colorStops:[
+                    {offset:0,color:"#01893D",opacity:1},
+                    {offset:57.5,color:"#FFA300",opacity:1},
+                    {offset:100,color:"#F70000",opacity:1},
+
+                ]
+
+            }
         },
         xaxis: {
             categories: months,
@@ -217,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 format: 'dd/MM/yy HH:mm'
             },
         },
-        colors: ['#cd7f32', '#c0c0c0'] // Colores para los planes Bronce y Plata
+        // colors: ['#cd7f32', '#c0c0c0'] // Colores para los planes Bronce y Plata
     };
 
     var combinedChart = new ApexCharts(document.querySelector("#chart"), combinedOptions);

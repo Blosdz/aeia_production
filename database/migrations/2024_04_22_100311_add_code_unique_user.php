@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 // using str random 
 use Illuminate\Support\Str;
 // importing the user table
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 use App\Models\User;
 
@@ -20,15 +22,16 @@ class AddCodeUniqueUser extends Migration
     {
         Schema::table('users',function(Blueprint $table){
             $table->string('unique_code')->unique()->nullable();
-
+            $table->softdeletes();
         });
         //
         $users=User::all();
         foreach ($users as $user)
         {
-            $user->unique_code=Str::random(5);
-            $user->save();
+              $user->unique_code=Str::random(5);
+              $user->save();
         }
+
     }
 
     /**
