@@ -38,8 +38,9 @@
                 </ul>
             </div> 
             <div class="d-flex-end">
-                <button type="button" class="btn btn-outline-success me-2">Login</button>
-                <button type="button" class="btn btn-outline-primary">Crear Cuenta</button> 
+                <button type="button" onclick="window.location.href='{{ url('/login') }}'" class="btn btn-outline-success me-2">Login</button>
+                <button type="button" onclick="window.location.href='{{ url('/register') }}'" class="btn btn-outline-primary">Crear Cuenta</button>
+
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
