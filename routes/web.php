@@ -41,6 +41,10 @@ Route::get('/', function () {
     return view('newFront');
 })->name('welcome');
 
+Route::get('/newHomeFront', function () {
+    return view('newHome');
+})->name('welcomeNew');
+
 // Route::get('/test1', function () {
 //     return view('auth.test1');
 // })->name('test');

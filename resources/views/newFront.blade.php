@@ -14,95 +14,65 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <div class="navbar navbar-expand-lg sticky-top">
+    <div class="circle"></div>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container-fluid">
-            <a href="#" class="navbar-brand"><img src="{{URL::asset('welcome_new/images/logo/image 9.png')}}" alt="logo"></a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <a href="" class="navbar-brand" href="#">
+                <img src="{{URL::asset('welcome_new/images/logo/logoNav.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
+                AEIA
+            </a>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav mb-2 mb-lg-0 header-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"> Inicio</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Suscriptores </a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Beneficios</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Instrucciones</a>
+                    </li> 
+                </ul>
+            </div> 
+            <div class="d-flex-end">
+                <button type="button" class="btn btn-outline-success me-2">Login</button>
+                <button type="button" class="btn btn-outline-primary">Crear Cuenta</button> 
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-            <div class=" collapse justify-content-end d-flex " id="navbarSupportedContent ">
-                <ul class=" navbar-nav me-auto mb-2 mb-lg-0 me-auto mb-2 mb-lg-0">
-
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
-                        <a href="#home1" class="nav-link">INICIO</a>
-                    </li>
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
-                        <a href="#home2" class="nav-link">SUSCRIPTOR</a>
-                    </li>                
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
-                        <a href="#home3" class="nav-link">BENEFICIOS</a>
-                    </li>                
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
-                        <a href="#home4" class="nav-link">¿ CÓMO FUNCIONA ?</a>
-                    </li>
-
-                    <li class="nav-f d-flex justify-content-center align-items-center text-align-center nav-item">
-                        <a href="https://wa.pe/AEIAInvest" target="_blank" class="nav-link"><i class="bi bi-whatsapp"></i>Contáctanos</a>
-
-                    </li>
- 
-                    <li>
-                        <a href="/login" class="btn1">
-                            <div class="login-btn d-flex justify-content-center align-items-center text-align-center">
-                                    <span>INGRESAR</span>
-                            </div>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-
         </div>
-    </div>
-    <!-- <iframe 
-        src="{{ URL::asset('images/dashboard/VID_20221207_221942_982.mp4') }}?autoplay=1" 
-        frameborder="0" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen 
-        class="video-iframe">
-    </iframe> -->
-
-        <canvas></canvas>
+    </nav>
+ 
     <div class="content">
+        <div class="galaxy-margin">
+            <div class="galaxy">
+                <div class="stars1"></div>
+                <div class="stars3"></div>
 
+            </div>
+        </div>
 
 
 
         <div class="section" id="home1">
-            <div class="row w-100 padding">
-                <div class="col-sm-6 appear2">
-                    <div class="title-home">
-                        <p> AEIA<br> INVESTMENTS</p>
-                    </div>
-                    <div class="container-text">
-                        <div class="title">
-                            <b>AEIA INVESTMENTS<br></b>
-                        </div>    
-                        <div class="subtitle" id="bluetext">
-                            <b>INVERSIÓN, <br> TRANSPARENCIA, <br> RENTABILIDAD</b>
-                        </div>
-                        
-                    </div>
+            <h1 class="frame-style-title">
+                Inversiones seguras e inteligentes con <br>
+            </h1>
+            <h1 class="frame-style-title">
+                AEIA
+            </h1>
 
 
-                </div>      
-                <div class="col-sm-6 z_image ">
-                    <!-- <iframe 
-                            src="{{ URL::asset('images/dashboard/VID_20221207_221942_982.mp4') }}?autoplay=1" 
-                            frameborder="0" 
-                            allow="autoplay; encrypted-media" 
-                            allowfullscreen 
-                            class="video-iframe">
-                        </iframe> -->
-                    <img src="{{URL::asset('/newDashboard/images/cel1.jpeg')}}" alt="" id="image-container">
-                </div>
-            </div> 
-
+            transparencia , rentabilidad , seguridad 
         </div>
+
         <div class="section" id="home2">
             <div class="row p-4 padding appear3">
-                <div class="col">
+                <div class="col d-flex justify-content-center text-align-center ">
                     <img src="{{URL::asset('/newDashboard/images/suscriptor.jpg')}}" alt="" id="suscriptor-img">
                 </div>
                 <div class="col">
@@ -303,6 +273,7 @@
     <footer>
 
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script>
