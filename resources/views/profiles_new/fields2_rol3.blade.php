@@ -100,14 +100,14 @@
         </div>
 
         <div class="form-group col-sm-6">
-            {!! Form::label('phone_code', 'Código de país:') !!}
-            {!! Form::select('phone_code', [
-                '+51' => '+51 (Peru)',
-                '+1' => '+1 (USA/Canada)',
-                '+44' => '+44 (UK)',
-                '+52' => '+52 (Mexico)',
-                '+91' => '+91 (India)',
-            ], null, ['class' => 'form-control']) !!}
+            {!! Form::label('phone_extension', 'Código de país:') !!}
+            {!! Form::select('phone_extension', [
+                51 => '+51 (Peru)',
+                1 => '+1 (USA/Canada)',
+                44 => '+44 (UK)',
+                52 => '+52 (Mexico)',
+                91 => '+91 (India)',
+            ], null , ['class' => 'form-control']) !!} <!-- Default to '1' if not set -->
         </div>
 
         <div class="form-group col-sm-6" >

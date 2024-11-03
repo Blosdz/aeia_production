@@ -345,10 +345,10 @@ class ProfileController extends AppBaseController
     {
     // Obtener el user_id del formulario
     	
+    
         $userId = $request->input('user_id');
         $profile = $this->profileRepository->find($id);
 	    $data=$request->all();
-        $data['phone']=$data['phone_code'].''.$data['phone'];
 	    $data['verified'] = 1; // Otra forma de actualizar el campo "verified" del perfil	
 	    $profile=$this->profileRepository->update($data,$id);
 		

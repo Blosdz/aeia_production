@@ -18,7 +18,7 @@
           </div>
         @endif
           <strong>Verifica tu información</strong>
-          <div class="col bg-1 p-4" id="rounded-container">
+          <div class="col  p-4" id="rounded-container">
                       {!! Form::model($profile, ['route' => ['profiles.update2', $profile->id], 'method' => 'post', 'files' => true]) !!}
                       @php
                         if ($user_session->rol==2) {
@@ -35,7 +35,7 @@
                         </li> -->
                       </ul>
                       <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active bg-1 rounded" id="home" role="tabpanel" aria-labelledby="home-tab">
                         @include('profiles_new.fields2')
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -54,7 +54,7 @@
                         </li>
                       </ul>
                       <div class="row tab-content d-flex justify-content-between align-items-center" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active bg-1 rounded" id="home" role="tabpanel" aria-labelledby="home-tab">
                         @include('profiles_new.fields2_rol3')
                         </div>
                       </div>
@@ -67,7 +67,7 @@
                         </li>
                       </ul>
                       <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active bg-1 rounded" id="home" role="tabpanel" aria-labelledby="home-tab">
                         @include('profiles_new.fields2_rol4')
                         </div>
                       </div>

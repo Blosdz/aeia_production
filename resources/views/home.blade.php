@@ -701,35 +701,10 @@
         <div class="row  p-3">
             <div class="counter w-100 h-100 bg-1 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
-              @if (!empty($planData ?? ''))
-                  <div id="chart" class="rounded p-4"></div>
-              @else
-                  {{-- <div class="  bg-1 container-size"> --}}
-                      <div class="chart-container">
-                          <div class="chart-overlay">Ejemplo</div>
-                          <div id="chart-demo" style="height: 16vw; width: 35vw;"></div>
-
-                      </div>
-                      {{-- <p class="text-center text-muted justify-content-center align-content-center d-flex"> No hay información disponible para realizar un gráfico.</p> --}}
-                 {{-- </div> --}}
-  
-              @endif
-
             </div> 
         </div>
         <div class="row p-3">
             <div class="counter bg-1 w-100 h-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
-
-                @if (!empty($porcentajeInvertido ?? ''))
-                    <div id="chart-dona" class="p-4"></div>
-                @else
-                    <div class="chart-container">
-                        <div class="chart-overlay">Ejemplo</div>
-                        <div id="chart-demo-dona" style="height:16vw ; width: 35vw;" ></div>
-
-                    </div>
-                    {{-- <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p> --}}
-                @endif         
 
             </div>
         </div>
@@ -802,38 +777,6 @@
                 @endif
             </div>
         </div>
-        @if($planData ?? '')
-            @foreach($planData ?? '' as $planName => $data)
-            <div class="row row-fil1-client h-100 w-100">
-                <div class="col">
-                    <div class="w-100 p-4 d-flex justify-content-between align-items-center bg-1 " id="rounded-container">
-                        <div class="h-100 w-100 row">
-                            <div class="col   d-flex text-align-center align-items-center justify-content-center  ">
-                                <img src="/welcome_new/images/icons/{{$planName}}.png" alt="Logo" style="width:3vw">
-                            </div>
-                            <div class="col">
-                                <h2 class="fw-bolder">$ <span class="count">{{$data['inversion_inicial']}}</span></h2>
-                                <span>Total Invertido En plan {{ $planName }}</span>
- 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col p-4">
-                    <div class="w-100 h-100 d-flex bg-1 " id="rounded-container">
-                            @if (!empty($data['data']))
-                              <div id="chart_{{ $planName }}" class="rounded p-4"></div>
-                            @else
-                                <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
-                            @endif
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        @endif
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let stack = document.querySelector(".stack");
@@ -907,7 +850,6 @@
     // console.log(donaDataClient); // Verifica que los datos se están pasando correctamente
     // console.log(donaSeries); // Verifica que los datos se están pasando correctamente
 </script>
-<script src="{{mix('js/charts.js')}}"></script>
 
 @endif
 

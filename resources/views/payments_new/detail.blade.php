@@ -94,8 +94,8 @@
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog bg-1" role="document">
-            <div class="modal-content bg-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-1" style="width:400px !important;">
                 <div class="modal-body">
                     <p class="text-center">
                         Total invertido: $<span id="amount-modal">0.00</span> USD.
@@ -278,7 +278,7 @@
     function findxy(res, e) {
         let canvasRect = canvas.getBoundingClientRect();  // Obtener la posición precisa del canvas
 
-        if (res == 'down') {
+        if (res === 'down') {
             prevX = currX;
             prevY = currY;
             currX = e.clientX - canvasRect.left;  // Ajuste de coordenadas usando getBoundingClientRect
@@ -289,15 +289,15 @@
             if (dot_flag) {
                 ctx.beginPath();
                 ctx.fillStyle = x;
-                ctx.fillRect(currX, currY, 0, 0);
+                ctx.fillRect(currX, currY, 2, 2);  // Cambia el tamaño a 2x2 para que sea visible
                 ctx.closePath();
                 dot_flag = false;
             }
         }
-        if (res == 'up' || res == "out") {
+        if (res === 'up' || res === "out") {
             flag = false;
         }
-        if (res == 'move') {
+        if (res === 'move') {
             if (flag) {
                 prevX = currX;
                 prevY = currY;
@@ -307,6 +307,7 @@
             }
         }
     }
+
 </script>
 
 

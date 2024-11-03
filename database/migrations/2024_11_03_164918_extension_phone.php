@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CelularClientUser extends Migration
+class ExtensionPhone extends Migration
 {
     /**
      * Run the migrations.
@@ -14,6 +14,10 @@ class CelularClientUser extends Migration
     public function up()
     {
         //
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->integer('phone_extension')->unsigned()->nullable();
+            
+        });
     }
 
     /**
@@ -23,6 +27,10 @@ class CelularClientUser extends Migration
      */
     public function down()
     {
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->$table->dropColumn('phone_extension');
+            
+        });
         //
     }
 }
