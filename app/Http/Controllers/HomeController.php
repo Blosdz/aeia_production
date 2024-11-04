@@ -294,7 +294,7 @@ class HomeController extends Controller
         }
         
 
-        dd($porcentajeInvertido);
+        dd($montoInvertido,$ultimoFondo);
 
         // *******************************************************************************
 
