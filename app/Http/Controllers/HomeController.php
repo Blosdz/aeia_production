@@ -252,11 +252,11 @@ class HomeController extends Controller
         $ultimoDiaMesActual = Carbon::now()->endOfMonth()->toDateString();
     
         // Filtrar FondoClientes por el mes actual
-        $fondoClientes = FondoClientes::where('user_id', $user->id)
-                                       ->whereDate('created_at', '>=', $primerDiaMesActual)
-                                       ->whereDate('created_at', '<=', $ultimoDiaMesActual)
-                                       ->get();
-        $montoInvertidoTotal=$fondoClientes->sum('monto_invertido');
+        // $fondoClientes = FondoClientes::where('user_id', $user->id)
+                                    //    ->whereDate('created_at', '>=', $primerDiaMesActual)
+                                    //    ->whereDate('created_at', '<=', $ultimoDiaMesActual)
+                                    //    ->get();
+
         
         $userProfile = Profile::where('user_id',$user->id)->first();
 
@@ -264,6 +264,8 @@ class HomeController extends Controller
         // dd($fondoClientes);
         // Filtrar Fondo por el mes actual
         $ultimoFondo = Fondo::latest()->first();
+
+        $montoInvertidoTotal=FondoClientes::where('plan_id_fondo',$ultimoFondo->id)->where('user_id',$user->id)->sum('monto_invertido');
     
 
         // ********************************TIMER************************************************
@@ -281,8 +283,9 @@ class HomeController extends Controller
         // $montoInvertidoTotal = FondoClientes::whereIn('id', $fondoClientes)->sum('monto_invertido');
         if($montoInvertidoTotal){
             $totalFondo=$ultimoFondo->total;
+            $montoInvertido=$montoInvertidoTotal;
             // $montoInvertido = FondoHistoriaClientes::where('plan_id_fondo',$ultimoFondo->id)->where('fondo_cliente_id',$user->id)->sum('total_invertido');
-            $porcentajeInvertido = $totalFondo > 0 ? ($montoInvertidoTotal/$totalFondo) *100 : 0 ;
+            $porcentajeInvertido = ($montoInvertidoTotal/ $ultimoFondo->total) * 100;
         }else{
             $totalFondo=0;
             $montoInvertidoTotal=0;
