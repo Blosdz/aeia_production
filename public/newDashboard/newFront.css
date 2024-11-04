@@ -1070,4 +1070,22 @@ ul{
       /* transform: translate(-50%); */
   }
   
+
+}
+
+.link_whatsapp{
+    position: relative;
+    font-size: 36px;
+    /* padding: 1vw; */
+}
+
+.circle_whatsapp{
+    border-radius: 100%;
+    position: absolute;
+    background-color: #1cbb17;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
 }

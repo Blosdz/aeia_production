@@ -48,7 +48,14 @@
         </div>
     </nav>
  
+
     <div class="content">
+
+        <a href="https://wa.pe/AEIAInvest" target="_blank">
+            <div class="circle_whatsapp d-flex justify-content-center text-align-center">
+                    <i class="bi bi-whatsapp link_whatsapp"></i>
+            </div>
+        </a>
         <div class="galaxy-margin">
             <div class="galaxy">
                 <div class="stars1"></div>
