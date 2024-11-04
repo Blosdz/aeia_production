@@ -495,7 +495,7 @@
     var planData = @json($planData ?? '');
     var donaDataClient = @json($porcentajeInvertido ?? '');
     var donaSeries=[donaDataClient,100-donaDataClient];
-    // console.log(planData); // Verifica que los datos se están pasando correctamente
+    console.log(planData); // Verifica que los datos se están pasando correctamente
     // console.log(donaDataClient); // Verifica que los datos se están pasando correctamente
     // console.log(donaSeries); // Verifica que los datos se están pasando correctamente
 </script>

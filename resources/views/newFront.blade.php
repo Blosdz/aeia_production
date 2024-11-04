@@ -264,13 +264,13 @@
                     Nuestras redes sociales
                 </div>
             </div>
-            <div class="row" id="">
+            <div class="row p-4" id="">
                 <div class="icons-socials d-flex justify-content-center">
                     <a href="https://wa.pe/AEIAInvest" target="_blank"><i class="bi bi-whatsapp"></i></a>
                     <a href="https://www.facebook.com/aeiainvestments" target="_blank"><i class="bi bi-facebook"></i></a>
                     <a href="https://www.instagram.com/aeiainvestments" target="_blank"><i class="bi bi-instagram"></i></a>
                     <a href="https://www.linkedin.com/company/aeia-investment/" target="_blank"><i class="bi bi-linkedin"></i></a>
-                    <a href="https://www.tiktok.com/@aeia.92" target="_blank"><i class="bi bi-tiktok"></i></a>
+                    <a href="https://www.tiktok.com/@aeia.investments" target="_blank"><i class="bi bi-tiktok"></i></a>
                     <a href="contact_support@aeia.capital" target="_blank"><i class="bi bi-envelope-at-fill"></i></a>
  
                 </div>

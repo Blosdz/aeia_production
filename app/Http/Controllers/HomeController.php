@@ -337,10 +337,11 @@ class HomeController extends Controller
         ];
 
         // dd($plans);
+
         foreach ($historiaClientes as $historia) {
             $planId = $historia->planId;
             $planName = $mapPlan[$planId];
-            $month = Carbon::parse($historia->update_at)->format('d/m H:i');
+            $month = Carbon::parse($historia->created_at)->format('m-d');
             $total_invertido = $historia->ganancia;
             $inversion_inicial = $historia->total_invertido;
             if (!isset($planData[$planName])) {

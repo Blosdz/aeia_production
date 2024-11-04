@@ -1081,7 +1081,7 @@ ul{
 
 .circle_whatsapp{
     border-radius: 100%;
-    position: absolute;
+    position: fixed;
     background-color: #1cbb17;
     bottom: 20px;
     right: 20px;
