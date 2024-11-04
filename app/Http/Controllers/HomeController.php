@@ -266,6 +266,7 @@ class HomeController extends Controller
         $ultimoFondo = Fondo::latest()->first();
 
         $montoInvertidoTotal=FondoClientes::where('plan_id_fondo',$ultimoFondo->id)->where('user_id',$user->id)->sum('monto_invertido');
+        dd($montoInvertidoTotal);
     
 
         // ********************************TIMER************************************************
