@@ -263,10 +263,10 @@ class HomeController extends Controller
         $fondoids=FondoClientes::where('user_id',$user->id)->pluck('id');
         // dd($fondoClientes);
         // Filtrar Fondo por el mes actual
-        $ultimoFondo = Fondo::latest()->first();
+        // $ultimoFondo = Fondo::latest()->first();
 
-        $montoInvertidoTotal=FondoClientes::where('plan_id_fondo',$ultimoFondo->id)->where('user_id',$user->id)->sum('monto_invertido');
-        dd($ultimoFondo->id);
+        $montoInvertidoTotal=FondoClientes::where->where('user_id',$user->id)->latest()->sum('monto_invertido');
+        $ultimoFondo = Fondo::where('id',$montoInvertidoTotal->plan_id_fondo)->first();
     
 
         // ********************************TIMER************************************************
