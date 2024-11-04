@@ -24,16 +24,16 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav mb-2 mb-lg-0 header-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"> Inicio</a>
+                        <a class="nav-link " href="#home1"> Inicio</a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Suscriptores </a>
+                        <a class="nav-link" href="#home2"> Suscriptores </a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Beneficios</a>
+                        <a class="nav-link" href="#home3"> Beneficios</a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> Instrucciones</a>
+                        <a class="nav-link" href="#home4"> Instrucciones</a>
                     </li> 
                 </ul>
             </div> 
