@@ -265,7 +265,7 @@ class HomeController extends Controller
         // Filtrar Fondo por el mes actual
         // $ultimoFondo = Fondo::latest()->first();
 
-        $montoInvertidoTotal=FondoClientes::where->where('user_id',$user->id)->latest()->sum('monto_invertido');
+        $montoInvertidoTotal=FondoClientes::where('user_id',$user->id)->latest()->sum('monto_invertido');
         $ultimoFondo = Fondo::where('id',$montoInvertidoTotal->plan_id_fondo)->first();
     
 
