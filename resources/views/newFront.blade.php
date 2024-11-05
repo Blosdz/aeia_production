@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AEIA Investments</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/jarallax@1.12.0/dist/jarallax.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/newFront.css')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,15 +17,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <div class="circle"></div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+    <nav class="header navbar navbar-expand-lg navbar-dark bg-dark sticky-top px-4 border-bottom">
         <div class="container-fluid">
             <a href="" class="navbar-brand" href="#">
                 <img src="{{URL::asset('welcome_new/images/logo/logoNav.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
                 AEIA
             </a>
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav mb-2 mb-lg-0 header-nav">
+                <ul class="navbar-nav mb-2 mb-lg-0 header-nav p-2">
                     <li class="nav-item">
                         <a class="nav-link " href="#home1"> Inicio</a>
                     </li> 
@@ -48,57 +50,40 @@
         </div>
     </nav>
  
+    <a href="https://wa.pe/AEIAInvest" target="_blank">
+        <div class="circle_whatsapp d-flex justify-content-center text-align-center">
+                <i class="bi bi-whatsapp link_whatsapp"></i>
+        </div>
+    </a>
 
-    <div class="content">
-
-        <a href="https://wa.pe/AEIAInvest" target="_blank">
-            <div class="circle_whatsapp d-flex justify-content-center text-align-center">
-                    <i class="bi bi-whatsapp link_whatsapp"></i>
-            </div>
-        </a>
-        <div class="galaxy-margin">
-            <div class="galaxy">
+        <div class="galaxy">
+            <div class="stars-container">
                 <div class="stars1"></div>
-                <div class="stars3"></div>
-
             </div>
+            
         </div>
 
-
-
-        <div class="section" id="home1">
-            <h1 class="frame-style-title">
-                Inversiones seguras e inteligentes con <br>
-            </h1>
-            <h1 class="frame-style-title">
-                AEIA
-            </h1>
-
-
-            transparencia , rentabilidad , seguridad 
-        </div>
-
-        <div class="section" id="home2">
-            <div class="row p-4 padding appear3">
-                <div class="col d-flex justify-content-center text-align-center ">
-                    <img src="{{URL::asset('/newDashboard/images/suscriptor.jpg')}}" alt="" id="suscriptor-img">
-                </div>
-                <div class="col">
-                    <div class="card-subs p-4">
-                        <div class="subtitle "> ¿Quién es un suscriptor?</div> <br>
-                        Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas. 
-
-                        <div class="subtitle"> ¿Cómo puedo ser un suscriptor?</div><br>
-                        Debes crear una cuenta como suscriptor y realizar la verificacón de tus datos, posteriormente deberás hacer el pago de la licencia de suscripción para ser nuestro socio comercial.
-                    </div>                                                
-
-
+        <div class="stars2"></div>
+    <section class="position-relative pt-lg-4 pt-xl-5 d-flex text-align-center justify-content-center" id="home1" style="">
+        <div class="container position-relative zindex-2 pt-2 pt-sm4 pt-md-5">
+            <div class="row benefits-container justify-content-center pt-5 mt-1">
+                <h1 class="display-4 text-white pt-3 mt-3 mb-4">Inversiones seguras e inteligentes con AEIA</h1>
+                <div class="benefits-content">
+                    <div class="benefits-content__container">
+                        <ul class="benefits-content__list">
+                            <li class="benefits-content__list__item">Transparencia</li>
+                            <li class="benefits-content__list__item">Rentabilidad</li>
+                            <li class="benefits-content__list__item">Seguridad</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-
         </div>
+    </section>
 
-        <div class="section padding" id="home3">
+    <section class="py-5 bg-dark" id="home3" style="background:black">
+        <div class="container pt-2 py-sm-3 py-md-4 py-lg-5 my-xxl-3">
+
             <div class="row" id="beneficios">
                 <div class="subtitle text-center" id="highlight_container">
                     <p><b>BENEFICIOS DE AEIA</b></p>
@@ -199,10 +184,37 @@
                    </div>
                 </div>
             </div>
+
+        </div>
+    </section>
+
+    <section class="position-relative overflow-hidden py-5" id="home2">
+        <div class="container position-relative zindex-2 pt-2 pt-sm-3 pt-md-4 pt-lg-5 mt-xl-3">
+            <div class="row p-4 padding appear3">
+                <div class="col d-flex justify-content-center text-align-center ">
+                    <img src="{{URL::asset('/newDashboard/images/suscriptor.jpg')}}" alt="" id="suscriptor-img">
+                </div>
+                <div class="col">
+                    <div class="card-subs p-4">
+                        <div class="subtitle "> ¿Quién es un suscriptor?</div> <br>
+                        Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas. 
+
+                        <div class="subtitle"> ¿Cómo puedo ser un suscriptor?</div><br>
+                        Debes crear una cuenta como suscriptor y realizar la verificacón de tus datos, posteriormente deberás hacer el pago de la licencia de suscripción para ser nuestro socio comercial.
+                    </div>                                                
+
+
+                </div>
+            </div>
+
         </div>
 
-        <div class="section padding" id="home4" section-scroll='home4' >
+    </section>
 
+
+    <section class="position-relative pt-2 pt-sm-0 pb-lg-4" id="home4" section-scroll='home4' >
+    <div class="circle circle1"></div>
+        <div class="container pt-2 py-sm-3 py-md-4 py-lg-5 my-xxl-3">
             <div class="row p-4" >
                 <div class="subtitle text-center">
                     POCOS PASOS PARA INICIAR
@@ -247,7 +259,7 @@
                         <i class="bi bi-5-circle-fill"id="icon_number"></i><br>
                         Esperar Proceso Trading de 1 año
                         Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading.
-
+    
                     </div>
                     <div class="col cel text-center" id="cel6">
                         <i class="bi bi-6-circle-fill"id="icon_number"></i><br>
@@ -255,182 +267,37 @@
                         Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias.
                     </div>
                 </div>
+    
+            </div>
+
+        </div>
+    </section>
+
+    <section class="" id="home5">
+        <div class="row">
+            <div class="subtitle text-center">
+                Nuestras redes sociales
             </div>
         </div>
-
-        <div class="section" id="home5">
-            <div class="row">
-                <div class="subtitle text-center">
-                    Nuestras redes sociales
-                </div>
-            </div>
-            <div class="row p-4" id="">
-                <div class="icons-socials d-flex justify-content-center">
-                    <a href="https://wa.pe/AEIAInvest" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                    <a href="https://www.facebook.com/aeiainvestments" target="_blank"><i class="bi bi-facebook"></i></a>
-                    <a href="https://www.instagram.com/aeiainvestments" target="_blank"><i class="bi bi-instagram"></i></a>
-                    <a href="https://www.linkedin.com/company/aeia-investment/" target="_blank"><i class="bi bi-linkedin"></i></a>
-                    <a href="https://www.tiktok.com/@aeia.investments" target="_blank"><i class="bi bi-tiktok"></i></a>
-                    <a href="contact_support@aeia.capital" target="_blank"><i class="bi bi-envelope-at-fill"></i></a>
+        <div class="row p-4" id="">
+            <div class="icons-socials d-flex justify-content-center">
+                <a href="https://wa.pe/AEIAInvest" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                <a href="https://www.facebook.com/aeiainvestments" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/aeiainvestments" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com/company/aeia-investment/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                <a href="https://www.tiktok.com/@aeia.investments" target="_blank"><i class="bi bi-tiktok"></i></a>
+                <a href="contact_support@aeia.capital" target="_blank"><i class="bi bi-envelope-at-fill"></i></a>
  
-                </div>
-           </div>
+            </div>
+       </div>
 
-        </div>
-    </div>
+    </section>
     <footer>
 
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script>
-
-        //-------------------------------------------
-const turnRatio = 0.1;   //how much the lines turns
-const bc = '0, 255, 233' //RGB line color
-const speed = 15;       //the line moving speed
-const lineWidth = 1;
-const backgroundColor = '#000618';
-//-------------------------------------------
-
-
-const canvas = document.querySelector('canvas'); 
-const ctx = canvas.getContext('2d');
-//shortcuts
-const PI = Math.PI, rand = Math.random, cos = Math.cos, sin = Math.sin;
-//directions that the lines could go
-const dirs = [0, PI/2, PI, PI/2*3, PI/4, PI/4*3, PI/4*5, PI/4*7]
-
-
-const onResize = () =>{
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
-  //console.log('resized');
-}
-onResize();
-addEventListener('resize',onResize);
-const lines = [];
-
-function screenInit(){
-  const amountParticles = Math.min(canvas.width*canvas.height*0.000032, 20)
-  for(let i=0;i<amountParticles;i++){
-    lines.push(new RunningLine(canvas, ctx));
-  }
-  requestAnimationFrame(animateAll);
-}
-function animateAll(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = backgroundColor;
-  ctx.fillRect(0,0,canvas.width, canvas.height);
-  lines.forEach(v=>v.draw(ctx));
-  //console.log(lines[0].x, lines[0].y)
-  ////console.log('aa');
-  requestAnimationFrame(animateAll);
-}
-
-
-class RunningLine {
-  prevTurnPoint = []
-  constructor(canvas, ctx){
-
-    this.init();
-  }
-  init(){
-    this.prevTurnPoint = []
-    const r = rand()
-    if(r<0.25){
-      this.x = rand()*canvas.width;
-      this.dir = dirs[1];
-      this.y = 0;
-    }else if(r<0.5){
-      this.x = rand()*canvas.width;
-      this.dir = dirs[3];
-      this.y = canvas.height;
-    }else if(r<0.75){
-      this.x = 0;
-      this.dir = dirs[0];
-      this.y = rand()*canvas.height;
-    }else {
-      this.x = canvas.width;
-      this.dir = dirs[2];
-      this.y = rand()*canvas.height;
-    }
-    //this.dir = dirs[dirs.length*rand()^0]
-    this.prevTurnPoint.push({
-      x:this.x,
-      y:this.y,
-    })
-    this.width = lineWidth;
-
-    this.v = speed;
-
-    this.vx = this.v*cos(this.dir);
-    this.vy = this.v*sin(this.dir);
-    this.fadeout = false;
-    this.opacity = (rand())**0.2
-    this.color = `rgba(${bc}, ${this.opacity})`;
-    //console.log(this.x, this.y);
-  }
-  draw(ctx){
-    //console.log(this.opacity);
-    if(this.fadeout){
-      if(this.opacity<0.1){
-        this.init();
-
-      }else{
-        this.opacity*=0.9;
-        this.color = `rgba(${bc}, ${this.opacity})`;
-        //console.log(this.opacity);
-      }
-
-    }else{
-      this.outOfScreen()
-      this.x+=this.vx;
-      this.y+=this.vy;
-
-      if(rand()<turnRatio)this.turn()
-    }
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = this.width;
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    //let remainL = this.length;
-    //let continuous = true, lastLen=0;
-    for(let i=this.prevTurnPoint.length-1;i>=0;i--){
-      const p = this.prevTurnPoint[i];
-      ctx.lineTo(p.x,p.y);
-    }
-    ctx.stroke();
-    //ctx.filter = 'none';
-    ctx.closePath();
-
-  }
-  turn(){
-    const choice = dirs.filter(v=>{
-      let a = Math.abs(this.dir-v);
-      if(a>PI)a=2*PI-a;
-      return a<=PI/2
-    })
-    //console.log(choice);
-    this.dir = choice[rand()*choice.length^0]
-    this.vx = this.v*cos(this.dir);
-    this.vy = this.v*sin(this.dir);
-    this.prevTurnPoint.push({
-      x:this.x,
-      y:this.y,
-    })
-
-  }
-  outOfScreen(){
-    if(this.x>=canvas.width&&this.vx>0||this.y>=canvas.height&&this.vy>0||this.x<=0&&this.vx<0||this.y<=0&&this.vy<0){
-      this.fadeout = true;
-    }
-  }
-}
-window.onload = screenInit
-    </script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

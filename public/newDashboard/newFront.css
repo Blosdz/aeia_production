@@ -8,7 +8,7 @@ html{
     scroll-behavior: auto;
 }
 body{
-    background-color: #000618;
+    background-color: #000000;
 }
 .content{
     background-color: #0000;
@@ -39,11 +39,11 @@ section{
 }
 
 #home1{
-    align-items: center;
-    align-content: center;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+    /* align-items: center; */
+    /* align-content: center; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* flex-wrap: nowrap; */
     gap: 32px;
     justify-content: flex-start;
     overflow: visible;
@@ -328,10 +328,17 @@ canvas{
 
 .navbar{
     position: fixed;
-    width: 100vw;
-    background-color: #0a008682;
+    /* width: 100vw; */
+    background-color: #c6c5ce52;
     z-index: 5;
+    color: white;
 }
+
+.navbar a{
+    color: white;
+}
+
+
 
 .login-btn{
     background-color: #1cbb17;
@@ -462,17 +469,37 @@ ul{
 }
 
 .galaxy {
-  width: 50%;
+  width: 100%;
   height: 100vh;
   position: absolute;
-  margin-left: 25vw;
   overflow: hidden;
+  perspective: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
-
+.stars-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: rotate_sphere 50s linear infinite; /* Animación de rotación */
+}
+/* Estilo de las estrellas */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+}
 
 .stars1 {
+        /* Distribuye estrellas en posiciones aleatorias alrededor de una esfera */
+    animation: group_center 5s ease-in-out infinite alternate;
+    transform-origin: center;
   width: 1px;
   height: 1px;
   background-color: transparent;
@@ -654,7 +681,8 @@ ul{
   1335px 872px #fff, 1647px 1298px #fff, 1233px 1387px #fff, 698px 1036px #fff,
   659px 1860px #fff, 388px 1412px #fff, 1212px 458px #fff, 755px 1468px #fff,
   696px 1654px #fff, 1144px 60px #fff;
-  animation: animate_stars 30s linear infinite;
+  animation: animate_stars 10s , group_center 25s ease-in-out infinite alternate;
+  transform-origin: center;
 }
 
 .stars1:after {
@@ -843,7 +871,21 @@ ul{
   696px 1654px #fff, 1144px 60px #fff;
 }
 
+/* Agrupación en círculo */
+@keyframes group_center {
+    0%, 100% {
+        transform: translateZ(0) scale(1);
+    }
+    50% {
+        transform: translateZ(-150px) scale(0.7); /* Ajusta para formar un círculo en el centro */
+    }
+}
 
+/* Animación de rotación de la esfera */
+@keyframes rotate_sphere {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
 
 .stars2 {
   width: 2px;
@@ -1061,12 +1103,19 @@ ul{
   .navbar{
     padding: 15px 99px !important ; 
   }
+  .navbar-nav{
+    transition: box-shadow 0.3s ease-in;
+  }
+
+  .navbar-nav:hover{
+    box-shadow:inset 0 -2em 2em #0c224a;
+  }
 }
 
 @media(min-width:989px) {
   .header-nav{
-      border: 1px solid rgba(0, 57, 131, 0.308);
-      border-radius: 999px;
+        border: 1px solid #001868;
+        border-radius: 999px;
       /* transform: translate(-50%); */
   }
   
@@ -1089,3 +1138,76 @@ ul{
     height: 60px;
     border-radius: 100%;
 }
+
+/* ANIMATION */
+
+#highlight_container p{
+        text-shadow: 
+        -1px -1px 0 #000, /* Sombras en las cuatro direcciones para crear el contorno */
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+}
+
+.benefits-content {
+    font-family: 'Lato', sans-serif;
+    font-size: 35px;
+    line-height: 40px;
+    color: #ecf0f1;
+}
+
+.benefits-content__container {
+    font-weight: 600;
+    overflow: hidden;
+    height: 40px;
+    padding: 0 40px;
+    position: relative;
+}
+
+.benefits-content__container::before {
+    content: '[';
+    color: #16a085;
+    font-size: 42px;
+    line-height: 40px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: opacity 2s infinite;
+}
+
+.benefits-content__container::after {
+    content: ']';
+    color: #16a085;
+    font-size: 42px;
+    line-height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    animation: opacity 2s infinite;
+}
+
+.benefits-content__list {
+    margin: 0;
+    padding-left: 110px;
+    text-align: left;
+    list-style: none;
+    animation: change 10s infinite;
+}
+
+.benefits-content__list__item {
+    line-height: 40px;
+    margin: 0;
+    height: 40px;
+}
+
+@keyframes opacity {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+@keyframes change {
+    0%, 25%, 100% { transform: translateY(0); }
+    33.33%, 58.33% { transform: translateY(-40px); } /* Cambia al siguiente elemento */
+    66.66%, 91.66% { transform: translateY(-80px); } /* Cambia al siguiente elemento */
+}
+
