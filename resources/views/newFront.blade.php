@@ -222,17 +222,17 @@
             </div>
             <div class="table_steps appear3">
                 <div class="row">
-                    <div class="col cel text-center"  id="cel1" >
+                    <div class="col-12 col-md cel text-center" id="cel1">
                         <i class="bi bi-1-circle-fill" id="icon_number"></i><br>
                         Registrarse en la Plataforma
                         Crea tu cuenta de acuerdo al perfil que mas te convenga.
                     </div>
-                    <div class="col cel text-center" id="cel2">
+                    <div class="col-12 col-md cel text-center" id="cel2">
                         <i class="bi bi-2-circle-fill"id="icon_number"></i><br>
                         Verificar sus datos
                         Verifica tus datos y llena los formularios de la plataforma
                     </div>
-                    <div class="col cel text-center" id="cel3">
+                    <div class="col-12 col-md cel text-center" id="cel3">
                         <i class="bi bi-3-circle-fill"id="icon_number"></i><br>
                         Escoger el Plan de Inversión
                         Decide cuanto dinero puedes invertir, no arriesgues más de lo que debes.
@@ -250,18 +250,18 @@
                     </div>
                 </div>
                <div class="row">
-                    <div class="col cel text-center" id="cel4">
+                    <div class="col-12 col-md cel text-center" id="cel4">
                         <i class="bi bi-4-circle-fill"id="icon_number"></i><br>
                         Depositar
                         Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene
                     </div>
-                    <div class="col cel text-center" id="cel5">
+                    <div class="col-12 col-md cel text-center" id="cel5">
                         <i class="bi bi-5-circle-fill"id="icon_number"></i><br>
                         Esperar Proceso Trading de 1 año
                         Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading.
     
                     </div>
-                    <div class="col cel text-center" id="cel6">
+                    <div class="col-12 col-md cel text-center" id="cel6">
                         <i class="bi bi-6-circle-fill"id="icon_number"></i><br>
                         Retirar sus Ganancias o Incluir Nuevo Plan
                         Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias.
