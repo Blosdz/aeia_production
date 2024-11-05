@@ -78,7 +78,15 @@
                     </div>
                 </div>
             </div>
+            <div class="row justify-content-center pt-5">
+                <div class="logo-background">
+                    <img src="{{ URL::asset('welcome_new/images/logo/logoNav.png') }}" class="logo_front" alt="" style="width: 100px; height: 100px;">
+                </div>
+            </div>
+
+
         </div>
+
     </section>
 
     <section class="py-5 bg-dark" id="home3" style="background:black">

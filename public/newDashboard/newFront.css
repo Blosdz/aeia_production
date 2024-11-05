@@ -1211,3 +1211,28 @@ ul{
     66.66%, 91.66% { transform: translateY(-80px); } /* Cambia al siguiente elemento */
 }
 
+
+/* Fondo animado de "breathing" */
+@keyframes breathing {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); /* Escala del fondo para el efecto "breathing" */
+    }
+}
+
+.logo-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px; /* Tamaño del fondo, un poco más grande que la imagen */
+    height: 300px;
+    border-radius: 50%; /* Fondo circular */
+    animation: breathing 3s ease-in-out infinite;
+}
+
+.logo_front {
+    width: 100px;
+    height: 100px;
+}
