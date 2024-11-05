@@ -403,10 +403,7 @@
                 rectificación, cancelación y oposición en los términos previstos en la Ley de Protección de Datos
                 Personales (Ley Nº 29733) y su Reglamento (Decreto Supremo Nº 003-2013-JUS), así como revocar su
                 consentimiento para el uso de sus datos),
-                son los siguientes: <br><b>AEIA INVESTMENT E.I.R.L..</b>,
-                con RUC N° 20608381741 Dirección: Urb. El Solar de Challapampa A -25´ distrito de Cerro Colorado,
-                provincia y departamento de Arequipa. Correo electrónico: XXXXXXXXXXXXXX </td>
-        </tr>
+            </td>
     </table><br>
     <p><u><b>DECIMO NOVENA: REGIMEN LEGAL APLICABLE</b></u></p><br>
     <table>

@@ -505,8 +505,10 @@ class PaymentController extends AppBaseController
             'code' => uniqid(),
             'signature_image' => $fileName, // Usar la ruta guardada
             'payment_id' => $payment->id
+
         ]);
 
+        $declaraciones->touch();
         $referred_user = Auth::user()->refered_code;
 
         $client_payment = [

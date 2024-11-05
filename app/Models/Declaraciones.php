@@ -50,7 +50,6 @@ class Declaraciones extends Model
         'created_at'=>'datetime',
         'signature_image' => 'string'
     ];
-    public $timestamps = false; 
 
     public static $rules = [
         'user_id' => 'required',
