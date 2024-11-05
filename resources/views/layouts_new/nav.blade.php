@@ -7,7 +7,6 @@
         @endif
         <br>
         {{-- {{ $user->name }} --}}
-        {{-- <strong>Diego Ballon</strong> --}}
         <br>
         {{-- {!! $badge !!} --}}
         <br>

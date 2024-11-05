@@ -74,7 +74,9 @@
                             <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle has-notify" data-click="toggle-notify">
                                 <i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;" ></i>
 					        </a>
+
                             <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
+                                
                                 <ul class="dropdown-menu dropdown-notification pull-right">
                                     @foreach($notificaciones as $notificacion)
                                         <li class="notification-item">
@@ -92,7 +94,7 @@
                                             {{-- <span class="timeline-date">{{ $notificacion->created_at->format('M d, H:i') }}</span> --}}
                                     @endforeach
                                 </ul>
-                            </>
+                            </span>
                             
                         </div>
                         <div class="dropdown-list toggle" onclick="toggleDropdown()">

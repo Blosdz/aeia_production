@@ -273,7 +273,9 @@ class HomeController extends Controller
         
             $ultimoFondo = Fondo::find($ultimoFondoCliente->plan_id_fondo);
         
-        } 
+        }else{
+            $montoInvertidoTotal=0;
+        }
     
 
         // ********************************TIMER************************************************
