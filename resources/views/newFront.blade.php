@@ -107,7 +107,7 @@
             <div class="row" id="beneficios">
                 <div class="col appear2">
                     <div class="container-glow">
-                        <div class="card p-3">
+                        <div class="card p-3 overflow-auto">
                             <div class="col-sm-6">
                                 <div class="subtitle">
                                     Seguridad/Protección de datos
@@ -126,7 +126,7 @@
                 </div>
                 <div class="col  appear2">
                     <div class="container-glow">
-                        <div class="card p-3">
+                        <div class="card p-3 overflow-auto">
                             <div class="col-sm-6">
                                 <div class="subtitle">
                                     Política de transparencia
@@ -145,7 +145,7 @@
             <div class="row" id="beneficios">
                 <div class="col  appear2">
                     <div class="container-glow">
-                        <div class="card p-3">
+                        <div class="card p-3 overflow-auto">
                             <div class="col-sm-6">
                                 <div class="subtitle">
                                     Gestión de riesgo y estrategias de inversión
@@ -163,7 +163,7 @@
 
                 <div class="col  appear2">
                     <div class="container-glow">
-                        <div class="card p-3">
+                        <div class="card p-3 overflow-auto">
                             <div class="col-sm-6">
                                 <div class="subtitle">
                                     Depósitos en dólares
@@ -183,7 +183,7 @@
             <div class="row justify-content-md-center">
                 <div class="col-sm-6  appear2">
                     <div class="container-glow">
-                        <div class="card">
+                        <div class="card p-3 overflow-auto">
                             <div class="col-sm-6">
                                 <div class="subtitle">
                                     Disponibilidad del efectivo
