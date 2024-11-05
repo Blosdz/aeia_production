@@ -424,11 +424,6 @@ tr{
     color: white;
 }
 
-.dropdown-menu li a:hover{
-  background-color: #1c3554;
-  color: rgb(255, 255, 255);
-  
-}
 
 
 .profile-pic li{
@@ -700,22 +695,6 @@ input ,textarea{
 }
 
 
-  /* -----------------------------------------
-     Dropdown
-  ----------------------------------------- */
-  .dropdown-menu{
-      padding:0 0 0 0;
-      overflow-x:  auto;
-  }
-  a.dropdown-menu-header {
-      background: #f7f9fe;
-      font-weight: bold;
-      border-bottom: 1px solid #e3e3e3;
-  }
-  .dropdown-menu > li a {
-      padding: 10px 20px;
-  }
-  
   /* -----------------------------------------
      Badge
   ----------------------------------------- */
@@ -1198,7 +1177,7 @@ h5{
   width: 50px;
   height: 50px;
   border-radius: 50px;
-  overflow: hidden;
+  overflow: scroll;
   display: inline-block;
 }
 .dropdown-items {
@@ -1209,7 +1188,38 @@ h5{
   top: 60px; /* Adjust based on the height of the container-rounded */
   right: 0;
   z-index: 1000; /* Ensure it appears above other content */
-  background: white; /* Background color to make it visible */
+  /* background: white; Background color to make it visible */
   border: 1px solid #ccc; /* Optional border */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.dropdown-alert {
+  position: relative;
+
+  .dropdown-menu {
+    width: 300px;
+    padding: 0;
+  }
+
+  .alert-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+
+    i {
+      color: #4CAF50;
+      margin-right: 10px;
+    }
+
+    p {
+      margin: 0;
+      color: #333;
+
+      small {
+        color: #999;
+      }
+    }
+  }
+}
+

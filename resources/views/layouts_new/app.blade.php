@@ -70,33 +70,29 @@
                         <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
                             <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
                         </a>
-                        <div class="dropdown open text-align-center p-3">
-                            <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle has-notify" data-click="toggle-notify">
-                                <i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;" ></i>
-					        </a>
+                        <div class="btn-group dropleft dropdown-alert">
+                          <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle has-notify p-4" data-click="toggle-notify">
+                            <i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
+                          </a>
+                          <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
 
-                            <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
-                                
-                                <ul class="dropdown-menu dropdown-notification pull-right">
-                                    @foreach($notificaciones as $notificacion)
-                                        <li class="notification-item">
-                                            <a href="javascript:;">
-                                                {{--aqui entra los icons que queremos poner por notificacion--}}
-                                                <div class="media">
-                                                    <i class="fa fa-exclamation-triangle"></i>
-                                                </div>
-                                                <div class="message">
-                                                    <p>{{ $notificacion->title }}: {{ $notificacion->body }}</p>
-                                                </div>
-                                            </a>
-                                        </li>
-                                            {{-- <span class="timeline-icon"><i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="color:white"></i></span> --}}
-                                            {{-- <span class="timeline-date">{{ $notificacion->created_at->format('M d, H:i') }}</span> --}}
-                                    @endforeach
-                                </ul>
-                            </span>
-                            
+                          <ul class="dropdown-menu dropdown-notification pull-right">
+                            @foreach($notificaciones as $notificacion)
+                              <li class="notification-item">
+                                <a href="javascript:;">
+                                  <div class="alert-card">
+                                    <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                    <p class="pull-right">
+                                      {{ $notificacion->title }} <br>
+                                      <small>{{ $notificacion->body }}</small>
+                                    </p>
+                                  </div>
+                                </a>
+                              </li>
+                            @endforeach
+                          </ul>
                         </div>
+
                         <div class="dropdown-list toggle" onclick="toggleDropdown()">
                             <div class="container-rounded">
                                 @if ($profile && $profile->profile_picture)
@@ -833,8 +829,8 @@
         });
     });
 
-
 </script>
+
 
 
 </script>
