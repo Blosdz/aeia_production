@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/landing_page.css')}}">
     <title>AEIA Investment</title>
 </head>
@@ -53,6 +55,8 @@
 
       </div>
     </nav>
+    <div id="particles-js"></div>
+
     <header class="masthead">
         <div class="container px-5">
             <div class="row gx-5 align-items-center">
@@ -122,7 +126,7 @@
                                 <div class="col-md-6 mb-5 ">
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
-                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-key-fill"></i>
                                         <h3 class="font-alt">Seguridad y Protección</h3>
                                         <p class="mb-0">Tus datos personales no son revelados a terceros</p>
                                     </div>
@@ -131,7 +135,7 @@
                                 <div class="col-md-6 mb-5">
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
-                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-file-earmark-bar-graph"></i>
                                         <h3 class="font-alt">Política de Transparencia</h3>
                                         <p class="mb-0">Puedes ver en tiempo real toda la información de tus inversiones.</p>
                                     </div>
@@ -142,7 +146,7 @@
                                 <div class="col-md-6 mb-5 mb-md-0">
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
-                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-graph-up-arrow"></i>
                                         <h3 class="font-alt">Gestión de riesgo</h3>
                                         <p class="mb-0"> Gestionamos un portafolio de  inversión para diversificar el riesgo y asumimos estrategias de  rebalanceo de operaciones y activos</p>
                                     </div>
@@ -150,7 +154,7 @@
                                 <div class="col-md-6 ">
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
-                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-currency-dollar"></i>
                                         <h3 class="font-alt">Depósitos en Dólares</h3>
                                         <p class="mb-0">Los depósitos se realizarán a través de la cuenta corriente de nuestra empresa.</p>
                                     </div>
@@ -160,7 +164,7 @@
                                 <div class="col-md-6 mb-5 mb-md-0">
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
-                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-cash-coin"></i>
                                         <h3 class="font-alt"> Disponibilidad del efectivo</h3>
                                         <p class="mb-0"> Todos los planes de inversión duran 1 año como minimo luego de ello se puede solicitar el retiro del capital y las ganancias a la cuenta bancaria o el wallet del titular.</p>
                                     </div>
@@ -212,21 +216,22 @@
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-1-circle-fill" id="icon_number"></i>
                                         <p class="mb-0"> Registrarse en la Plataforma Crea tu cuenta de acuerdo al perfil que mas te convenga. </p>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <i class="bi bi-2-circle-fill" id="icon_number"></i>
                                         <p class="mb-0"> Verificar sus datos Verifica tus datos y llena los formularios de la plataforma </p>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+
+                                        <i class="bi bi-3-circle-fill" id="icon_number"></i>
                                         <p class=" mb-0"> Escoger el Plan de Inversión Decide cuanto dinero puedes invertir, no arriesgues más de lo que debes. </p>
                                     </div>
                                 </div>
@@ -236,7 +241,8 @@
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+
+                                        <i class="bi bi-4-circle-fill" id="icon_number"></i>
                                         <p class="mb-0">
                                              Depositar Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene 
                                         </p>
@@ -246,7 +252,8 @@
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+
+                                        <i class="bi bi-5-circle-fill" id="icon_number"></i>
                                         <p class="mb-0">
                                              Esperar Proceso Trading de 1 año Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading. 
                                         </p>
@@ -255,7 +262,8 @@
                                 <div class="col-md-4 mb-3">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+
+                                        <i class="bi bi-6-circle-fill" id="icon_number"></i>
                                         <p class="mb-0">
                                              Retirar sus Ganancias o Incluir Nuevo Plan Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias. 
                                         </p>
@@ -355,5 +363,113 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{{URL::asset('/js/landing.js')}}"></script>
+    <script>
+    particlesJS("particles-js", {
+        "particles": {
+            "number": {
+                "value": 30,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": {
+                "value": "#00265e"
+            },
+            "shape": {
+                "type": "circle",
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                },
+                "polygon": {
+                    "nb_sides": 5
+                }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": {
+                    "enable": false,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 5,
+                "random": true,
+                "anim": {
+                    "enable": false,
+                    "speed": 40,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#00265e",
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 6,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": false,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "repulse"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 400,
+                    "line_linked": {
+                        "opacity": 1
+                    }
+                },
+                "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                },
+                "repulse": {
+                    "distance": 200,
+                    "duration": 0.4
+                },
+                "push": {
+                    "particles_nb": 4
+                },
+                "remove": {
+                    "particles_nb": 2
+                }
+            }
+        },
+        "retina_detect": true
+    });
+</script>
+
 </body>
 </html>
