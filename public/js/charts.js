@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
       breakpoint: undefined,
       options: {}
     }],
-    labels: ['porcentaje de fondo', 'fondo total']
+    labels: ['Porcentaje de fondo', 'Fondo total']
   };
   var chartDona = new (apexcharts__WEBPACK_IMPORTED_MODULE_0___default())(document.querySelector('#chart-dona'), porcentaje_cliente);
   chartDona.render();

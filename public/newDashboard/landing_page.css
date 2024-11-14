@@ -1,0 +1,43 @@
+.bg-box-aeia {
+    background-color: #7D8388;
+    border-radius: 28px;
+    padding-right: 15%; /* Añadir espacio para que la tarjeta no esté demasiado pegada */
+    position: relative; /* Necesario para posicionar elementos relativos al contenedor */
+}
+
+.card {
+    background-color: black;
+    border-radius: 28px;
+    position: absolute; /* Hace que la tarjeta sea posicionable dentro del contenedor */
+    right: 0; /* Mueve la tarjeta hacia la derecha del contenedor */
+    top: 20%;
+    width: 50vw;
+    transform: translate(18%, 0); /* Controla su desplazamiento adicional a la derecha */
+    box-shadow: -8px 9px 4px rgba(6, 6, 11, 0.65); /* Aplicar sombra personalizada */
+}
+
+aside{
+    height: 80vh;
+}
+
+section{
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.bg-blue-steps{
+    background-color: #0e359ef6;
+
+    font-weight: 500;
+    width: 60vw;
+    color: white !important;
+    height: 60vh;
+    border-radius: 28px;
+}
+
+.bg-benefits{
+    font-weight: 500;
+    background-color: #7D8388;
+    border-radius: 28px;
+    color: white !important;
+}

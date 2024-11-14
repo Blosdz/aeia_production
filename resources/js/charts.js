@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
             breakpoint:undefined,
             options:{},
         }],
-        labels:['porcentaje de fondo','fondo total'],
+        labels:['Porcentaje de fondo','Fondo total'],
     };
     var chartDona = new ApexCharts(document.querySelector('#chart-dona'),porcentaje_cliente);
     chartDona.render();

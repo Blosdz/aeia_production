@@ -3,359 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AEIA Investments</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/jarallax@1.12.0/dist/jarallax.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{URL::asset('/newDashboard/newFront.css')}}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-heart-eyes" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M11.315 10.014a.5.5 0 0 1 .548.736A4.498 4.498 0 0 1 7.965 13a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .548-.736h.005l.017.005.067.015.252.055c.215.046.515.108.857.169.693.124 1.522.242 2.152.242.63 0 1.46-.118 2.152-.242a26.58 26.58 0 0 0 1.109-.224l.067-.015.017-.004.005-.002zM4.756 4.566c.763-1.424 4.02-.12.952 3.434-4.496-1.596-2.35-4.298-.952-3.434zm6.488 0c1.398-.864 3.544 1.838-.952 3.434-3.067-3.554.19-4.858.952-3.434z"/></svg> --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{URL::asset('/newDashboard/landing_page.css')}}">
+    <title>AEIA Investment</title>
 </head>
 <body>
-    <nav class="header navbar navbar-expand-lg navbar-dark bg-dark sticky-top px-4 border-bottom">
-        <div class="container-fluid">
-            <a href="" class="navbar-brand" href="#">
-                <img src="{{URL::asset('welcome_new/images/logo/logoNav.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
-                AEIA
-            </a>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav mb-2 mb-lg-0 header-nav p-2">
-                    <li class="nav-item">
-                        <a class="nav-link " href="#home1"> Inicio</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home2"> Suscriptores </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home3"> Beneficios</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home4"> Instrucciones</a>
-                    </li> 
-                </ul>
-            </div> 
-            <div class="d-flex-end">
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+      <div class="container-fluid">
+
+        <a href="index.html" style="text-decoration:none !important; color:black !important;" ><img src="{{URL::asset('/newDashboard/images/logovdf.png')}}" alt="logo" style="width:4vw !important;"/>AEIA INVESTMENTS <br></a>
+        
+        <!-- Botón toggler, visible en pantallas medianas y pequeñas -->
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Offcanvas para pantallas pequeñas y medianas -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#inicio">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#sobre-nosotros">Sobre Nosotros</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#beneficios">Beneficios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#suscriptores">Suscriptores</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#indicaciones">Indicaciones</a>
+              </li>
+            </ul>
+
+            <form class="d-flex mt-3" role="search">
                 <button type="button" onclick="window.location.href='{{ url('/login') }}'" class="btn btn-outline-success me-2">Login</button>
                 <button type="button" onclick="window.location.href='{{ url('/register') }}'" class="btn btn-outline-primary">Crear Cuenta</button>
-
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
+            </form>
+          </div>
         </div>
+
+      </div>
     </nav>
- 
-    <a href="https://wa.pe/AEIAInvest" target="_blank">
-        <div class="circle_whatsapp d-flex justify-content-center text-align-center">
-                <i class="bi bi-whatsapp link_whatsapp"></i>
-        </div>
-    </a>
-
-        <div class="galaxy">
-            <div class="stars-container">
-                <div class="stars1"></div>
-            </div>
-            
-        </div>
-
-        <div class="stars2"></div>
-    <section class="position-relative pt-lg-4 pt-xl-5 d-flex text-align-center justify-content-center" id="home1" style="">
-        <div class="container position-relative zindex-2 pt-2 pt-sm4 pt-md-5">
-            <div class="row benefits-container justify-content-center pt-5 mt-1">
-                <h1 class="display-4 text-white pt-3 mt-3 mb-4">Inversiones seguras e inteligentes con AEIA</h1>
-                <div class="benefits-content">
-                    <div class="benefits-content__container">
-                        <ul class="benefits-content__list">
-                            <li class="benefits-content__list__item">Transparencia</li>
-                            <li class="benefits-content__list__item">Rentabilidad</li>
-                            <li class="benefits-content__list__item">Seguridad</li>
-                        </ul>
+    <header class="masthead">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6">
+                    <!-- Mashead text and app badges-->
+                    <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                        <h1 class="display-1 lh-1 mb-3">Inversión Inteligente con AEIA.</h1>
+                        <p class="lead fw-normal text-muted mb-5">Transparencia, Rentabilidad,Seguridad</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Masthead device mockup feature-->
+                    <div class="masthead-device-mockup text-center">
+                        <h3 class="display-6 lh-3 mb-3">Días Operando</h3>
+                        <p class="lead fw-normal text-muted mb-5">{{$daysFunctioning ?? '1,355'}}</p>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center pt-5">
-                <div class="logo-background">
-                    <img src="{{ URL::asset('welcome_new/images/logo/logoNav.png') }}" class="logo_front" alt="" style="width: 100px; height: 100px;">
+        </div>
+    </header>
+
+    <aside class="text-center">
+        <div class="container px-5">
+            <div class="row gx-5 justify-content-center" id="">
+                <div class="col-xl-8 bg-box-aeia position-relative" style="height:62vh;!important"> 
+                    <div class="h4 fs-1 text-white mt-4 mb-4 text-lg-start">Fondo de Noviembre</div>
+                    <div class="card mt-4 p-4 custom-shadow"> <!-- Añadido custom-shadow para la sombra -->
+                        <div class="chart-area">
+                            <div class="grid"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
         </div>
+    </aside>
 
+    <section class="bg-light" id="sobre-nosotros">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+                <div class="col-12 col-lg-5">
+                    <h2 class="display-4 lh-1 mb-4">Acerca de AEIA</h2>
+                    <p class="lead fw-normal text-muted mb-5 mb-lg-0">
+                    Somos una empresa dedicada a ofrecer un entorno de servicios financieros electrónicos, con el objetivo de generar múltiples fondos de inversión colectiva para el trading automatizado de criptomonedas, respaldado por algoritmos avanzados en inteligencia artificial. Simplificando el proceso de inversión para proteger tu capital y maximizar tus ganancias, brindándote acceso a oportunidades de crecimiento en el mercado de manera segura y eficiente.
+                    </p>
+                </div>
+                <div class="col-sm-8 col-md-6">
+                    <div class="px-5 px-sm-0">
+                        <img class="circle-behind img-fluid" src="{{URL::asset('/newDashboard/images/5006144.png')}}" alt="">
+                        <!-- <img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." /> -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="py-5 bg-dark" id="home3" style="background:black">
-        <div class="container pt-2 py-sm-3 py-md-4 py-lg-5 my-xxl-3">
-
-            <div class="row" id="beneficios">
-                <div class="subtitle text-center" id="highlight_container">
-                    <p><b>BENEFICIOS DE AEIA</b></p>
+    <section id="beneficios">
+            <div class="container px-5 mt-5 text-center">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xl-8">
+                        <h1>Beneficios de AEIA</h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row" id="beneficios">
-                <div class="col appear2">
-                    <div class="container-glow">
-                        <div class="card p-3 overflow-auto">
-                            <div class="col-sm-6">
-                                <div class="subtitle">
-                                    Seguridad/Protección de datos
+                <div class="row gx-5 align-items-center">
+                    <div class="col order-lg-1 mb-5 mb-lg-0">
+                        <div class="container-fluid px-5">
+                            <div class="row gx-5 mt-5">
+                                <div class="col-md-6 mb-5 ">
+                                    <!-- Feature item-->
+                                    <div class="text-center bg-benefits p-5">
+                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Seguridad y Protección</h3>
+                                        <p class="mb-0">Tus datos personales no son revelados a terceros</p>
+                                    </div>
                                 </div>
-                                <div class="content_text">
-                                    Tus datos personales no son revelados a terceros.
-                                </div>
-                            </div> 
-                            <div class="col-sm-6 text-center"> 
-                                <i class="bi bi-shield-lock-fill" id="icons-beneficios"></i>
-                            </div>
-                        </div>
 
-                   </div>
+                                <div class="col-md-6 mb-5">
+                                    <!-- Feature item-->
+                                    <div class="text-center bg-benefits p-5">
+                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Política de Transparencia</h3>
+                                        <p class="mb-0">Puedes ver en tiempo real toda la información de tus inversiones.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gx-5 mt-5">
 
-                </div>
-                <div class="col  appear2">
-                    <div class="container-glow">
-                        <div class="card p-3 overflow-auto">
-                            <div class="col-sm-6">
-                                <div class="subtitle">
-                                    Política de transparencia
+                                <div class="col-md-6 mb-5 mb-md-0">
+                                    <!-- Feature item-->
+                                    <div class="text-center bg-benefits p-5">
+                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Gestión de riesgo</h3>
+                                        <p class="mb-0"> Gestionamos un portafolio de  inversión para diversificar el riesgo y asumimos estrategias de  rebalanceo de operaciones y activos</p>
+                                    </div>
                                 </div>
-                                <div class="content_text">
-                                    Puedes ver en tiempo real toda la información sobre tus inversiones. 
-                                </div>
-                            </div>
-                            <div class="col-sm-6 text-center">
-                                <i class="bi bi-eye-fill" id="icons-beneficios"></i>
-                            </div>
-                        </div>
-                   </div>
-                </div>
-            </div>    
-            <div class="row" id="beneficios">
-                <div class="col  appear2">
-                    <div class="container-glow">
-                        <div class="card p-3 overflow-auto">
-                            <div class="col-sm-6">
-                                <div class="subtitle">
-                                    Gestión de riesgo y estrategias de inversión
-                                </div>
-                                <div class="content_text">
-                                    Gestionamos un portafolio de inversión para diversificar el riesgo y asumimos estrategias de rebalanceo de operaciones y activos
+                                <div class="col-md-6 ">
+                                    <!-- Feature item-->
+                                    <div class="text-center bg-benefits p-5">
+                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Depósitos en Dólares</h3>
+                                        <p class="mb-0">Los depósitos se realizarán a través de la cuenta corriente de nuestra empresa.</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 text-center">
-                                <i class="bi bi-exclamation-circle-fill" id="icons-beneficios"></i>
-                            </div>
-                        </div>
-                   </div>
-                </div>
+                            <div class="row gx-5 align-items-center justify-content-center mt-5">
+                                <div class="col-md-6 mb-5 mb-md-0">
+                                    <!-- Feature item-->
+                                    <div class="text-center bg-benefits p-5">
+                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt"> Disponibilidad del efectivo</h3>
+                                        <p class="mb-0"> Todos los planes de inversión duran 1 año como minimo luego de ello se puede solicitar el retiro del capital y las ganancias a la cuenta bancaria o el wallet del titular.</p>
+                                    </div>
+                                </div>
 
-                <div class="col  appear2">
-                    <div class="container-glow">
-                        <div class="card p-3 overflow-auto">
-                            <div class="col-sm-6">
-                                <div class="subtitle">
-                                    Depósitos en dólares
-                                </div>
-                                <div class="content_text">
-                                    Los depósitos se realizarán a través de la cuenta corriente de nuestra empresa.
-                                </div>
-                            </div>
-                            <div class="col-sm-6 text-center">
-                                <i class="bi bi-coin" id="icons-beneficios"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="row justify-content-md-center">
-                <div class="col-sm-6  appear2">
-                    <div class="container-glow">
-                        <div class="card p-3 overflow-auto">
-                            <div class="col-sm-6">
-                                <div class="subtitle">
-                                    Disponibilidad del efectivo
+    </section>
+    <section class="bg-light mb-5 mt-5" id="suscriptores">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+                <div class="col-12 col-lg-5">
+                    <h2 class="display-4 lh-1 mb-4 mb-4">Forma parte del equipo de AEIA</h2>
+                    <p class="lead fw-normal text-muted mb-5">Genera capital vendiendo suscripciones</p>
+                    
+                    <h3 class="text-center font-alt mb-4">¿Quién es un suscriptor?</h3>
+                    <p class="lead fw-normal text-muted mb-5 mb-lg-5">
+                        Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas.
+                    </p>
+                    <h3 class="text-center font-alt mb-4"> ¿Cómo puedo ser un suscriptor?</h3>
+                    <p class="lead fw-normal text-muted mb-5 mb-lg-5">
+                        Debes crear una cuenta como suscriptor y  realizar la verificacón de tus datos, posteriormente deberás hacer el  pago de la licencia de suscripción para ser nuestro socio comercial.
+                    </p>
+                </div>
+                <div class="col-sm-8 col-md-6">
+                    <div class="px-5 px-sm-0">
+                        <img class="circle-behind img-fluid" src="{{URL::asset('/newDashboard/images/5006144.png')}}" alt="">
+                        <!-- <img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." /> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="indicaciones">
+            <div class="container px-5 mt-5 text-center">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col xl-8">
+                        <h1>Pocos pasos para Iniciar</h1>
+
+                    </div>
+                </div>
+                <div class="row gx-5 align-items-center">
+                    <div class="col order-lg-1 mb-5 mb-lg-0 bg-blue-steps">
+                        <div class="container-fluid px-5">
+                            <div class="row gx-5 mt-5">
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <p class="mb-0"> Registrarse en la Plataforma Crea tu cuenta de acuerdo al perfil que mas te convenga. </p>
+                                    </div>
                                 </div>
-                                <div class="content_text">
-                                    Todos los planes de inversión duran 1 año como minimo luego de ello se puede solicitar el retiro del capital y las ganancias a la cuenta bancaria o el wallet del titular.
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <p class="mb-0"> Verificar sus datos Verifica tus datos y llena los formularios de la plataforma </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <p class=" mb-0"> Escoger el Plan de Inversión Decide cuanto dinero puedes invertir, no arriesgues más de lo que debes. </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 text-center">
-                                <i class="bi bi-wallet-fill" id="icons-beneficios"></i>
+                            <div class="row gx-5 mt-5">
+
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <p class="mb-0">
+                                             Depositar Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene 
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <p class="mb-0">
+                                             Esperar Proceso Trading de 1 año Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading. 
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <p class="mb-0">
+                                             Retirar sus Ganancias o Incluir Nuevo Plan Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias. 
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-                   </div>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-    </section>
-
-    <section class="position-relative overflow-hidden py-5" id="home2">
-        <div class="container position-relative zindex-2 pt-2 pt-sm-3 pt-md-4 pt-lg-5 mt-xl-3">
-            <div class="row p-4 padding appear3">
-                <div class="col d-flex justify-content-center text-align-center ">
-                    <img src="{{URL::asset('/newDashboard/images/suscriptor.jpg')}}" alt="" id="suscriptor-img">
-                </div>
-                <div class="col">
-                    <div class="card-subs p-4">
-                        <div class="subtitle "> ¿Quién es un suscriptor?</div> <br>
-                        Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas. 
-
-                        <div class="subtitle"> ¿Cómo puedo ser un suscriptor?</div><br>
-                        Debes crear una cuenta como suscriptor y realizar la verificacón de tus datos, posteriormente deberás hacer el pago de la licencia de suscripción para ser nuestro socio comercial.
-                    </div>                                                
-
-
-                </div>
-            </div>
-
-        </div>
 
     </section>
 
 
-    <section class="position-relative pt-2 pt-sm-0 pb-lg-4" id="home4" section-scroll='home4' >
-    <div class="circle circle1"></div>
-        <div class="container pt-2 py-sm-3 py-md-4 py-lg-5 my-xxl-3">
-            <div class="row p-4" >
-                <div class="subtitle text-center">
-                    POCOS PASOS PARA INICIAR
-                </div>
-            </div>
-            <div class="table_steps appear3">
-                <div class="row">
-                    <div class="col-12 col-md cel text-center" id="cel1">
-                        <i class="bi bi-1-circle-fill" id="icon_number"></i><br>
-                        Registrarse en la Plataforma
-                        Crea tu cuenta de acuerdo al perfil que mas te convenga.
-                    </div>
-                    <div class="col-12 col-md cel text-center" id="cel2">
-                        <i class="bi bi-2-circle-fill"id="icon_number"></i><br>
-                        Verificar sus datos
-                        Verifica tus datos y llena los formularios de la plataforma
-                    </div>
-                    <div class="col-12 col-md cel text-center" id="cel3">
-                        <i class="bi bi-3-circle-fill"id="icon_number"></i><br>
-                        Escoger el Plan de Inversión
-                        Decide cuanto dinero puedes invertir, no arriesgues más de lo que debes.
-                    </div>
-                </div>
-                <div class="cels_plus">
-                    <div class="cel-divider"> 
-                    </div>
-                    <div class="cel-divider-row">
-                    </div>
-                
-                    <div class="cel-divider2"> 
-                    </div>
-                    <div class="cel-divider-row2"> 
-                    </div>
-                </div>
-               <div class="row">
-                    <div class="col-12 col-md cel text-center" id="cel4">
-                        <i class="bi bi-4-circle-fill"id="icon_number"></i><br>
-                        Depositar
-                        Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene
-                    </div>
-                    <div class="col-12 col-md cel text-center" id="cel5">
-                        <i class="bi bi-5-circle-fill"id="icon_number"></i><br>
-                        Esperar Proceso Trading de 1 año
-                        Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading.
-    
-                    </div>
-                    <div class="col-12 col-md cel text-center" id="cel6">
-                        <i class="bi bi-6-circle-fill"id="icon_number"></i><br>
-                        Retirar sus Ganancias o Incluir Nuevo Plan
-                        Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias.
-                    </div>
-                </div>
-    
-            </div>
 
+        <!-- Footer-->
+        <footer class="bg-black text-center py-5">
+            <div class="container px-5">
+                <div class="text-white-50 small">
+                    <div class="mb-2">&copy; AEIA INVESTMENTS 2024. All Rights Reserved.</div>
+                    <a href="#!">Privacy</a>
+                    <span class="mx-1">&middot;</span>
+                    <a href="#!">Terms</a>
+                    <span class="mx-1">&middot;</span>
+                    <a href="#!">FAQ</a>
+                </div>
+            </div>
+        </footer>
+        <!-- Feedback Modal-->
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-primary-to-secondary p-4">
+                        <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Send feedback</h5>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body border-0 p-4">
+                        <!-- * * * * * * * * * * * * * * *-->
+                        <!-- * * SB Forms Contact Form * *-->
+                        <!-- * * * * * * * * * * * * * * *-->
+                        <!-- This form is pre-integrated with SB Forms.-->
+                        <!-- To make this form functional, sign up at-->
+                        <!-- https://startbootstrap.com/solution/contact-forms-->
+                        <!-- to get an API token!-->
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                            <!-- Name input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <label for="name">Full name</label>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                            </div>
+                            <!-- Email address input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="email">Email address</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                            </div>
+                            <!-- Phone number input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
+                                <label for="phone">Phone number</label>
+                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
+                            </div>
+                            <!-- Message input-->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <label for="message">Message</label>
+                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                            </div>
+                            <!-- Submit success message-->
+                            <!---->
+                            <!-- This is what your users will see when the form-->
+                            <!-- has successfully submitted-->
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3">
+                                    <div class="fw-bolder">Form submission successful!</div>
+                                    To activate this form, sign up at
+                                    <br />
+                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                </div>
+                            </div>
+                            <!-- Submit error message-->
+                            <!---->
+                            <!-- This is what your users will see when there is-->
+                            <!-- an error submitting the form-->
+                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                            <!-- Submit Button-->
+                            <div class="d-grid"><button class="btn btn-primary rounded-pill btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
-
-    <section class="" id="home5">
-        <div class="row">
-            <div class="subtitle text-center">
-                Nuestras redes sociales
-            </div>
-        </div>
-        <div class="row p-4" id="">
-            <div class="icons-socials d-flex justify-content-center">
-                <a href="https://wa.pe/AEIAInvest" target="_blank"><i class="bi bi-whatsapp"></i></a>
-                <a href="https://www.facebook.com/aeiainvestments" target="_blank"><i class="bi bi-facebook"></i></a>
-                <a href="https://www.instagram.com/aeiainvestments" target="_blank"><i class="bi bi-instagram"></i></a>
-                <a href="https://www.linkedin.com/company/aeia-investment/" target="_blank"><i class="bi bi-linkedin"></i></a>
-                <a href="https://www.tiktok.com/@aeia.investments" target="_blank"><i class="bi bi-tiktok"></i></a>
-                <a href="contact_support@aeia.capital" target="_blank"><i class="bi bi-envelope-at-fill"></i></a>
- 
-            </div>
-       </div>
-
-    </section>
-    <footer>
-
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const items = document.querySelectorAll('.appear2');
-
-        // Añadir retraso de transición dinámicamente
-        items.forEach((element, index) => {
-            element.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        const active = function(entries){
-            entries.forEach(entry => {
-                if(entry.isIntersecting){
-                    entry.target.classList.add('inview2'); 
-                }else{
-                    entry.target.classList.remove('inview2'); 
-                }
-            });
-        }
-
-        const io2 = new IntersectionObserver(active);
-
-        items.forEach(item => io2.observe(item));
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const items = document.querySelectorAll('.appear3');
-
-        // Añadir retraso de transición dinámicamente
-        items.forEach((element, index) => {
-            element.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        const active = function(entries){
-            entries.forEach(entry => {
-                if(entry.isIntersecting){
-                    entry.target.classList.add('inview3'); 
-                }else{
-                    entry.target.classList.remove('inview3'); 
-                }
-            });
-        }
-
-        const io2 = new IntersectionObserver(active);
-
-        items.forEach(item => io2.observe(item));
-    });
-</script>
+    <script src="{{URL::asset('/js/landing.js')}}"></script>
 </body>
-
-
 </html>
