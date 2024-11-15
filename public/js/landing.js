@@ -2,7 +2,7 @@
 function generateDailyData() {
   const data = [];
   const startDate = new Date(new Date().getFullYear(), 10, 1); // 1 de noviembre
-  const endDate = new Date(new Date().getFullYear(), 10, 14); // 14 de noviembre
+  const endDate = new Date(new Date().getFullYear(), 10, 15); // 14 de noviembre
   let currentDate = startDate;
   let lastValue = 100000; // Valor inicial de $100,000
 
@@ -26,9 +26,31 @@ function generateDailyData() {
   return data;
 }
 
-const initialData = generateDailyData();
+// Recuperar datos desde localStorage o generarlos si no existen
+function getOrGenerateData() {
+  const storedData = localStorage.getItem("novemberDailyData");
+  if (storedData) {
+    return JSON.parse(storedData); // Recuperar y parsear datos almacenados
+  } else {
+    const newData = generateDailyData();
+    localStorage.setItem("novemberDailyData", JSON.stringify(newData)); // Guardar datos en localStorage
+    return newData;
+  }
+}
+
+const initialData = getOrGenerateData();
 let data = [...initialData]; // Copia para los datos que se mostrarán en el gráfico
 
+// Extraer valor inicial y calcular rentabilidad
+const initialValue = initialData[0][1];
+const finalValue = initialData[initialData.length - 1][1];
+const rentability = (((finalValue - initialValue) / initialValue) * 100).toFixed(2);
+
+// Actualizar el HTML con transparencia y rentabilidad
+document.querySelector(".transparency-value").textContent = `$${initialValue.toLocaleString()}`;
+document.querySelector(".rentability-value").textContent = `${rentability}%`;
+
+// Configuración del gráfico
 var options = {
   series: [{
     data: data.slice()

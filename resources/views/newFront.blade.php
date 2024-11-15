@@ -11,10 +11,10 @@
     <title>AEIA Investment</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+<nav class="navbar navbar-expand-lg  sticky-top">
       <div class="container-fluid">
 
-        <a href="index.html" style="text-decoration:none !important; color:black !important;" ><img src="{{URL::asset('/newDashboard/images/logovdf.png')}}" alt="logo" style="width:4vw !important;"/>AEIA INVESTMENTS <br></a>
+        <a href="index.html" style="text-decoration:none!important; color:white!important;" ><img src="{{URL::asset('/newDashboard/images/logovdf.png')}}" alt="logo" style="width:4vw !important;"/>AEIA INVESTMENTS <br></a>
         
         <!-- Botón toggler, visible en pantallas medianas y pequeñas -->
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -22,9 +22,8 @@
         </button>
         
         <!-- Offcanvas para pantallas pequeñas y medianas -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #0e359ef6 !important;">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
@@ -71,7 +70,7 @@
                     <!-- Masthead device mockup feature-->
                     <div class="masthead-device-mockup text-center">
                         <h3 class="display-6 lh-3 mb-3">Días Operando</h3>
-                        <p class="lead fw-normal text-muted mb-5">{{$daysFunctioning ?? '1,355'}}</p>
+                        <p id="days-functioning" class="lead fw-normal text-muted mb-5">1,356</p>
                     </div>
                 </div>
             </div>
@@ -81,8 +80,17 @@
     <aside class="text-center">
         <div class="container px-5">
             <div class="row gx-5 justify-content-center" id="">
-                <div class="col-xl-8 bg-box-aeia position-relative" style="height:62vh;!important"> 
+                <div class="col-xl-8 bg-box-aeia position-relative" > 
                     <div class="h4 fs-1 text-white mt-4 mb-4 text-lg-start">Fondo de Noviembre</div>
+                    
+                        <p class=" text-lg-start" style="color:white; font-weight:bolder;">
+                            Recaudado: <span class="transparency-value"></span>                       
+                        </p>
+
+                        <p class=" text-lg-start" style="color:white; font-weight:bolder;">
+                            Rentabilidad: <span class="rentability-value" style="color:#57b957;"></span> 
+                            <i class="bi bi-graph-up-arrow mx-3" style="background-color:green !important; padding:0.5vw; border-radius:50px; color:white;" ></i> </a>
+                        </p>
                     <div class="card mt-4 p-4 custom-shadow"> <!-- Añadido custom-shadow para la sombra -->
                         <div class="chart-area">
                             <div class="grid"></div>
@@ -127,6 +135,7 @@
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-key-fill"></i>
+                                        <br>
                                         <h3 class="font-alt">Seguridad y Protección</h3>
                                         <p class="mb-0">Tus datos personales no son revelados a terceros</p>
                                     </div>
@@ -136,6 +145,8 @@
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-file-earmark-bar-graph"></i>
+
+                                        <br>
                                         <h3 class="font-alt">Política de Transparencia</h3>
                                         <p class="mb-0">Puedes ver en tiempo real toda la información de tus inversiones.</p>
                                     </div>
@@ -147,6 +158,8 @@
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-graph-up-arrow"></i>
+
+                                        <br>
                                         <h3 class="font-alt">Gestión de riesgo</h3>
                                         <p class="mb-0"> Gestionamos un portafolio de  inversión para diversificar el riesgo y asumimos estrategias de  rebalanceo de operaciones y activos</p>
                                     </div>
@@ -155,6 +168,8 @@
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-currency-dollar"></i>
+
+                                        <br>
                                         <h3 class="font-alt">Depósitos en Dólares</h3>
                                         <p class="mb-0">Los depósitos se realizarán a través de la cuenta corriente de nuestra empresa.</p>
                                     </div>
@@ -165,6 +180,8 @@
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-cash-coin"></i>
+
+                                        <br>
                                         <h3 class="font-alt"> Disponibilidad del efectivo</h3>
                                         <p class="mb-0"> Todos los planes de inversión duran 1 año como minimo luego de ello se puede solicitar el retiro del capital y las ganancias a la cuenta bancaria o el wallet del titular.</p>
                                     </div>
@@ -179,24 +196,82 @@
     <section class="bg-light mb-5 mt-5" id="suscriptores">
         <div class="container px-5">
             <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
-                <div class="col-12 col-lg-5">
+                <div class="col-12 col-lg-5 ">
                     <h2 class="display-4 lh-1 mb-4 mb-4">Forma parte del equipo de AEIA</h2>
                     <p class="lead fw-normal text-muted mb-5">Genera capital vendiendo suscripciones</p>
                     
-                    <h3 class="text-center font-alt mb-4">¿Quién es un suscriptor?</h3>
+                    <h3 class="font-alt mb-4">¿Quién es un suscriptor?</h3>
                     <p class="lead fw-normal text-muted mb-5 mb-lg-5">
                         Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas.
                     </p>
-                    <h3 class="text-center font-alt mb-4"> ¿Cómo puedo ser un suscriptor?</h3>
+                    <h3 class="font-alt mb-4"> ¿Cómo puedo ser un suscriptor?</h3>
                     <p class="lead fw-normal text-muted mb-5 mb-lg-5">
                         Debes crear una cuenta como suscriptor y  realizar la verificacón de tus datos, posteriormente deberás hacer el  pago de la licencia de suscripción para ser nuestro socio comercial.
                     </p>
                 </div>
-                <div class="col-sm-8 col-md-6">
-                    <div class="px-5 px-sm-0">
-                        <img class="circle-behind img-fluid" src="{{URL::asset('/newDashboard/images/5006144.png')}}" alt="">
-                        <!-- <img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." /> -->
+                <div class="col-10 col-lg-5 px-sm-2 " style="border: 1px #b7b7b7 solid;border-radius: 25px;background: #0c58ce;box-shadow: -8px 9px 4px rgba(6, 6, 11, 0.65);color: white;">
+
+                    <div class="row justify-content-center text-center mt-5 text-lg-start">
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Plan</p> 
+                        </div>
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Comisión</p>
+                        </div>
                     </div>
+
+                    <div class="row gx-5 align-items-center justify-content-center text-align-center mt-5">
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Bronce</p>
+                        </div>
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>$14</p>
+                        </div>
+                    </div>
+                    <div class="row gx-5 align-items-center justify-content-center mt-5">
+
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Plata</p>
+                        </div>
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>$35</p>
+                        </div>
+                    </div>
+                    <div class="row gx-5 align-items-center justify-content-center mt-5">
+
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Oro</p>
+                        </div>
+
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>$ 70</p>
+                        </div>
+                    </div>
+                    <div class="row gx-5 align-items-center justify-content-center mt-5">
+
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Platino</p>
+                        </div>
+
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>$ 84</p>
+                        </div>
+                    </div>
+                    <div class="row gx-5 align-items-center justify-content-center mt-5 mb-5">
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>Diamante</p>
+                        </div>
+                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                            <p>$ 140</p>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="px-5 px-sm-0"> -->
+
+                        <!-- <img class="circle-behind img-fluid" src="{{URL::asset('/newDashboard/images/5006144.png')}}" alt=""> -->
+                        <!-- <img class="img-fluid rounded-circle" src="https://source.unsplash.com/u8Jn2rzYIps/900x900" alt="..." /> -->
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -364,112 +439,125 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{{URL::asset('/js/landing.js')}}"></script>
     <script>
-    particlesJS("particles-js", {
-        "particles": {
-            "number": {
-                "value": 30,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#00265e"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": false,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 5,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 40,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#00265e",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 6,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": false,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
-            }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "repulse"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 400,
-                    "line_linked": {
-                        "opacity": 1
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 30,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
                     }
                 },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
+                "color": {
+                    "value": "#00265e"
                 },
-                "repulse": {
-                    "distance": 200,
-                    "duration": 0.4
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
                 },
-                "push": {
-                    "particles_nb": 4
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
                 },
-                "remove": {
-                    "particles_nb": 2
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00265e",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
                 }
-            }
-        },
-        "retina_detect": true
-    });
-</script>
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
 
+    <script>
+        const startDate = new Date('2021-02-28'); // Ejemplo: 1 de enero de 2021
+
+        function updateDaysFunctioning() {
+            const currentDate = new Date();
+            const timeDifference = currentDate - startDate;
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Conversión a días
+            document.getElementById('days-functioning').textContent = days.toLocaleString(); // Actualiza el DOM
+        }
+
+        // Actualizar al cargar la página
+        updateDaysFunctioning();
+    </script>
 </body>
 </html>
