@@ -6,7 +6,7 @@
     <div class="col-lg-12 p-5">
             <!-- <div class="card"> -->
                 {!! Form::model($payment, ['route' => ['payments.edit.payment', $payment->id], 'method' => 'put', 'files' => true]) !!}
-                    @include('payments.fields')
+                    @include('payments_new.fields')
                     <div class="form-group col p-5">
                         <p><strong>Sube tu voucher:</strong></p>
                         <div class="input-group">

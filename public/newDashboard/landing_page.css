@@ -116,3 +116,27 @@ section{
 
 
 }
+
+.feature-container {
+    position: relative; /* Define el contexto de posicionamiento */
+    overflow: hidden;   /* Evita que el círculo salga del contenedor */
+}
+
+.circle-effect {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #00155b67 50%, transparent 70%);
+    border: 1px solid #ffda0627;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.2s ease-out;
+}
+
+
+.feature-container:hover .circle-effect {
+    opacity: 1; /* Mostrar el círculo al hacer hover */
+}

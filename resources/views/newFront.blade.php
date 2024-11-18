@@ -22,7 +22,8 @@
         </button>
         
         <!-- Offcanvas para pantallas pequeñas y medianas -->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #0e359ef6 !important;">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #0e359ef6;  ">
+            
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
@@ -131,17 +132,23 @@
                     <div class="col order-lg-1 mb-5 mb-lg-0">
                         <div class="container-fluid px-5">
                             <div class="row gx-5 mt-5">
-                                <div class="col-md-6 mb-5 ">
-                                    <!-- Feature item-->
-                                    <div class="text-center bg-benefits p-5">
-                                        <i class="bi bi-key-fill"></i>
-                                        <br>
-                                        <h3 class="font-alt">Seguridad y Protección</h3>
-                                        <p class="mb-0">Tus datos personales no son revelados a terceros</p>
+                                <div class="col-md-6 mb-5">
+                                    <div class="feature-container position-relative">
+                                        <div class="circle-effect"></div>
+                                        <!-- Feature item-->
+                                        <div class="text-center bg-benefits p-5">
+                                            <i class="bi bi-key-fill"></i>
+                                            <br>
+                                            <h3 class="font-alt">Seguridad y Protección</h3>
+                                            <p class="mb-0">Tus datos personales no son revelados a terceros</p>
+
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 mb-5">
+                                    <div class="feature-container position-relative">
+                                    <div class="circle-effect"></div>
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-file-earmark-bar-graph"></i>
@@ -150,11 +157,16 @@
                                         <h3 class="font-alt">Política de Transparencia</h3>
                                         <p class="mb-0">Puedes ver en tiempo real toda la información de tus inversiones.</p>
                                     </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row gx-5 mt-5">
 
                                 <div class="col-md-6 mb-5 mb-md-0">
+
+                                    <div class="feature-container position-relative">
+
+                                    <div class="circle-effect"></div>
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-graph-up-arrow"></i>
@@ -163,8 +175,11 @@
                                         <h3 class="font-alt">Gestión de riesgo</h3>
                                         <p class="mb-0"> Gestionamos un portafolio de  inversión para diversificar el riesgo y asumimos estrategias de  rebalanceo de operaciones y activos</p>
                                     </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6 ">
+                                    <div class="feature-container position-relative">
+                                    <div class="circle-effect"></div>
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-currency-dollar"></i>
@@ -173,10 +188,14 @@
                                         <h3 class="font-alt">Depósitos en Dólares</h3>
                                         <p class="mb-0">Los depósitos se realizarán a través de la cuenta corriente de nuestra empresa.</p>
                                     </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row gx-5 align-items-center justify-content-center mt-5">
                                 <div class="col-md-6 mb-5 mb-md-0">
+
+                                    <div class="feature-container position-relative">
+                                    <div class="circle-effect"></div>
                                     <!-- Feature item-->
                                     <div class="text-center bg-benefits p-5">
                                         <i class="bi bi-cash-coin"></i>
@@ -184,6 +203,7 @@
                                         <br>
                                         <h3 class="font-alt"> Disponibilidad del efectivo</h3>
                                         <p class="mb-0"> Todos los planes de inversión duran 1 año como minimo luego de ello se puede solicitar el retiro del capital y las ganancias a la cuenta bancaria o el wallet del titular.</p>
+                                    </div>
                                     </div>
                                 </div>
 
@@ -559,5 +579,31 @@
         // Actualizar al cargar la página
         updateDaysFunctioning();
     </script>
+    <script>
+        document.querySelectorAll('.feature-container').forEach((container) => {
+            const circle = container.querySelector('.circle-effect');
+
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left; // Coordenada relativa al contenedor
+                const y = e.clientY - rect.top;
+            
+                circle.style.left = `${x}px`;
+                circle.style.top = `${y}px`;
+            });
+        
+            container.addEventListener('mouseleave', () => {
+                circle.style.opacity = '0'; // Oculta el círculo al salir
+            });
+        
+            container.addEventListener('mouseenter', () => {
+                circle.style.opacity = '1'; // Muestra el círculo al entrar
+            });
+        });
+
+
+    </script>
+
 </body>
 </html>
+

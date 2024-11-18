@@ -62,11 +62,11 @@
             </div>
             <div class="col h-100 p-0 w-100 content-wrapper">
                 <div class="nbar w-100 d-flex justify-content-end ">
-                    <div class="nbar-r h-75 d-flex align-items-center text-align-center justify-content-end bg-2">
-                        <div class="container">
-                            <ul class="note_list">
-                            </ul>
-                        </div>
+                    <div class="nbar-r h    75 d-flex align-items-center text-align-center justify-content-end bg-2 align-items-center" style="width:20vw">
+                         
+                        <div class="container-fluid d-flex justify-content-end">
+
+
                         <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
                             <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
                         </a>
@@ -76,7 +76,7 @@
                           </a>
                           <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
 
-                          <ul class="dropdown-menu dropdown-notification pull-right">
+                          <ul class="dropdown-menu dropdown-notification pull-right" style="position: absolute; will-change: transform; max-height: 30vh; overflow: scroll; top: 0px; left: 0px; transform: translate3d(-300px, 5px, 0px);">
                             @foreach($notificaciones as $notificacion)
                               <li class="notification-item">
                                 <a href="javascript:;">
@@ -93,25 +93,16 @@
                           </ul>
                         </div>
 
-                        <div class="dropdown-list toggle" onclick="toggleDropdown()">
-                            <div class="container-rounded">
-                                @if ($profile && $profile->profile_picture)
-                                    <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" style="width:45px !important; border-radius:100%;" />
-                                @else 
-                                    <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
-                                @endif
-                            </div>
-                            <ul class="dropdown-items" id="dropdown-menu" style="display: none;">
-                                <li>
-                                    <button class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Log-Out
-                                    </button>
-                                </li>
-                            </ul>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>                           
+                         
+
                         </div>
+
+                        <button class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:10vw; height:4vh; ">
+                            Log-Out
+                        </button>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>  
                    </div>
                 </div>
                 <div class="container-fluid">

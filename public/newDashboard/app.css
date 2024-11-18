@@ -827,7 +827,7 @@ input ,textarea{
   height: 98vh;
   margin: 0.5vw;
   border-radius: 2vw;
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   width: 12%;
@@ -837,7 +837,7 @@ input ,textarea{
 }
 
 .content-wrapper {
-  margin-left: 14%;
+  margin-left: 2dvh;
   padding: 0;
 }
 
