@@ -1,3 +1,100 @@
+/* Variables de tema */
+:root {
+  --base: #ffff;
+  --bglight: #f8f9fa;
+  --text: black;
+  --text-muted: #3b3b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --base: #0d0d0d;
+    --bglight: #181818c2;
+    --text: #ffff;
+    --text-muted: #9e9e9e;
+  }
+}
+
+html {
+  color-scheme: dark light;
+}
+
+:root:has(#theme:not(:checked)) {
+  color-scheme: light;
+  --base: #ffff;
+  --bglight: #f8f9fa;
+  --text: black;
+  --text-muted: #3b3b3b;
+}
+
+:root:has(#theme:checked) {
+  color-scheme: dark;
+  --base: #0d0d0d;
+  --bglight: #181818c2;
+  --text: #ffff;
+  --text-muted: #9e9e9e;
+}
+
+/* Estilo del interruptor */
+#theme {
+  height: 34px;
+  width: 64px;
+  position: relative;
+  cursor: pointer;
+  appearance: none;
+  background: var(--bglight);
+  border-radius: 17px;
+  outline: none;
+  border: 2px solid var(--text-muted);
+  transition: background 0.3s, border 0.3s;
+}
+
+/* Iconos para el interruptor */
+#theme::before,
+#theme::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  transition: opacity 0.3s, left 0.3s, right 0.3s;
+}
+
+#theme::before {
+  background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 32 32'%3E%3Cpath fill='%23ffe4a1' d='M16.001 8c-4.418 0-8 3.582-8 8s3.582 8 8 8c4.418 0 7.999-3.582 7.999-8s-3.581-8-7.999-8v0zM14 2c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2s-2-0.895-2-2zM4 6c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2s-2-0.895-2-2zM2 14c1.105 0 2 0.895 2 2 0 1.107-0.895 2-2 2s-2-0.893-2-2c0-1.105 0.895-2 2-2zM4 26c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2s-2-0.895-2-2zM14 30c0-1.109 0.895-2 2-2 1.108 0 2 0.891 2 2 0 1.102-0.892 2-2 2-1.105 0-2-0.898-2-2zM24 26c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2s-2-0.895-2-2zM30 18c-1.104 0-2-0.896-2-2 0-1.107 0.896-2 2-2s2 0.893 2 2c0 1.104-0.896 2-2 2zM24 6c0-1.105 0.895-2 2-2s2 0.895 2 2c0 1.105-0.895 2-2 2s-2-0.895-2-2z'%3E%3C/path%3E%3C/svg%3E");
+  left: 10px;
+  opacity: 1;
+}
+
+#theme::after {
+  background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 32 32'%3E%3Cpath fill='%23b9c6d3' d='M24.633 22.184c-8.188 0-14.82-6.637-14.82-14.82 0-2.695 0.773-5.188 2.031-7.363-6.824 1.968-11.844 8.187-11.844 15.644 0 9.031 7.32 16.355 16.352 16.355 7.457 0 13.68-5.023 15.648-11.844-2.18 1.254-4.672 2.028-7.367 2.028z'%3E%3C/path%3E%3C/svg%3E");
+  right: 10px;
+  opacity: 0;
+}
+
+/* Cambiar estado cuando está activado */
+#theme:checked::before {
+  opacity: 0;
+}
+
+#theme:checked::after {
+  opacity: 1;
+}
+
+.text-muted{
+  color:var(--text-muted)!important;
+}
+body{
+  color:var(--text);
+  background-color: var(--base);
+}
+
+.bg-light{
+  background-color: var(--bglight) !important;;
+}
+
 .bg-box-aeia {
     background-color: #7D8388;
     border-radius: 28px;
@@ -20,7 +117,7 @@
 }
 
 .card {
-    background-color: black;
+    background-color: #000000;
     border-radius: 28px;
     position: sticky; /*Hace que la tarjeta sea posicionable dentro del contenedor*/
     right: -39%; /* Mueve la tarjeta hacia la derecha del contenedor */
@@ -60,7 +157,7 @@ section{
 /* Pantallas pequeñas (móviles) */
 @media (max-width: 576px) {
     .card {
-        background-color: black;
+        background-color: #000000;
         border-radius: 28px;
         width: 82vw;
         box-shadow: -8px 9px 4px rgba(6, 6, 11, 0.65); /* Aplicar sombra personalizada */
@@ -71,7 +168,7 @@ section{
 /* Pantallas medianas (tabletas) */
 @media (min-width: 577px) and (max-width: 768px) {
     .card {
-        background-color: black;
+        background-color: #000000;
         border-radius: 28px;
         /* width: 72vw; */
         position: sticky; /*Hace que la tarjeta sea posicionable dentro del contenedor*/
@@ -85,7 +182,7 @@ section{
 
 @media (min-width:768px) and (max-width:1175px){
     .card {
-        background-color: black;
+        background-color: #000000;
         border-radius: 28px;
         /* width: 72vw; */
         position: sticky; /*Hace que la tarjeta sea posicionable dentro del contenedor*/
@@ -140,3 +237,6 @@ section{
 .feature-container:hover .circle-effect {
     opacity: 1; /* Mostrar el círculo al hacer hover */
 }
+
+/* toggle darkmode  */
+

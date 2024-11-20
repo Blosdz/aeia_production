@@ -46,6 +46,13 @@
               </li>
             </ul>
 
+            <div class="form-check form-switch my-2 mx-3">
+
+                <input type="checkbox" name="switch" id="theme" class="form-check-input" role="switch">
+                <label for="theme"></label>
+                
+            </div>
+ 
             <form class="d-flex mt-3" role="search">
                 <button type="button" onclick="window.location.href='{{ url('/login') }}'" class="btn btn-outline-success me-2">Login</button>
                 <button type="button" onclick="window.location.href='{{ url('/register') }}'" class="btn btn-outline-primary">Crear Cuenta</button>
@@ -603,7 +610,6 @@
 
 
     </script>
-
 </body>
 </html>
 
