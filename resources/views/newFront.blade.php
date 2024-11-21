@@ -75,11 +75,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <!-- Masthead device mockup feature-->
-                    <div class="masthead-device-mockup text-center">
-                        <h3 class="display-6 lh-3 mb-3">Días Operando</h3>
-                        <p id="days-functioning" class="lead fw-normal text-muted mb-5">1,356</p>
-                    </div>
+                  
                 </div>
             </div>
         </div>
