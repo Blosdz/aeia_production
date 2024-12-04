@@ -86,7 +86,7 @@
 
 @php
   }
-  if(in_array($user->rol, [3, 4])) { // Cliente
+  if($user->rol == 3 || $user->rol == 4){
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('user.home') }}">
@@ -109,7 +109,7 @@
 </li>
 
 
-
+@php
   } if( $user->rol == 5 ) { //Gestor comercial
 @endphp
 
