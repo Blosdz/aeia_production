@@ -9,7 +9,7 @@
 @endphp
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('home.index') }}">
+    <a class="nav-link" href="{{ route('admin.home') }}">
         <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
@@ -89,13 +89,13 @@
   if( $user->rol == 3) { // Cliente
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('home.index') }}">
+    <a class="nav-link" href="{{ route('user.home') }}">
         <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('profiles.user') }}">
+    <a class="nav-link" href="{{ route('user.profile_edit') }}">
         <i class="fa-solid fa-user-check"></i>
         <span>Verificación</span>
     </a>
@@ -108,12 +108,6 @@
     </a>
 </li>
 
-<li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('vouchers.show') }}">
-        <img src="{{URL::asset('/images/dashboard/estados_nav.png')}}" alt="">
-        <span>Recibos</span>
-    </a>
-</li>
 
 @php
   }
@@ -139,12 +133,6 @@
     </a>
 </li>
 
-<li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('vouchers.show') }}">
-        <img src="{{URL::asset('/images/dashboard/estados_nav.png')}}" alt="">
-        <span>Recibos</span>
-    </a>
-</li>
 @php
   } if( $user->rol == 5 ) { //Gestor comercial
 @endphp
@@ -200,7 +188,6 @@
 
 <li class="nav-item {{ Request::is('notifications*') ? 'active' : '' }}">
     <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}" href="{{ route('notifications.index') }}">
-        <img src="{{URL::asset('/images/dashboard/alertas.png')}}" alt="">
         Notificaciones
         <span class="badge badge-success notification" style="display: none;"><i class="fa fa-bell"></i></span>
     </a>
@@ -225,7 +212,6 @@
 </li>
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('payments.index') }}">
-        <img src="{{URL::asset('/images/dashboard/depositar.png')}}" alt="">
         <span>Depositos</span>
     </a>
 </li>
@@ -236,13 +222,11 @@
 @endphp
 {{-- <li class="nav-item {{ Request::is('plans*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('plans.index') }}">
-        <img src="{{URL::asset('/images/dashboard/estados_nav.png')}}" alt="">
         <span>Plans</span>
     </a>
 </li> --}}
 {{-- <li class="nav-item {{ Request::is('clientPayments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('clientPayments.index') }}">
-        <img src="{{URL::asset('/images/dashboard/home_nav.png')}}" alt="">
         <span>Client Payments</span>
     </a>
 </li> --}}
@@ -252,19 +236,16 @@
 @endphp
    <li class="nav-item {{ Request::is('showUsers*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('showUsers') }}">
-        <img src="{{URL::asset('/images/dashboard/clientes_subscriptores.png')}}" alt="">
 		<span>Clientes</span>
         </a>
     </li>
 	<li class="nav-item {{ Request::is('showUsers*') ? 'active' : '' }}">
 	    <a class="nav-link" href="{{ route('showproduct') }}">
-            <img src="{{URL::asset('/images/dashboard/pdfs_nav.png')}}" alt="">
 	        <span>Pdf Files</span>
 	    </a>
 	</li>
     <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin_funciones.fondos') }}">
-            <img src="{{URL::asset('/images/dashboard/documentos_nav.png')}}" alt="">
             <span>Subir Documentos</span>
         </a>
     </li>

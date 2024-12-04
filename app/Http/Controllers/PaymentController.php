@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Flash;
 use DB;
+use dd;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Response;
@@ -47,12 +48,19 @@ class PaymentController extends AppBaseController
     private $contractRepository;
     protected ?BinanceTransferInterface $transfer;
 
-    public function __construct(PaymentRepository $paymentRepo,ContractRepository $contractRepo)
+    public function __construct(PaymentRepository $paymentRepo, ContractRepository $contractRepo)
     {
         $this->paymentRepository = $paymentRepo;
+        $this->contractRepository = $contractRepo;
         $this->transfer = null;
-	$this->contractRepository=$contractRepo;
+
+        // Middleware para inicializar $this->user
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
     }
+
 
     /**
      * Display a listing of the Payment.
@@ -64,6 +72,16 @@ class PaymentController extends AppBaseController
     public function index(Request $request)
     {
         $payments = $this->paymentRepository->all();
+        // dd($payments) ;
+
+        return view('payments_new.index')->with(compact('payments'));
+    }
+
+    public function index_user(Request $request)
+    {
+
+        $payments = $this->paymentRepository->all();
+        
 
         return view('payments_new.index')
             ->with('payments', $payments);
@@ -114,8 +132,9 @@ class PaymentController extends AppBaseController
 
             return redirect(route('payments.index'));
         }
+        
 
-        return view('payments_new.show')->with('payment', $payment);
+        return view('payments_new.index`')->with('payment', $payment);
     }
 
     /**
@@ -256,59 +275,63 @@ class PaymentController extends AppBaseController
 
     public function client_index(Request $request){
         $input = $request->all();
+        $payments=Payment::with(['clientPayments'])->where("user_id",$this->user->id)->orderBy('created_at','desc')->get();
+        
 
-        $payments = $this->paymentRepository->all();
-        $payments = Payment::where("user_id", Auth::user()->id)
-                  ->with('contract')
-                  ->with('declaracion')
-                  ->with('client_payment')
-                  ->when( (isset($input['plan']) && $input['plan']!= 0) , function($query) use ($input){
-                      return $query->whereHas('client_payment', function($query2) use ($input) {
-                          $query2->where('plan_id',$input['plan']);
-                      });
-                  })
-                  ->when( (isset($input['year']) && is_numeric($input['year'])) , function ($query) use ($input) {
-                      return $query->whereBetween('created_at',[$input['year'].'-01-01 00:00:00',$input['year'].'-12-31 23:59:59']);
-                  })
-                  ->when( (isset($input['funds']) && $input['funds'] != 0), function ($query) use ($input) {
-                      $months = [
-                          1 => 'Enero',
-                          2 => 'Febrero',
-                          3 => 'Marzo',
-                          4 => 'Abril',
-                          5 => 'Mayo',
-                          6 => 'Junio',
-                          7 => 'Julio',
-                          8 => 'Agosto',
-                          9 => 'Setiembre',
-                          10 => 'Octubre',
-                          11 => 'Noviembre',
-                          12 => 'Diciembre'
-                      ];
-                      return $query->where('month',$months[$input['funds']]);
-                  } )
-                  ->get()
-                  ->map(function ($payment) {
-                    // Formateamos la fecha con minutos y segundos en el formato Y-m-d H:i:s
-                    $payment->formatted_date = $payment->created_at->format('Y-m-d H:i:s');
-                    return $payment;
-                })
-                  ->sortBy(function ($payment) {
-                      switch ($payment->status) {
-                          case 'PENDIENTE':
-                              return 1;
-                          case 'PAGADO':
-                              return 2;
-                          case 'VENCIDO':
-                              return 3;
-                          default:
-                              return 4;
-                      }
-                  });
-        $plans = Plan::pluck('name','id')->toArray();
+
+
+        // $payments = $this->paymentRepository->all();
+        // $payments = Payment::where("user_id", Auth::user()->id)
+        //           ->with('contract')
+        //           ->with('declaracion')
+        //           ->with('client_payment')
+        //           ->when( (isset($input['plan']) && $input['plan']!= 0) , function($query) use ($input){
+        //               return $query->whereHas('client_payment', function($query2) use ($input) {
+        //                   $query2->where('plan_id',$input['plan']);
+        //               });
+        //           })
+        //           ->when( (isset($input['year']) && is_numeric($input['year'])) , function ($query) use ($input) {
+        //               return $query->whereBetween('created_at',[$input['year'].'-01-01 00:00:00',$input['year'].'-12-31 23:59:59']);
+        //           })
+        //           ->when( (isset($input['funds']) && $input['funds'] != 0), function ($query) use ($input) {
+        //               $months = [
+        //                   1 => 'Enero',
+        //                   2 => 'Febrero',
+        //                   3 => 'Marzo',
+        //                   4 => 'Abril',
+        //                   5 => 'Mayo',
+        //                   6 => 'Junio',
+        //                   7 => 'Julio',
+        //                   8 => 'Agosto',
+        //                   9 => 'Setiembre',
+        //                   10 => 'Octubre',
+        //                   11 => 'Noviembre',
+        //                   12 => 'Diciembre'
+        //               ];
+        //               return $query->where('month',$months[$input['funds']]);
+        //           } )
+        //           ->get()
+        //           ->map(function ($payment) {
+        //             // Formateamos la fecha con minutos y segundos en el formato Y-m-d H:i:s
+        //             $payment->formatted_date = $payment->created_at->format('Y-m-d H:i:s');
+        //             return $payment;
+        //         })
+        //           ->sortBy(function ($payment) {
+        //               switch ($payment->status) {
+        //                   case 'PENDIENTE':
+        //                       return 1;
+        //                   case 'PAGADO':
+        //                       return 2;
+        //                   case 'VENCIDO':
+        //                       return 3;
+        //                   default:
+        //                       return 4;
+        //               }
+        //           });
+        // $plans = Plan::pluck('name','id')->toArray();
 
         return view('payments_new.index')
-            ->with(compact('payments', 'plans'));
+            ->with(compact('payments'));
     }
 
     public function client_update_signature(Request $request, $id)

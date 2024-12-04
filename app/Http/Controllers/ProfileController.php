@@ -47,29 +47,9 @@ class ProfileController extends AppBaseController
      * @return Response
      */
 
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->input('search');
-        $userType = $request->input('userType');
-        $status = $request->input('status');
-
         $profiles = Profile::query();
-
-        // Aplicar filtros
-        if ($search) {
-            $profiles->filterByNameOrLastName($search);
-        }
-
-        if ($userType) {
-            $profiles->whereHas('user', function ($query) use ($userType) {
-                $query->where('rol', $userType);
-            });
-        }
-
-        if ($status) {
-            $profiles->filterByStatus($status);
-        }
-
         // Ordenar por el estado de verificación
         $profiles = $profiles->orderByRaw("CASE
             WHEN verified = 2 THEN 1
@@ -79,7 +59,7 @@ class ProfileController extends AppBaseController
             ELSE 5
         END")->with('user')->get();
 
-        return view('profiles_new.index', compact('profiles'));
+        return view('profiles_new.table_users', compact('profiles'));
     }
 
 
@@ -213,8 +193,25 @@ class ProfileController extends AppBaseController
             return redirect(route('profiles.index'));
         }
 
-        return view('profiles_new.edit')->with('profile', $profile);
+        return view('profiles_new.verificar_user')->with('profile', $profile);
     }
+
+
+    public function massDestroy(Request $request)
+    {
+        $ids = $request->ids;
+
+        if (empty($ids)) {
+            Flash::error('No se seleccionaron perfiles para eliminar.');
+            return redirect(route('profiles.index'));
+        }
+
+        $this->profileRepository->deleteWhereIn('id', $ids);
+
+        Flash::success('Perfiles eliminados exitosamente.');
+        return redirect(route('profiles.edit'));
+    }
+
 
     /**
      * Update the specified Profile in storage.
@@ -284,7 +281,11 @@ class ProfileController extends AppBaseController
 
 	        // Almacenar el archivo PDF
 	        $request->file('pdf_file')->storeAs('public/'.$filePath, $name);
-	        $pdfFile = Document::create(['user_name' => $profile ->id, 'filename'=>uniqid(),'document_type' => 'kyc', 'file_path' => '/storage/'.$path]);
+
+            $profile->update(['KYC'=>$path]);
+
+            
+
 	        // Devolver una respuesta JSON con la URL del archivo y un mensaje de éxito
 	
         	Flash::success('Verificacion de informacion guardado correctamente.');
@@ -338,7 +339,7 @@ class ProfileController extends AppBaseController
         }
 		
         // session()->flash('success', 'Información enviada con éxito');
-        return view('profiles_new.edit2')->with('profile', $profile);
+        return view('profiles_new.forma_verificacion')->with('profile', $profile);
     }
 
     public function update2($id, UpdateProfileRequest $request)

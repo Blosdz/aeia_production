@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\HistorialController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FacturasController;
 use App\Http\Controllers\FondoController;
@@ -32,26 +33,11 @@ Route::get('/pgadmin', function() {
     abort(404);
 });
 
-
-Route::get('/welcome_default', function () {
-    return view('welcome_default');
-});
-
+// landing_page
 Route::get('/', function () {
-    return view('newFront');
+    return view('landing_site');
 })->name('welcome');
 
-Route::get('/newHomeFront', function () {
-    return view('newHome');
-})->name('welcomeNew');
-
-// Route::get('/test1', function () {
-//     return view('auth.test1');
-// })->name('test');
-
-Route::get('/welcome_default2', function () {
-    return view('welcome_default2');
-})->name('welcome_default2');
 
 Route::get('/registration', function () {
     return view('/registration/registration');
@@ -63,22 +49,55 @@ Route::get('/start', [HomeController::class, 'start'])->name('start');
 
 Route::post('/mail/sendmail', [HomeController::class, 'sendmail'])->name('send.mail');
 
+//user_dashboard_routes
 Route::middleware(['auth'])->group(function() {
+    // home routes
+    /* 
+    |                                                      |
+    |                                                      |
+    |               manejo de rutas group                  |
+    |                                                      |
+    |                                                      |
+    */
+    Route::middleware('role:1')->group(function(){
+        // home admin
+        Route::get('/admin/home',[HomeController::class,'homeAdmin'])->name('admin.home');
+        //profiles / Verified / KYC / DESTROY / 
+        Route::resource('profiles', App\Http\Controllers\ProfileController::class);
+        Route::get('/profiles/{id}/edit', function ($id) {
+            return redirect()->route('show-form-pdf');
+        })->name('profiles.edit');
+        Route::post('/upload-file', [ProfileController::class, 'upload_file'])->name('upload_file');
+        Route::delete('/profiles/mass-destroy', [ProfileController::class, 'massDestroy'])->name('profiles.massDestroy');
+        //payments / 
+        Route::resource('payments',PaymentController::class);
 
-    Route::post('/client/update_signature/{id}', [PaymentController::class, 'client_update_signature'])->name('client.update_signature');
+        //fondos
+        
+        Route::get('table-fondo/fondo-select',[FondoController::class,'get_payments'])->name('adminSelect');
+        Route::post('update-fondo-general', [FondoGeneralController::class, 'updateTotalAmount'])->name('fondo-general.update');
 
-    // descargar documentos 
-    Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
-    // 
-    Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
-    Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
-    ROute::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
-    Route::get('/dataSuscriptor/{id}',[SuscriptorInfo::class,'detailSuscriptor'])->name('detailSuscriptor');
-    Route::get('/dataSuscriptor',[SuscriptorInfo::class,'tableSuscriptors'])->name('tableSuscriptor');
-    Route::resource('users', App\Http\Controllers\UserController::class);
+        Route::get('fondo-table',function(){
+            return view('admin_funciones_new.tableFondos');
+        });
+        // FONDOS NEW 
+        // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
+        Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
+        // edit currencies
+        Route::post('/table-fondo/edit/{id}/update-invested-currencies', [FondoController::class, 'updateInvestedCurrencies'])->name('fondos.update-invested-currencies');
 
-    Route::get('profiles/subscribers', [App\Http\Controllers\ProfileController::class, 'indexSubscribers'])->name('profiles.subscribers');
+        Route::post('/table-fondo/edit/{id}/update-add-payments', [FondoController::class, 'editUpdateFondo'])->name('fondos.update-add-payments');
+
+        Route::post('/create-fondo', [FondoController::class,'createFondo'])->name('create.fondo');
+        Route::get('table-fondo',[FondoController::class,'view_fondos'])->name('tableFondos');
+
+        // Route::post('update-fondo-general', [FondoController::class, 'updateGanancia'])->name('fondos.update-ganancia');
+        Route::post('/table-fondo/edit/{id}/update-investing',[FondoController::class,'updateGanancia'])->name('fondos.update-ganancia');
+
+
+    /*
     Route::resource('profiles', App\Http\Controllers\ProfileController::class);
+    Route::get('profiles/subscribers', [App\Http\Controllers\ProfileController::class, 'indexSubscribers'])->name('profiles.subscribers');
     Route::get('/profiles/data-suscriptor/{id}', [App\Http\Controllers\ProfileController::class, 'data_suscriptor'])->name('data_suscriptor');
     Route::get('/profiles/data-user/{id}', [App\Http\Controllers\ProfileController::class, 'data_user'])->name('data_user');
     Route::get('/profiles/data-gerente/{id}', [App\Http\Controllers\ProfileController::class, 'data_gerente'])->name('data_gerente');
@@ -90,18 +109,76 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/profiles/user/verified', [App\Http\Controllers\ProfileController::class, 'verified'])->name('profiles.verified');
     // En routes/web.php
     Route::delete('profiles/delete/{id}', [App\Http\Controllers\ProfileController::class, 'delete'])->name('deleteUser');
+    */
+
+
+
+    });
+    Route::middleware('role:2')->group(function(){
+        //home 
+
+    });
+    Route::middleware('role:3')->group(function(){
+        // home client
+        Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
+        //profile
+        Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
+        Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
+        //payments
+        Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
+        Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
+        Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
+        Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
+
+    });
+
+    Route::middleware('role:4')->group(function(){
+        // home business
+
+    });
+    Route::middleware('role:5')->group(function(){
+        // home 
+
+    });
+    Route::middleware('role:6')->group(function(){
+        // home 
+
+    });
+    Route::middleware('role:8')->group(function(){
+        // home banco
+
+
+    });
+
+    Route::resource('home',HomeController::class);
+    Route::get('/home');
+    Route::get('/get-fondo-data/{id}', [HomeController::class, 'getFondoData']);
+
+
+
+    Route::post('/client/update_signature/{id}', [PaymentController::class, 'client_update_signature'])->name('client.update_signature');
+
+    // descargar documentos 
+    Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
+    // 
+    Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
+    Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
+    ROute::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
+    Route::get('/dataSuscriptor/{id}',[SuscriptorInfo::class,'detailSuscriptor'])->name('detailSuscriptor');
+
+    Route::get('/dataSuscriptor',[SuscriptorInfo::class,'tableSuscriptors'])->name('tableSuscriptor');
+    Route::resource('users', App\Http\Controllers\UserController::class);
+
 
 
     Route::resource('payments', PaymentController::class);
     Route::put('payments/{payment}/updatecomment', [PaymentController::class, 'updateComments'])->name('payments.update.comments');
     Route::get('/payments/user/data', [PaymentController::class, 'index2'])->name('payments.index2');
     Route::post('/payments/user/pay', [PaymentController::class, 'pay'])->name('payments.pay');
-    Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
     Route::post('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.filter');
-    Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
-    Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
-    Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
+
     Route::get('/payments/client/{id}', [PaymentController::class, 'client_detail'])->name('payment.client.detail');
+    Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
     Route::put('/payments/{id}/update-status', [PaymentController::class,'updateStatus'])->name('payments.update.status');
     Route::put('/payments/{id}/edit-payment', [PaymentController::class, 'editPayment'])->name('payments.edit.payment');
     Route::get('/payments/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
@@ -120,8 +197,6 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/rejection-history/{user_id}', [App\Http\Controllers\RejectionHistoryController::class, 'rejectionHistory'])->name('rejectionHistory');
     Route::get('/rejection-history-show/{id}', [App\Http\Controllers\RejectionHistoryController::class, 'show'])->name('rejectionHistory.show');
     Route::get('/dashboard', [App\Http\Controllers\EventController::class, 'allEvents'])->name('dashboard');
-    Route::post('/upload-file', [App\Http\Controllers\ProfileController::class, 'upload_file'])->name('upload_file');
-
     Route::get('bells/bells', [App\Http\Controllers\BellsController::class, 'bells'])->name('bells.bells');
 
     Route::get('images/{filename}', function ($filename) {
@@ -150,17 +225,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/show-pdf', [PdfController::class, 'show'])->name('showproduct');
     Route::get('/view-pdf/{id}', [PdfController::class, 'view'])->name('viewproduct');
 
-    Route::get('/profiles/{id}/edit', function ($id) {
-        return redirect()->route('show-form-pdf');
-    })->name('profiles.edit');
 
-    Route::get('fondo-general', [FondoGeneralController::class, 'showTotalAmount'])->name('fondo-general.show');
-    Route::post('update-fondo-general', [FondoGeneralController::class, 'updateTotalAmount'])->name('fondo-general.update');
     
     // Route::get('/home', [HomeController::class, 'showClientHistory'])->name('home');
-    Route::resource('home',HomeController::class);
-    Route::get('/get-fondo-data/{id}', [HomeController::class, 'getFondoData']);
-
     // Route::get('/home/{userId}', [HomeController::class, 'dataUsers'])->name('home');
 
     // ******************Facturas***********************
@@ -174,17 +241,6 @@ Route::middleware(['auth'])->group(function() {
     Route::get('payment/declaracion',[PaymentController::class, 'declaracion'])->name('declaracion');
 
 
-    Route::prefix('funciones_admin')->group(function () {
-        Route::get('/fondos', [FondoController::class, 'index'])->name('fondos.index');
-        Route::get('/fondos/create', [FondoController::class, 'create'])->name('fondos.create');
-        Route::post('/fondos', [FondoController::class, 'store'])->name('fondos.store');
-        Route::get('/fondos/{id}/edit', [FondoController::class, 'edit'])->name('fondos.edit');
-        Route::put('/fondos/{id}', [FondoController::class, 'update'])->name('fondos.update');
-        Route::delete('/fondos/{id}', [FondoController::class, 'destroy'])->name('fondos.destroy');
-        Route::post('/fondos/{id}', [FondoController::class, 'calcularComisiones'])->name('fondos.update-comisiones');
-        Route::post('/fondos/{id}/update-ganancia', [FondoController::class, 'updateGanancia'])->name('fondos.update-ganancia');
-    });
-
     Route::get('/view-product/{id}', [BankViewsController::class, 'view'])->name('viewproduct');
     Route::get('/subscriptor-data', [SubscriptorDataController::class, 'index'])->name('subscriptor.data.index');
 // tableFondos
@@ -194,19 +250,6 @@ Route::middleware(['auth'])->group(function() {
     })->name('logout');
     Route::get('/home-gerente',[HomeController::class,'gerenteHome'])->name('gerente.home');
 
-    Route::get('fondo-table',function(){
-        return view('admin_funciones_new.tableFondos');
-    });
-    // FONDOS NEW 
-    Route::get('table-fondo/fondo-select',[FondoController::class,'get_payments'])->name('adminSelect');
-    Route::post('/create-fondo', [FondoController::class,'createFondo'])->name('create.fondo');
-    Route::get('table-fondo',[FondoController::class,'view_fondos'])->name('tableFondos');
-    // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
-    Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
-    // edit currencies
-    Route::post('/table-fondo/edit/{id}/update-invested-currencies', [FondoController::class, 'updateInvestedCurrencies'])->name('fondos.update-invested-currencies');
-
-    Route::post('/table-fondo/edit/{id}/update-add-payments', [FondoController::class, 'editUpdateFondo'])->name('fondos.update-add-payments');
     // Suscriptor Historial
     Route::get('/historial-suscriptor',[HistorialController::class,'dataHistorial'])->name('Historial');
 

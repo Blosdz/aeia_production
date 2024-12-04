@@ -15,10 +15,10 @@
                          <div class="card">
                              <div class="card-header">
                                  <strong>Details</strong>
-                                  <a href="{{ route('clientPayments.index') }}" class="btn btn-light">Back</a>
+                                  <a href="{{ route('client_payments_new.index') }}" class="btn btn-light">Back</a>
                              </div>
                              <div class="card-body">
-                                 @include('client_payments.show_fields')
+                                 @include('client_payments_new.show_fields')
                              </div>
                          </div>
                      </div>

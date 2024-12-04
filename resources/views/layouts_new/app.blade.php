@@ -39,105 +39,135 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ config('app.name') }}</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url('welcome_new/events.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/app.css')}}"/>
-    <link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>
-    <link rel="stylesheet" href="{{URL::asset('/newDashboard/app_mobile.css')}}"/>
+    {{--<link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>--}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qK0oI0kfdPAe+Tx9B5JcO1OTk5ci62A4XJymNeCEc5d/3UybA6WfrM8eIhvXXF5g" crossorigin="anonymous"></script>
+
+    {{--<link rel="stylesheet" href="{{URL::asset('/newDashboard/app_mobile.css')}}"/>--}}
 </head>
-<body>
-    <style>
-        .note_list li { display: none; }
-        .note_list li.active { display: block; }
-    </style>
-    <div id="particles-js"></div>
-    {{-- website view --}}
-    <div class="container-fluid d-none d-md-block">
-        <div class="row h-100">
-            <div class="side-bar " id="sidebar-col">
-                @include('layouts_new.sidebar_new')
-            </div>
-            <div class="col h-100 p-0 w-100 content-wrapper">
-                <div class="nbar w-100 d-flex justify-content-end ">
-                    <div class="nbar-r h    75 d-flex align-items-center text-align-center justify-content-end bg-2 align-items-center" style="width:20vw">
-                         
-                        <div class="container-fluid d-flex justify-content-end">
+<body id="page-top">
+    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
+
+        {{-- website view --}}
+        <div class="" id="wrapper">
+                {{--sidebrand--}}
+                <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" >
+
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                        <div class="sidebar-brand-icon"> 
+                            <img src="{{URL::asset('/images/dashboard/Logo.png')}}" alt="" class="menu_hidden" style="width:1.5vw;!important">
+                        </div>
+                    </a>
+                    {{-- divider --}}
+                    <hr class="sidebar-divider my-0">
+                    {{-- image client --}}
 
 
-                        <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
-                            <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
+                    <div class="text-center d-none d-md-block">
+
+                        @if ($profile && $profile->profile_picture)
+                            <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" />
+                        @else 
+                            <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
+                        @endif
+                        <p class="ms-3 text-white font-weight-bold" style="font-weight:bolder;">
+                             {{ $userProfile->first_name ?? 'User' }}
+                        </p>
+
+                    </div>
+
+                    <hr class="sidebar-divider my-0">
+
+                    @include('layouts_new.menu')
+
+                    <li class="nav-item">
+                        <a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">
+                            <span>
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>Log-Out
+
+                            </span>
                         </a>
-                        <div class="btn-group dropleft dropdown-alert">
-                          <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle has-notify p-4" data-click="toggle-notify">
-                            <i class="fa fa-bell d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
-                          </a>
-                          <span class="badge badge-danger">{{ $notificaciones->count() }}</span>
-
-                          <ul class="dropdown-menu dropdown-notification pull-right" style="position: absolute; will-change: transform; max-height: 30vh; overflow: scroll; top: 0px; left: 0px; transform: translate3d(-300px, 5px, 0px);">
-                            @foreach($notificaciones as $notificacion)
-                              <li class="notification-item">
-                                <a href="javascript:;">
-                                  <div class="alert-card">
-                                    <i class="fa fa-exclamation-triangle fa-2x"></i>
-                                    <p class="pull-right">
-                                      {{ $notificacion->title }} <br>
-                                      <small>{{ $notificacion->body }}</small>
-                                    </p>
-                                  </div>
-                                </a>
-                              </li>
-                            @endforeach
-                          </ul>
-                        </div>
-
-                         
-
-                        </div>
-
-                        <button class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:10vw; height:4vh; ">
-                            Log-Out
-                        </button>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>  
-                   </div>
-                </div>
-                <div class="container-fluid">
-                    @yield('content')
-                </div>
-            </div>
-        </div>
-    </div>
+                    </li>
 
-    <div class="container-fluid d-md-none">
-        <div class="row h-100">
-            <div class="col h-100 w-100">
-                <div class="nbar w-100 d-flex justify-content-end">
-                    <div class="nbar-r h-75 d-flex align-items-center text-align-center justify-content-end bg-2">
-                        <div class="container">
-                            <ul class="note_list">
-                            </ul>
-                        </div>
-                        <a href="#" class="text-align-center align-items-center p-3" id="theme-toggle">
-                            <i class="fa fa-solid fa-sun d-flex text-align-center align-items-center justify-content-center" style="font-size: 20px; color: white;"></i>
-                        </a>
+                </ul>
+
+            <div class="d-flex flex-column" id="content-wrapper">
+
+                <div id="content">
+                    {{-- top-bar --}}
+
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand  topbar mb-4 static-top ">
+
+                        <!-- Sidebar Toggle (Topbar) -->
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" >
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <!-- Topbar Navbar -->
+                        <ul class="navbar-nav ml-auto">
+
+                            <!-- Nav Item - Alerts -->
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a class="nav-link dropdown-toggle has-notify p-4" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: black; border-radius: 40px;">
+                                    <i class="fa fa-bell fa-fw" style="color: white;"></i>
+                                    <!-- Counter - Alerts -->
+                                    <span class="badge badge-danger badge-counter">{{ $notificaciones->count() }}</span>
+                                </a>
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" style="max-height: 30vh; overflow: auto;">
+                                    <h6 class="dropdown-header">
+                                        Centro de Alertas
+                                    </h6>
+                                    @if($notificaciones->isNotEmpty())
+                                        @foreach($notificaciones as $notificacion)
+                                            <a class="dropdown-item d-flex align-items-center" href="javascript:;">
+                                                <div class="mr-3">
+                                                    <div class="icon-circle bg-warning">
+                                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="small text-gray-500">{{ $notificacion->created_at->format('d M, Y') }}</div>
+                                                    <span class="font-weight-bold">{{ $notificacion->title }}</span>
+                                                    <div>{{ $notificacion->body }}</div>
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    @else
+                                        <p class="dropdown-item text-center text-gray-500">No tienes notificaciones.</p>
+                                    @endif
+                                    {{-- <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las alertas</a> --}}
+                                </div>
+                            </li>
+                            <div class="topbar-divider d-none d-sm-block"></div>
+
+                        </ul>
+
+                    </nav>
+                    {{--  End of Topbar  --}}
+
+                    <div class="container-fluid">
+                        @yield('content')
                     </div>
-                </div>
-                <div class="container">
-                    @yield('content_mobile')
+
                 </div>
             </div>
 
         </div>
-        <div class="row fixed-bottom">
-            <div class="d-flex justify-content-between w-100 p-3 " id="mobile_nav" style="background-color: #192541;">
-                @include('layouts_new.sidebar_new_mobile')
-            </div>
-        </div>
-    </div>
+
+</body>
 <script>
     function toggleDropdown() {
         var dropdownMenu = document.getElementById('dropdown-menu');
@@ -147,9 +177,14 @@
     
 <script src ={{URL::asset('/newDashboard/js/app_new.js')}}></script>
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script src={{asset('dashboard/js/sb-admin-2.js')}}></script>
+{{-- bundle js bootstrap --}}
+
+<script src="{{ asset('vendor/bootstrap/bootstrap/js/bootstrap.bundle.js') }}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     {{-- quedooo  --}}
 <script>
     function hexToRgb(hex) {
@@ -356,18 +391,6 @@
     });
 </script>
 
-
-<script>
-    $(document).click(function(event) {
-        if(
-            $('.toggle > input').is(':checked') &&
-            !$(event.target).parents('.toggle').is('.toggle')
-        ) {
-            $('.toggle > input').prop('checked', false);
-        }
-    });
-    
-</script>
 <script>
     $( document ).ready(function() {
         
@@ -822,10 +845,21 @@
 
 </script>
 
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-
+<script>
+$('#dataTable').DataTable({
+    language: {
+        url: "https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-MX.json" // Cambia "es-MX" al idioma deseado
+    }
+});
 </script>
-</body>
+
+
+<script src="{{ asset('js/particles.js') }}"></script>
+<script src="{{ asset('js/particles-aeia.js') }}"></script>
+
+
 </html>
 
 

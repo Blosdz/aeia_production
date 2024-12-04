@@ -237,104 +237,101 @@
 
 
 @elseif($user_session->rol == 3 || $user_session->rol == 4)
-    <strong>Dashboard</strong>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    </div>
 
-    <div class="row row-fil1-client">
-        <div class="col p-3">
-            <div class="counter h-100 w-100" >
-                <div class="row w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
-                        <div class="col h-100">
-                            <h2 class="fw-bolder">$ {{$totalInversionYBeneficio ?? ''}} </h2>
-                            <span>Balance General</span>
+    <div class="row justify-content-center align-items-center">
+
+        {{-- ingresos --}}
+        <div class="col-xl-4 col-md-3 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Balance General</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{$totalInversionYBeneficio ?? ''}} </div>
                         </div>
-                        <div class="col-3 h-100">
-                            <span class="rounded-span">
-                                <i class="fa-duotone fa-solid fa-chart-line"></i>
-                            </span>
-                            {{-- <i></i> --}}
+                        <div class="col-auto">
+                            <i class="fa-duotone fa-solid fa-chart-line"></i>
                         </div>
-                        {{-- <span class="rounded-span">
-                            <i class="far fa-eye  d-flex text-align-center align-items-center justify-content-center"></i>
-                            </span>
-                            <h2 class="text-light fw-bolder">$ <span class="count">{{$totalInversionYBeneficio ?? ''}}</span></h2>
-                            <span>Total</span>--}}
-                    {{-- 
-                        <div class="count-r h-100 w-50 text-end align-self-end">
-                            <span class="text-success fw-bold"></span>
-                        </div> 
-                    --}}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col p-3">
-            <div class="counter h-100 w-100">
-                <div class="row w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
-                    <div class="col h-100">
-                        <h2 class="fw-bolder">${{$paymentsTotal ?? ''}}</h2>
-                        <span>Capital Invertido</span>
-                    </div>
-                    <div class="col-3 h-100">
-                        <span class="rounded-span">
+        <div class="col-xl-4 col-md-3 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Capital Invertido
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{$paymentsTotal ?? ''}} </div>
+                        </div>
+                        <div class="col-auto">
+
                             <i class="fa-solid fa-circle-dollar-to-slot"></i>
-                            {{-- <i class="far fa-eye  d-flex text-align-center align-items-center justify-content-center"></i> --}}
-                        </span>
+                        </div>
                     </div>
-                    {{-- <div class="h-100 w-50">
-                        <div class="count-i rounded-circle i-bg wht position-relative align-content-center">
-                            <i class="far fa-eye  d-flex text-align-center align-items-center justify-content-center"></i>
-                        </div>
-                        <h2 class="text-light fw-bolder">$ <span class="count">{{$totalInversionPlanes ?? ''}}</span></h2>
-                        <span>Total Invertido</span>
-                        </div>
-                        <div class="count-r h-100 w-50 text-end align-self-end">
-                            <span class="text-success fw-bold"></span>
-                        </div> 
-                    --}}
                 </div>
             </div>
         </div>
 
-        <div class="col p-3">
-            <div class="counter h-100 w-100"  >
-                <div class="w-100 p-3 d-flex justify-content-between align-items-center bg-1" id="rounded-container">
-                    {{-- count down to this 28 timer --}}
-                    <div class="col h-100">
-                        <h2 id="countdown"></h2>
-                        <span>Cierre de Ciclo </span>
-                    </div>
-                    <div class="col-3 h-100">
-                        <span class="rounded-span">
+        <div class="col-xl-4 col-md-3 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Cierre De Ciclo
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="countdown">
+
+                            </div>
+                        </div>
+                        <div class="col-auto">
                             <i class="fa-regular fa-clock"></i>
-                        </span>
+                        </div>
                     </div>
-
-                    {{-- .col-3 --}}
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="h-100 w-100 bg-1 d-flex justify-content-center "  id="rounded-container">
-                <div class="container w-60 p-4">
-                    <h1 class="display-4">Bienvenido</h1>
-                    <br>
-                    <p class="lead">¡Qué gusto verte de nuevo! {{ $userProfile->first_name ?? '' }}</p>
-                    @if($user->validated == 1)
-                        <h4 class="text-success fw-bold">Su cuenta ha sido verificada, ya puedes invertir</h4>
-                    @else
-                        <h4 class="text-danger fw-bold">Su cuenta aún no esta verificada</h4>
-                    @endif
-                </div>
-                <div class="container w-40 h-100">
-                    <div class="content h-100 justify-content-center align-items-center text-center mt-5">
-                        @include('layouts_new.nav')
+        <div class="col-xl-6 col-md-3 mb-4">
+            <div class="card shadow d-flex "  id="rounded-container">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <h1 class="display-4">Bienvenido</h1>
+                            <br>
+                            <p class="lead">¡Qué gusto verte de nuevo! {{ $userProfile->first_name ?? '' }}</p>
+                            @if($user->validated == 1)
+                                <h4 class="text-success fw-bold">Su cuenta ha sido verificada, ya puedes invertir</h4>
+                            @else
+                                <h4 class="text-danger fw-bold">Su cuenta aún no esta verificada</h4>
+                            @endif
+                        </div>
+                        <div class="col-auto">
+                                @if ($profile && $profile->profile_picture)
+                                    <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture"  style="width: 10vw !important; border-radius:100% !important;" />
+                                @else 
+                                    <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px !important; border-radius:100% !important;" />
+                                @endif
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
         {{-- <div class="col-md-6"> --}}
+        <div class="col-xl-6 col-auto">
+
             <div class="stack ">
                 @if(isset($plans) && count($plans) > 0)
                     @foreach($plans as $plan)
@@ -355,6 +352,7 @@
                     <p>No hay planes disponibles.</p>
                 @endif
             </div>
+        </div>
         {{-- </div> --}}
     </div>
 
@@ -427,29 +425,29 @@
         @endforeach
     @endif
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let stack = document.querySelector(".stack");
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     let stack = document.querySelector(".stack");
     
-        [...stack.children].reverse().forEach(i => stack.append(i));
+    //     [...stack.children].reverse().forEach(i => stack.append(i));
     
-        stack.addEventListener("click", swap);
+    //     stack.addEventListener("click", swap);
     
-        function swap(e) {
-            let card = document.querySelector(".card:last-child");
-            if (e.type === 'click' && e.target !== card) return;
-            card.style.animation = "swap 700ms forwards";
+    //     function swap(e) {
+    //         let card = document.querySelector(".card:last-child");
+    //         if (e.type === 'click' && e.target !== card) return;
+    //         card.style.animation = "swap 700ms forwards";
         
-            setTimeout(() => {
-                card.style.animation = "";
-                stack.prepend(card);
-            }, 700);
-        }
+    //         setTimeout(() => {
+    //             card.style.animation = "";
+    //             stack.prepend(card);
+    //         }, 700);
+    //     }
     
-        // Cambiar tarjeta automáticamente cada 5 segundos
-        setInterval(() => {
-            swap(new Event('autoSwap'));
-        }, 5000);
-    });
+    //     // Cambiar tarjeta automáticamente cada 5 segundos
+    //     setInterval(() => {
+    //         swap(new Event('autoSwap'));
+    //     }, 5000);
+    // });
 
 
 </script>

@@ -1,11 +1,19 @@
 @extends('layouts_new.app')
 
 @section('content')
-    <div class="row p-4 h-100 w-100" >
-        <strong>Depósitos</strong>
-        <div class="detail-payment-card p-4 bg-1" id="rounded-container">
-            Selecciona tu plan
-            <a href="{{ route('payment.plan') }}" class="btn btn-danger float-right">Escoger otro plan</a>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Depósitos</h1>
+</div>
+
+<div class=" card shadow mb-4 row  " id="rounded-container">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary mt-1">Selecciona tu plan    
+        <a href="{{ route('payment.plan') }}" class="btn btn-danger float-right">Escoger otro plan</a>
+        </h6>
+
+    </div>
+    <div class="card-body">
+        <div class="detail-payment-card p-4 bg-1">
             <div class="card-body row payment-card p-5">
                 <div class="card mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 25%;" id="rounded-container">
                     <span class="d-flex flex-column justify-content-center align-items-center">
@@ -92,7 +100,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-1" style="width:400px !important;">

@@ -46,6 +46,7 @@ class BankViewsController extends Controller
     public function __construct(UserRepository $userRepository){
 	    $this->userRepository=$userRepository;
 	}
+
     public function showUsers()
     {
         $users = User::where('rol', 3)->get();
@@ -67,6 +68,7 @@ class BankViewsController extends Controller
         // dd($totalPaymentsByUser);
         return view('bankUsers', compact('users', 'totalPaymentsByUser'));
     }
+
 
 public function view($id)
 {

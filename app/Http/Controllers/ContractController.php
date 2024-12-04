@@ -306,18 +306,18 @@ class ContractController extends AppBaseController
 
 
             $months = [
-                0 => 'Enero',
-                1 => 'Febrero',
-                2 => 'Marzo',
-                3 => 'Abril',
-                4 => 'Mayo',
-                5 => 'Junio',
-                6 => 'Julio',
-                7 => 'Agosto',
-                8 => 'Setiembre',
-                9 => 'Octubre',
-                10 => 'Noviembre',
-                11 => 'Diciembre'
+                1 => 'Enero',
+                2 => 'Febrero',
+                3 => 'Marzo',
+                4 => 'Abril',
+                5 => 'Mayo',
+                6 => 'Junio',
+                7 => 'Julio',
+                8 => 'Agosto',
+                9 => 'Setiembre',
+                10 => 'Octubre',
+                11 => 'Noviembre',
+                12 => 'Diciembre'
             ];
             // Crear un PDF con los datos necesarios
             $pdf = Pdf::loadView('documentos_new.contrato', [
@@ -340,19 +340,20 @@ class ContractController extends AppBaseController
         $user=Auth::user(); 
         $profile =Profile::where('id',$declaracion->user_id)->first();
         $months = [
-            0 => 'Enero',
-            1 => 'Febrero',
-            2 => 'Marzo',
-            3 => 'Abril',
-            4 => 'Mayo',
-            5 => 'Junio',
-            6 => 'Julio',
-            7 => 'Agosto',
-            8 => 'Setiembre',
-            9 => 'Octubre',
-            10 => 'Noviembre',
-            11 => 'Diciembre'
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Setiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
         ];
+
         $profile=Profile::where('id',$declaracion->user_id)->first();
         $timestamp=Carbon::parse($declaracion->created_at);
         $pdf=Pdf::loadView('documentos_new.declaracionVoluntaria',[

@@ -1,4 +1,4 @@
-.nav-item i{
+#accordionSidebar > .nav-item i{
     color:white;
     font-size:1vw;
     padding:0.4vw;
@@ -6,7 +6,7 @@
     border-radius: 25%;
 }
 
-.sidebar-nav li:hover{
+#accordionSidebar > .sidebar-nav li:hover{
     background-color:rgba(114, 114, 114, 0.671);
     border-radius: 5%;
     padding: 0.5vw;

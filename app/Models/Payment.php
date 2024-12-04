@@ -48,6 +48,7 @@ class Payment extends Model
 	    'voucher_picture',
 	    'comments_on_payment',
 	    'user_name',
+        'comprobante',
     ];
 
     /**
@@ -58,6 +59,7 @@ class Payment extends Model
     protected $casts = [
         'status' => 'string',
         'voucher_picture'=>'string',
+        'comprobante'=>'string',
     ];
 
     public $timestamps=true;

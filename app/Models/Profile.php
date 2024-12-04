@@ -113,7 +113,8 @@ class Profile extends Model
         'taxes_file',
 	    'bank_name',
 	    'card_number',
-	    'cci_card'
+	    'cci_card',
+        'KYC',
     ];
 
     /**
@@ -134,7 +135,8 @@ class Profile extends Model
         'bank_name'=>'string',
         'phone'=>'string',
         'card_number'=>'string',
-        'cci_card'=>'string'
+        'cci_card'=>'string',
+        'KYC' => 'string',
     ];
 
     /**

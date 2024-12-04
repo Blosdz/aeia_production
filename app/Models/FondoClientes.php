@@ -18,6 +18,7 @@ class FondoClientes extends Model
         'rentabilidad',
         'ganancia',
         'user_id',
+        'fondo_historial',
     ];
     
     public function user()

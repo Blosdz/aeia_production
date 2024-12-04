@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail as MailCustom;
 use App\Models\Payment;
 use App\Models\Profile;
 use App\Models\Contract;
@@ -14,7 +15,6 @@ use App\Models\Fondo;
 use App\Models\User;
 use App\Models\ClientPayment;
 use App\Models\Notification;
-use Illuminate\Support\Facades\Mail as MailCustom;
 use App\Mail\SendMail;
 use App\Models\SuscriptorHistorial;
 use App\Models\FondoClientes;
@@ -28,6 +28,7 @@ use Illuminate\Session\SessionManager;
 use DateTime;
 use Str;
 use dd;
+
 // use FondoHistorial;
 
 class HomeController extends Controller
@@ -37,6 +38,8 @@ class HomeController extends Controller
      *
      * @return void
      */
+
+
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['sendmail', 'welcome']]);
@@ -80,35 +83,7 @@ class HomeController extends Controller
 
     public function data_admin()
     {
-        $user = Auth::user();
-        
-        // Obtener todos los fondos con su historial
-        $fondos = Fondo::with('historial')->get();
-    
-        // Crear la estructura de datos para cada fondo
-        // dd($fondos);
-        $fondosChartData = [];
-    
-        foreach ($fondos as $fondo) {
-            $fondoData = [];
-            foreach ($fondo->historial as $historial) {
-                $fondoData[] = [
-                    'x' => $historial->created_at->format('Y-m-d H:i:s'),  // Fecha
-                    'y' => [
-                        $historial->ganancia_neta           // valor de actualizacion en historial
-                         
-                    ]
-                ];
-            }
-            $fondosChartData[$fondo->id] = $fondoData;  // Asociar el fondo con su historial
-        }
-    
-        // Otros datos
-        $membresias = SubscriptorDataModel::where('user_table_id', $user->id)->first(); 
-        $totalsumado = Fondo::sum('total_comisiones');
-    
-        // Pasar los datos a la vista
-        return view('adminDashboard', compact('fondos', 'fondosChartData', 'membresias', 'totalsumado'));
+
     }
     
 
@@ -242,9 +217,12 @@ class HomeController extends Controller
         return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus','qrCode'));
     }
 
-    public function getUserCliente()
-    {
+
+    public function homeUsers(){
         $user = Auth::user();
+
+        $profile = Profile::where('user_id',$user->id)->first();
+
         // Obtener el primer día del mes actual
         $primerDiaMesActual = Carbon::now()->startOfMonth()->toDateString();
     
@@ -371,7 +349,53 @@ class HomeController extends Controller
 
         $plans = Plan::all();
         // dd($planData);
-        return view('home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans' ,'paymentsTotal','userProfile'));
+
+        return view('user_funciones.home', compact('planData','totalInversionPlanes','totalInversionYBeneficio','porcentajeInvertido','interval','plans' ,'paymentsTotal','userProfile','user','profile'));
+
+    }
+
+    public function homeAdmin(){
+        $user = Auth::user();
+        
+        // Obtener todos los fondos con su historial
+        $fondos = Fondo::with('historial')->get();
+    
+        // Crear la estructura de datos para cada fondo
+        // dd($fondos);
+        $fondosChartData = [];
+    
+        foreach ($fondos as $fondo) {
+            $fondoData = [];
+            foreach ($fondo->historial as $historial) {
+                $fondoData[] = [
+                    'x' => $historial->created_at->format('Y-m-d H:i:s'),  // Fecha
+                    'y' => [
+                        $historial->ganancia_neta           // valor de actualizacion en historial
+                         
+                    ]
+                ];
+            }
+            $fondosChartData[$fondo->id] = $fondoData;  // Asociar el fondo con su historial
+        }
+    
+        // Otros datos
+        $membresias = SubscriptorDataModel::where('user_table_id', $user->id)->first(); 
+        $totalsumado = Fondo::sum('total_comisiones');
+    
+        // Pasar los datos a la vista
+        return view('admin_funciones_new.home', compact('fondos', 'fondosChartData', 'membresias', 'totalsumado'));
+    }
+
+    public function suscriptor(){
+
+        return view();
+
+    }
+
+    public function gerente(){
+
+        return view();
+
     }
 
 
