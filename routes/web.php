@@ -118,7 +118,7 @@ Route::middleware(['auth'])->group(function() {
         //home 
 
     });
-    Route::middleware('role:3')->group(function(){
+    Route::middleware(['role:3,4'])->group(function(){
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
         //profile
@@ -132,10 +132,6 @@ Route::middleware(['auth'])->group(function() {
 
     });
 
-    Route::middleware('role:4')->group(function(){
-        // home business
-
-    });
     Route::middleware('role:5')->group(function(){
         // home 
 

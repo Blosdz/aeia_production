@@ -86,7 +86,7 @@
 
 @php
   }
-  if( $user->rol == 3) { // Cliente
+  if(in_array($user->rol, [3, 4])) { // Cliente
 @endphp
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('user.home') }}">
@@ -109,31 +109,7 @@
 </li>
 
 
-@php
-  }
-  if( $user->rol == 4 ) { // Business
-@endphp
-<li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('home.index') }}">
-        <i class="fa-solid fa-house"></i>
-        <span>Inicio</span>
-    </a>
-</li>
 
-<li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('profiles.user') }}">
-        <i class="fa-solid fa-user-check"></i>
-        <span>Verificación</span>
-    </a>
-</li>
-<li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('clients.index') }}">
-        <i class="fa-solid fa-user-check"></i>
-        <span>Depositar</span>
-    </a>
-</li>
-
-@php
   } if( $user->rol == 5 ) { //Gestor comercial
 @endphp
 

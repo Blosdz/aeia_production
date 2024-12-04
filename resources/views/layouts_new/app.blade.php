@@ -120,7 +120,7 @@
 
                             <!-- Nav Item - Alerts -->
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle has-notify p-4" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: black; border-radius: 40px;">
+                                <a class="nav-link dropdown-toggle has-notify p-4" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background: #0e359ef6; border-radius: 40px;">
                                     <i class="fa fa-bell fa-fw" style="color: white;"></i>
                                     <!-- Counter - Alerts -->
                                     <span class="badge badge-danger badge-counter">{{ $notificaciones->count() }}</span>
