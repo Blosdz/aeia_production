@@ -20,7 +20,8 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next,$role)
     {
         $user=Auth::user();
-        if(!$user || $user->rol!=$role){
+
+        if(!$user && $user->rol!=$role){
             abort(404,'No tienes permiso para acceder a esta página.');
         }
         return $next($request);

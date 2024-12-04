@@ -30,6 +30,7 @@ class RedirectIfAuthenticated
                     case 2:
                         return redirect('/suscriptor/home');
                     case 3:
+                        return redirect('/user/home');
                     case 4:
                         return redirect('/user/home');
                     case 5:
@@ -39,7 +40,7 @@ class RedirectIfAuthenticated
                     case 8:
                         return redirect('/banco/home');
                     default:
-                        return redirect('/start'); // Ruta por defecto.
+                        return redirect('/'); // Ruta por defecto.
                 }
             }
         }

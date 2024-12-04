@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts_new.app')
 @section('content')
   <div class="container-fluid">
         <div class="animated fadeIn">

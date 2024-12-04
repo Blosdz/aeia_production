@@ -49,7 +49,26 @@ Route::get('/start', [HomeController::class, 'start'])->name('start');
 
 Route::post('/mail/sendmail', [HomeController::class, 'sendmail'])->name('send.mail');
 
+$roles = [
+    'admin' => 1,
+    'suscriptor' => 2,
+    'client' => [3, 4], // Roles múltiples
+];
+
+
 //user_dashboard_routes
+Route::middleware(['auth', 'rolemiddleware:3,4'])->group(function () {
+    Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
+    //profile
+    Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
+    Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
+    //payments
+    Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
+    Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
+    Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
+    Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
+
+});
 Route::middleware(['auth'])->group(function() {
     // home routes
     /* 
@@ -118,7 +137,8 @@ Route::middleware(['auth'])->group(function() {
         //home 
 
     });
-    Route::middleware('role:3')->group(function(){
+    
+    Route::middleware(['role:3'])->group(function(){
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
         //profile
@@ -131,7 +151,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
 
     });
-    Route::middleware('role:4')->group(function(){
+    Route::middleware(['role:4'])->group(function(){
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
         //profile
