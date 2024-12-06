@@ -133,7 +133,7 @@
                 </div>
                 <div class="row gx-5 align-items-center">
                     <div class="col order-lg-1 mb-5 mb-lg-0">
-                        <div class="container-fluid px-5">
+                        <div class="container-fluid">
                             <div class="row gx-5 mt-5">
                                 <div class=" col col-md-6 mb-5">
                                     <div class="feature-container position-relative">
