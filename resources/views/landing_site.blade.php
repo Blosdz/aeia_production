@@ -135,7 +135,7 @@
                     <div class="col order-lg-1 mb-5 mb-lg-0">
                         <div class="container-fluid px-5">
                             <div class="row gx-5 mt-5">
-                                <div class="col-md-6 mb-5">
+                                <div class=" col col-md-6 mb-5">
                                     <div class="feature-container position-relative">
                                         <div class="circle-effect"></div>
                                         <!-- Feature item-->
@@ -149,7 +149,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 mb-5">
+                                <div class=" col col-md-6 mb-5">
                                     <div class="feature-container position-relative">
                                     <div class="circle-effect"></div>
                                     <!-- Feature item-->
@@ -165,7 +165,7 @@
                             </div>
                             <div class="row gx-5 mt-5">
 
-                                <div class="col-md-6 mb-5 mb-md-0">
+                                <div class="col col-md-6 mb-5 mb-md-0">
 
                                     <div class="feature-container position-relative">
 
@@ -180,7 +180,7 @@
                                     </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 ">
+                                <div class="col col-md-6 mb-5 mb-md-0">
                                     <div class="feature-container position-relative">
                                     <div class="circle-effect"></div>
                                     <!-- Feature item-->
@@ -195,7 +195,7 @@
                                 </div>
                             </div>
                             <div class="row gx-5 align-items-center justify-content-center mt-5">
-                                <div class="col-md-6 mb-5 mb-md-0">
+                                <div class=" col col-md-6 mb-5 mb-md-0">
 
                                     <div class="feature-container position-relative">
                                     <div class="circle-effect"></div>
@@ -235,56 +235,55 @@
                 <div class="col-10 col-lg-5 px-sm-2 " style="border: 1px #b7b7b7 solid;border-radius: 25px;background: #0c58ce;box-shadow: -8px 9px 4px rgba(6, 6, 11, 0.65);color: white;">
 
                     <div class="row justify-content-center text-center mt-5 text-lg-start">
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6  mb-md-0">
                             <p>Plan</p> 
                         </div>
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Comisión</p>
                         </div>
                     </div>
 
                     <div class="row gx-5 align-items-center justify-content-center text-align-center mt-5">
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Bronce</p>
                         </div>
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>$14</p>
                         </div>
                     </div>
                     <div class="row gx-5 align-items-center justify-content-center mt-5">
-
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Plata</p>
                         </div>
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>$35</p>
                         </div>
                     </div>
                     <div class="row gx-5 align-items-center justify-content-center mt-5">
-
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Oro</p>
                         </div>
 
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>$ 70</p>
                         </div>
                     </div>
                     <div class="row gx-5 align-items-center justify-content-center mt-5">
-
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Platino</p>
                         </div>
 
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>$ 84</p>
                         </div>
                     </div>
                     <div class="row gx-5 align-items-center justify-content-center mt-5 mb-5">
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Diamante</p>
                         </div>
-                        <div class="col-md-4 mb-2 col-sm-4  mb-md-0">
+
+                        <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>$ 140</p>
                         </div>
                     </div>
