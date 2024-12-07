@@ -306,9 +306,9 @@
                 </div>
 
             </div>
-            <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between mb-5 mb-lg-5 bg-blue-steps p-5">
+            <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between mb-5 mb-lg-5 bg-blue-steps p-5 mt-5">
                 {{-- <div class="mb-5 mb-lg-6 bg-blue-steps p-5  align-items-center justify-content-center "> --}}
-                        <div class="row gx-5 mt-5">
+                        <div class="row gx-5">
                             <div class="col-md-4 mb-3">
                                 <!-- Feature item-->
                                 <div class="text-center">

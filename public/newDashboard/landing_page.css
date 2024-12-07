@@ -140,7 +140,7 @@ section{
     background-color: #0c58ce;
 
     font-weight: 500;
-    width: 60vw;
+    /* width: 60vw; */
     color: white !important;
     /* height: 60vh; */
     border-radius: 28px;
