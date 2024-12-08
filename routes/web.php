@@ -113,6 +113,10 @@ Route::middleware(['auth'])->group(function() {
         // Route::post('update-fondo-general', [FondoController::class, 'updateGanancia'])->name('fondos.update-ganancia');
         Route::post('/table-fondo/edit/{id}/update-investing',[FondoController::class,'updateGanancia'])->name('fondos.update-ganancia');
 
+        
+        Route::resource('contracts', App\Http\Controllers\ContractController::class);
+        Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
+        Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
     /*
     Route::resource('profiles', App\Http\Controllers\ProfileController::class);
@@ -150,6 +154,10 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
         Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
 
+        Route::resource('contracts', App\Http\Controllers\ContractController::class);
+        Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
+        Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
+
     });
     Route::middleware(['role:4'])->group(function(){
         // home client
@@ -162,6 +170,10 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
         Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
         Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
+
+        Route::resource('contracts', App\Http\Controllers\ContractController::class);
+        Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
+        Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
     });
 
@@ -241,9 +253,6 @@ Route::middleware(['auth'])->group(function() {
         return $response;
     });
 
-    Route::resource('contracts', App\Http\Controllers\ContractController::class);
-    Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
-    Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
     Route::resource('plans', App\Http\Controllers\PlanController::class);
     Route::resource('clientPayments', App\Http\Controllers\ClientPaymentController::class);
