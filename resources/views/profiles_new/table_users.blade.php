@@ -39,9 +39,9 @@
                                     <input type="checkbox" name="ids[]" value="{{ $profile->id }}" class="select-checkbox">
                                 </td>
                                 <td>
-                                    {{ $profile->firstname . ' ' . $profile->lastname }}
+                                    {{ $profile->first_name . ' ' . $profile->lastname }}
                                     <br>
-                                    {{ $profile->user->email }}
+                                    {{ $profile->user->email }} 
                                 </td>
                                 <td>
                                     {{ $verified_list[$profile->verified]}}

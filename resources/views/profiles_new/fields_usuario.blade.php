@@ -149,7 +149,7 @@
                 {!! Form::text('city', null, ['class' => 'form-control','maxlength' => '20']) !!}
             </div>
             <div class="form-group col-sm-6">
-                {!! Form::label('state', 'Cuidad:') !!}
+                {!! Form::label('state', 'Ciudad:') !!}
                 {!! Form::text('state', null, ['class' => 'form-control','maxlength' => '20']) !!}
             </div>
         </div>
