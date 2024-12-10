@@ -55,20 +55,6 @@ $roles = [
     'client' => [3, 4], // Roles múltiples
 ];
 
-
-//user_dashboard_routes
-// Route::middleware(['auth', 'rolemiddleware:3,4'])->group(function () {
-//     Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
-//     //profile
-//     Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
-//     Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
-//     //payments
-//     Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
-//     Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
-//     Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
-//     Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
-
-// });
 Route::middleware(['auth'])->group(function() {
     // home routes
     /* 
@@ -80,16 +66,26 @@ Route::middleware(['auth'])->group(function() {
     */
     Route::middleware('role:1')->group(function(){
         // home admin
+
         Route::get('/admin/home',[HomeController::class,'homeAdmin'])->name('admin.home');
+
         //profiles / Verified / KYC / DESTROY / 
+        
         Route::resource('profiles', App\Http\Controllers\ProfileController::class);
         Route::get('/profiles/{id}/edit', function ($id) {
             return redirect()->route('show-form-pdf');
         })->name('profiles.edit');
         Route::post('/upload-file', [ProfileController::class, 'upload_file'])->name('upload_file');
         Route::delete('/profiles/mass-destroy', [ProfileController::class, 'massDestroy'])->name('profiles.massDestroy');
-        //payments / 
-        Route::resource('payments',PaymentController::class);
+
+        //payments 
+
+        //index
+        // Route::resource('payments',PaymentController::class);
+        Route::get('payments',[PaymentController::class,'index'])->name('payments.index');
+
+        Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
+        Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.update.status');
 
         //fondos
         
@@ -118,22 +114,6 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
-    /*
-    Route::resource('profiles', App\Http\Controllers\ProfileController::class);
-    Route::get('profiles/subscribers', [App\Http\Controllers\ProfileController::class, 'indexSubscribers'])->name('profiles.subscribers');
-    Route::get('/profiles/data-suscriptor/{id}', [App\Http\Controllers\ProfileController::class, 'data_suscriptor'])->name('data_suscriptor');
-    Route::get('/profiles/data-user/{id}', [App\Http\Controllers\ProfileController::class, 'data_user'])->name('data_user');
-    Route::get('/profiles/data-gerente/{id}', [App\Http\Controllers\ProfileController::class, 'data_gerente'])->name('data_gerente');
-
-
-
-    Route::get('/profiles/user/data', [App\Http\Controllers\ProfileController::class, 'edit2'])->name('profiles.user');
-    Route::post('/profiles/user/data/{id}', [App\Http\Controllers\ProfileController::class, 'update2'])->name('profiles.update2');
-    Route::get('/profiles/user/verified', [App\Http\Controllers\ProfileController::class, 'verified'])->name('profiles.verified');
-    // En routes/web.php
-    Route::delete('profiles/delete/{id}', [App\Http\Controllers\ProfileController::class, 'delete'])->name('deleteUser');
-    */
-
 
 
     });
@@ -149,10 +129,16 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
         //payments
+
+        Route::get('payments',[PaymentController::class,'index'])->name('payments.index');
+
+        Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
         Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
         Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
         Route::post('/payments/client/payment', [PaymentController::class, 'client_pay'])->name('client.payment');
+        Route::post('/payments/{id}/edit-payment', [PaymentController::class, 'editPayment'])->name('payments.editPayment');
+
 
         Route::resource('contracts', App\Http\Controllers\ContractController::class);
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
@@ -212,17 +198,7 @@ Route::middleware(['auth'])->group(function() {
 
 
 
-    Route::resource('payments', PaymentController::class);
-    Route::put('payments/{payment}/updatecomment', [PaymentController::class, 'updateComments'])->name('payments.update.comments');
-    Route::get('/payments/user/data', [PaymentController::class, 'index2'])->name('payments.index2');
-    Route::post('/payments/user/pay', [PaymentController::class, 'pay'])->name('payments.pay');
-    Route::post('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.filter');
 
-    Route::get('/payments/client/{id}', [PaymentController::class, 'client_detail'])->name('payment.client.detail');
-    Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
-    Route::put('/payments/{id}/update-status', [PaymentController::class,'updateStatus'])->name('payments.update.status');
-    Route::put('/payments/{id}/edit-payment', [PaymentController::class, 'editPayment'])->name('payments.edit.payment');
-    Route::get('/payments/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
     
     Route::get('/invite/user/link', [App\Http\Controllers\UserController::class, 'generateInviteLink'])->name('invite.user');
 

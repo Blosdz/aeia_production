@@ -26,6 +26,7 @@
                         <th>Status</th>
                         <th>Documentos</th>
                         <th>Recibo</th>
+                        <th>Más</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,7 +43,7 @@
                                 <td>{{ $payment->total }}</td>
                                 <td>{{ $payment->status }}</td>
                                 <td>
-                                    <a href="{{ route('payments.show', [$payment->id]) }}" class="btn btn-success">Ver detalle</a>
+                                    {{-- <a href="{{ route('payments.show', [$payment->id]) }}" class="btn btn-success">Ver detalle</a> --}}
                                     @if ($payment->contract && $payment->contract->signature_image)
                                         <a href="{{ route('contracts.pdf', [$payment->contract->id]) }}" target="_blank" class="btn btn-info">Ver contrato</a>
                                         @if ($payment->declaracion)
@@ -58,11 +59,16 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{-- @if ($payment->voucher_picture) --}}
+                                    @if ($payment->comprobante)
+
+                                        <a href="{{ Storage::url($payment->comprobante) }}" target="_blank" class="btn btn-info">Comprobante</a>
                                         {{-- <a href="{{ asset('storage/' . $payment->voucher_picture) }}" target="_blank" class="btn btn-info">Ver recibo</a> --}}
-                                    {{-- @else --}}
+                                    @else
                                         <span class="text-danger">No hay recibo</span>
-                                    {{-- @endif --}}
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-primary">Ver</a>
                                 </td>
                             </tr>
                         @endforeach

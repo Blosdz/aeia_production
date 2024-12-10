@@ -22,6 +22,7 @@ use App\Http\Services\BinanceTransferMoneyToClientsService;
 use App\Http\Services\BinanceTransferMoneyToSubscribersService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\BinanceMoneySplitterTrait;
 use App\Traits\BinanceDoughSenderTrait;
@@ -134,7 +135,7 @@ class PaymentController extends AppBaseController
         }
         
 
-        return view('payments_new.index`')->with('payment', $payment);
+        return view('payments_new.index')->with('payment', $payment);
     }
 
     /**
@@ -153,8 +154,7 @@ class PaymentController extends AppBaseController
 
             return redirect(route('payments.index'));
         }
-
-        return view('payments_new.edit')->with('payment', $payment);
+        return view('payments_new.edit',compact('payment'));
     }
 
     /**
@@ -558,6 +558,171 @@ class PaymentController extends AppBaseController
 	    return redirect()->back()->with('success'); 
     }
 
+    public function updateStatus($id, Request $request)
+    {
+        $payment = Payment::findOrFail($id);
+        $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
+    
+        // Validaciones de entrada
+        $request->validate([
+            'comments_on_payment' => 'nullable|string|max:255',
+            'status' => 'required|string|in:Pagado,Rechazado,Revision',
+            'voucher_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'comprobante' => 'nullable|mimes:pdf|max:2048',
+        ]);
+    
+        DB::transaction(function () use ($payment, $clientPayment, $request) {
+            // Actualizar el estado y comentarios del pago
+            $payment->status = $request->input('status');
+            $payment->comments_on_payment = $request->input('comments_on_payment');
+    
+            // Manejar la subida de `voucher_picture`
+            if ($request->hasFile('voucher_picture')) {
+                // Eliminar el archivo anterior si existe
+                if ($payment->voucher_picture) {
+                    Storage::delete('public/' . $payment->voucher_picture);
+                }
+    
+                // Guardar el nuevo archivo
+                $filePath = 'vouchers/';
+                $fileName = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
+                $request->file('voucher_picture')->storeAs('public/' . $filePath, $fileName);
+                $payment->voucher_picture = $filePath . $fileName;
+            }
+    
+            
+            if ($request->hasFile('comprobante')) {
+                // Eliminar archivo anterior si existe
+                if ($payment->comprobante) {
+                    Storage::delete('public/' . $payment->comprobante);
+                }
+            
+                // Guardar el nuevo archivo
+                $filePath = 'vouchers_emitidos/';
+                $fileName = uniqid() . '.' . $request->file('comprobante')->getClientOriginalExtension();
+                $request->file('comprobante')->storeAs('public/' . $filePath, $fileName);
+            
+                // Actualizar el modelo con la nueva ruta
+                $payment->update(['comprobante'=>$filePath.$fileName]);
+            }
+
+    
+            $payment->save();
+    
+            // Actualizar el estado de `ClientPayment` solo si el estado es "Pagado"
+            if ($clientPayment) {
+                $clientPayment->status = $payment->status === "Pagado" ? 1 : 0;
+                $clientPayment->save();
+            }
+    
+            // Procesar notificaciones y lógica según el estado
+            switch ($payment->status) {
+                case "Pagado":
+                    $this->actualizarMembresias($payment);
+                    Notification::create([
+                        'user_id' => $payment->user_id,
+                        'title' => 'Pago del ' . $payment->created_at->format('Y-m-d'),
+                        'body' => "Su pago ha sido procesado con éxito.",
+                    ]);
+                    break;
+    
+                case "Rechazado":
+                    Notification::create([
+                        'user_id' => $payment->user_id,
+                        'title' => 'Pago del ' . $payment->created_at->format('Y-m-d'),
+                        'body' => "Su pago ha sido rechazado.",
+                    ]);
+                    break;
+    
+                case "Revision":
+                    Notification::create([
+                        'user_id' => $payment->user_id,
+                        'title' => 'Pago del ' . $payment->created_at->format('Y-m-d'),
+                        'body' => "Su pago está en revisión. Vaya a 'Depositar' y en su pago seleccione 'Ver Detalle'.",
+                    ]);
+                    break;
+    
+                default:
+                    break;
+            }
+        });
+    
+        return redirect()->route('payments.index')->with('success', 'Estado del pago actualizado con éxito.');
+    }
+    
+    
+
+    public function actualizarMembresias($payment)
+    {
+        $dataSuscriptor = [1 => 14, 2 => 35, 3 => 70, 4 => 84, 5 => 140];
+        $dataGerente = [1 => 4, 2 => 10, 3 => 20, 4 => 24, 5 => 40];
+        $dataAdmin = [1 => 6, 2 => 15, 3 => 30, 4 => 36, 5 => 60];
+        $dataAdminNew = [1 => 24, 2 => 60, 3 => 120, 4 => 144, 5 => 240];
+        $dataAdminRef = [1 => 10, 2 => 25, 3 => 50, 4 => 60, 5 => 100];
+
+        DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminNew, $dataAdminRef) {
+            $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
+            $user = User::findOrFail($payment->user_id);
+            $clientProfile = Profile::where('user_id', $user->id)->firstOrFail();
+            $referredCode = $user->refered_code;
+            $userReferee = User::where('unique_code', $referredCode)->first();
+
+            if ($referredCode === "aeia") {
+                SuscriptorHistorial::create([
+                    'name' => $clientProfile->first_name,
+                    'refered_code' => 'aeia',
+                    'plan_id' => $clientPayment->plan_id,
+                    'user_id' => $user->id,
+                    'membership_collected' => $dataAdminNew[$clientPayment->plan_id]
+                ]);
+
+                SubscriptorDataModel::where('user_table_id', $userReferee->id)
+                    ->increment('membership_collected', $dataAdminNew[$clientPayment->plan_id]);
+            } else {
+                $this->procesarMembresiasSuscriptor($user, $clientPayment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminRef);
+            }
+        });
+    }
+
+    private function procesarMembresiasSuscriptor($user, $clientPayment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminRef)
+    {
+        $suscriptor = User::where('unique_code', $user->refered_code)->first();
+        $clientProfile = Profile::where('user_id', $user->id)->first();
+        $planId = $clientPayment->plan_id;
+
+        SuscriptorHistorial::create([
+            'name' => $clientProfile->first_name,
+            'refered_code' => $user->refered_code,
+            'plan_id' => $planId,
+            'user_id' => $user->id,
+            'membership_collected' => $dataSuscriptor[$planId]
+        ]);
+
+        SubscriptorDataModel::where('user_table_id', $suscriptor->id)
+            ->increment('membership_collected', $dataSuscriptor[$planId]);
+
+        if ($suscriptor->refered_code !== 'aeia') {
+            $this->procesarMembresiasGerente($suscriptor, $clientPayment, $dataGerente, $dataAdminRef);
+        }
+    }
+
+    private function procesarMembresiasGerente($suscriptor, $clientPayment, $dataGerente, $dataAdminRef)
+    {
+        $suscriptorData = User::where('unique_code', $suscriptor->refered_code)->first();
+        $gerenteName = Profile::where('user_id', $suscriptorData->id)->first();
+
+        SuscriptorHistorial::create([
+            'name' => $gerenteName->first_name,
+            'refered_code' => $suscriptorData->unique_code,
+            'plan_id' => $clientPayment->plan_id,
+            'user_id' => $suscriptor->id,
+            'membership_collected' => $dataAdminRef[$clientPayment->plan_id]
+        ]);
+
+        SubscriptorDataModel::where('user_table_id', $suscriptorData->id)
+            ->increment('membership_collected', $dataAdminRef[$clientPayment->plan_id]);
+    }
+
 
     public function pay(Request $request)
     {
@@ -629,189 +794,8 @@ class PaymentController extends AppBaseController
             return $e->getMessage();
         }
     }
-    public function updateStatus($id)
-    {
-        $payment = Payment::find($id);
-    
-        if (!$payment) {
-            return response()->json(['error' => 'Pago no encontrado'], 404);
-        }
-    
-        // Actualiza el estado del pago a "PAGADO"
-        $payment->status = 'PAGADO';
-    
-        // Datos de membresías
-        $dataSuscriptor = [
-            1 => 14, 
-            2 => 35, 
-            3 => 70, 
-            4 => 84, 
-            5 => 140
-        ];
-        $dataGerente = [
-            1 => 4  , 
-            2 => 10, 
-            3 => 20, 
-            4 => 24, 
-            5 => 40
-        ];
-        // admin con comision 
-        $dataAdmin = [
-            1 => 6, 
-            2 => 15, 
-            3 => 30, 
-            4 => 36, 
-            5 => 60
-        ];
-        // admin vende sin comision
-        $dataAdminNew = [
-            1 => 24, 
-            2 => 60, 
-            3 => 120, 
-            4 => 144, 
-            5 => 240
-        ];
-        $dataAdminRef = [
-            1 => 10,
-            2 => 25, 
-            3 => 50, 
-            4 => 60, 
-            5 => 100
-        ];
-        $result = DB::transaction(function () use ($payment, $dataSuscriptor, $dataGerente, $dataAdmin, $dataAdminNew, $dataAdminRef) {
-            $payment->update();
-    
-            // Buscar el registro de ClientPayment asociado al pago
-            $clientPayment = ClientPayment::where('payment_id', $payment->id)->first();
-            if (!$clientPayment) {
-                throw new Exception('ClientPayment no encontrado');
-            }
-    
-            // Buscar el usuario asociado al pago
-            $user = User::find($payment->user_id);
-            if (!$user) {
-                throw new Exception('Usuario no encontrado');
-            }
-    
-            // Obtener el perfil del cliente
-            $clientProfile = Profile::where('user_id', $user->id)->first();
-            if (!$clientProfile) {
-                throw new Exception('Perfil del cliente no encontrado');
-            }
-    
-            $referredCode = $user->refered_code;
-            $user_referee = User::where('unique_code', $referredCode)->first();
-            if (!$user_referee) {
-                throw new Exception('Usuario referenciado no encontrado');
-            }
-    
-            $suscriptorData = [];
-            $suscriptorHistorial = [];
-    
-            if ($referredCode == "aeia") {
-                $suscriptorData[] = SuscriptorHistorial::create([
-                    'name' => $clientProfile->first_name,
-                    'refered_code' => 'aeia',
-                    'plan_id' => $clientPayment->plan_id,
-                    'user_id' => $user->id,
-                    'membership_collected' => $dataAdminNew[$clientPayment->plan_id]
-                ]);
-                $suscriptorHistorial[] = SubscriptorDataModel::where('user_table_id', $user_referee->id)->update([
-                    'membership_collected' => DB::raw("membership_collected + " . $dataAdminNew[$clientPayment->plan_id])
-                ]);
-            } else {
-                $suscriptor = User::where('unique_code', $user->refered_code)->first();
-                if (!$suscriptor) {
-                    throw new Exception('Suscriptor no encontrado');
-                }
-                
-                $suscriptorData[] = SuscriptorHistorial::create([
-                    'name' => $clientProfile->first_name,
-                    'refered_code' => $user->refered_code,
-                    'plan_id' => $clientPayment->plan_id,
-                    'user_id' => $user->id,
-                    'membership_collected' => $dataSuscriptor[$clientPayment->plan_id],
-                    'updated_at' => now(),
-                    'created_at' => now()
-                ]);
-                
-                $suscriptorHistorial[] = SubscriptorDataModel::where('user_table_id', $user_referee->id)->update([
-                    'membership_collected' => DB::raw("membership_collected + " . $dataSuscriptor[$clientPayment->plan_id])
-                ]);
-                
-                if ($suscriptor->refered_code != 'aeia') {
-                    $suscriptor_data = User::where('unique_code', $suscriptor->refered_code)->first();
-                    if (!$suscriptor_data) {
-                        throw new Exception('Suscriptor de segundo nivel no encontrado');
-                    }
-    
-                    $suscriptor_name = Profile::where('user_id', $suscriptor->id)->first();
-                    if (!$suscriptor_name) {
-                        throw new Exception('Nombre del suscriptor no encontrado');
-                    }
-    
-                    $suscriptorDataGerenteHistorial[] = SuscriptorHistorial::create([
-                        'name' => $suscriptor_name->first_name,
-                        'refered_code' => $suscriptor_data->unique_code,
-                        'plan_id' => $clientPayment->plan_id,
-                        'user_id' => $suscriptor->id,
-                        'membership_collected' => $dataGerente[$clientPayment->plan_id]
-                    ]);
-    
-                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $suscriptor_data->id)->update([
-                        'membership_collected' => DB::raw("membership_collected + " . $dataGerente[$clientPayment->plan_id])
-                    ]);
-    
-                    $gerente_name = Profile::where('user_id', $suscriptor_data->id)->first();
-                    if (!$gerente_name) {
-                        throw new Exception('Nombre del gerente no encontrado');
-                    }
-    
-                    $suscriptorData[] = SubscriptorDataModel::create([
-                        'name' => $gerente_name->first_name,
-                        'refered_code' => 'aeia',
-                        'plan_id' => $clientPayment->plan_id,
-                        'membership_collected' => $dataAdmin[$clientPayment->plan_id]
-                    ]);
-    
-                    $admin_code = User::where('unique_code', 'aeia')->first();
-                    if (!$admin_code) {
-                        throw new Exception('Código de administrador no encontrado');
-                    }
-    
-                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $admin_code->id)->update([
-                        'membership_collected' => DB::raw("membership_collected + " . $dataAdmin[$clientPayment->plan_id])
-                    ]);
-                }else{
-                    $suscriptor_data = User::where('unique_code', $suscriptor->refered_code)->first();
-                    if (!$suscriptor_data) {
-                        throw new Exception('Suscriptor de segundo nivel no encontrado');
-                    }
-    
-                    $suscriptor_name = Profile::where('user_id', $suscriptor->id)->first();
-                    if (!$suscriptor_name) {
-                        throw new Exception('Nombre del suscriptor no encontrado');
-                    }
-    
-                    $suscriptorDataGerenteHistorial[] = SuscriptorHistorial::create([
-                        'name' => $suscriptor_name->first_name,
-                        'refered_code' => $suscriptor_data->unique_code,
-                        'plan_id' => $clientPayment->plan_id,
-                        'user_id' => $suscriptor->id,
-                        'membership_collected' => $dataAdminRef[$clientPayment->plan_id]
-                    ]);
-    
-                    $suscriptorDataGerente[] = SubscriptorDataModel::where('user_table_id', $suscriptor_data->id)->update([
-                        'membership_collected' => DB::raw("membership_collected + " . $dataAdminRef[$clientPayment->plan_id])
-                    ]);
-    
-                }
-            }
-        });
-        
-	    return redirect()->back()->with('success','pago actualizado con exito');
-    }
-    
+
+   
     
     public function updateComments(Request $request, $id){
 	    $payment=Payment::findOrFail($id);
@@ -859,7 +843,7 @@ class PaymentController extends AppBaseController
             $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
             $path = $filePath . $name;
             $request->file('voucher_picture')->storeAs('public/' . $filePath, $name);
-            $input["voucher_picture"] = '/storage/vouchers/' . $name; // Corrige la ruta de almacenamiento
+            $input["voucher_picture"] = 'vouchers/' . $name; // Corrige la ruta de almacenamiento
         }
     
         // Actualiza el registro del pago con la nueva imagen

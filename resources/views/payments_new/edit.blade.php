@@ -1,24 +1,30 @@
 @extends('layouts_new.app')
 
 @section('content')
-<strong>Editar Depósito</strong>
-<div class="row bg-1 w-100 h-100" id="rounded-container">
-    <div class="col-lg-12 p-5">
-            <!-- <div class="card"> -->
-                {!! Form::model($payment, ['route' => ['payments.edit.payment', $payment->id], 'method' => 'put', 'files' => true]) !!}
-                    @include('payments_new.fields')
-                    <div class="form-group col p-5">
-                        <p><strong>Sube tu voucher:</strong></p>
-                        <div class="input-group">
-                            {!! Form::label('voucher_picture', "Seleccionar archivo", ['class' => '', 'for' => 'voucher_picture', 'id' => 'file_input_voucher']) !!}
-                            {!! Form::file('voucher_picture', ['class' => '', 'id' => 'voucher_picture', 'oninput' => 'input_filename(event);', 'tofill' => '', 'onclick' => 'check_progress_bar(event);']) !!}
-                        </div>
-                        <input type="text" class="d-none" id="hide_voucher">
-                    </div>
-                    {!! Form::submit('Actualizar', ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
-            <!-- </div> -->
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Depósitos</h1>
+</div>
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Editar Depósito</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+                <div class="col-3 col-sm-4 col-xl-4 d-flex align-items-center justify-content-center">
+                    <img src="{{ Storage::url($payment->voucher_picture) }}" width="300" alt="Imagen No Subida por el Usuario">
+
+                </div>
+
+                <div class="col">
+                       @include('payments_new.fields')
+                </div>
         </div>
+
     </div>
 </div>
 @endsection
+
+

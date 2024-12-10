@@ -102,7 +102,7 @@
 </li>
 
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('clients.index') }}">
+    <a class="nav-link" href="{{ route('payments.index') }}">
         <i class="fa-solid fa-piggy-bank"></i>
         <span>Depositar</span>
     </a>

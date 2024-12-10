@@ -23,15 +23,17 @@
                         <th>Monto</th>
                         <th>Status</th>
                         <th>Actualizar</th>
+                        <th>Voucher</th>
                         <th>Mas Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($payments as $payment)
+                @foreach($payments  as $payment)
                         <tr>
                             <td>{{$payment->user_name}}</td>
                             <td>{{$payment->date_transaction}}</td>
                             <td>{{$payment->total}}</td>
+
                             <td>{{$payment->status}}</td>
                             <td>
                                 <form action="{{ route('payments.update.status', $payment->id) }}" method="POST" style="display:inline-block;">
@@ -39,6 +41,13 @@
                                     @method('PUT')
                                     <button type="submit" class="btn btn-success">Validar</button>
                                 </form>
+                            </td>
+                            <td>
+                                @if ($payment->voucher_picture!="noimgadded")
+                                    <a href="{{ Storage::url($payment->voucher_picture) }}" target="_blank" class="btn btn-info">Ver recibo</a>
+                                @else
+                                    <span class="text-danger">No hay recibo</span>
+                                @endif
                             </td>
                             <td>
                                 <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-primary">Ver</a>
