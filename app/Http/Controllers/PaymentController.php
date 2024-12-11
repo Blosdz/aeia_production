@@ -82,11 +82,11 @@ class PaymentController extends AppBaseController
     {
         $user=Auth::user();
 
-        $payments = Payment::where('user_id',$user->id);
+        $payments = Payment::where('user_id',$user->id)->get();
 
 
         return view('payments_new.index')
-            ->with('payments', $payments);
+            ->with(compact('payments'));
     }
 
     /**
