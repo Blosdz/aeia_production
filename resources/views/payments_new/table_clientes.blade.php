@@ -30,9 +30,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($payments->isEmpty())
-
-                    @else
                         @foreach ($payments as $payment)
                             <tr>
                                 <!-- Mostrar el primer fondo_name relacionado o 'null' -->
@@ -72,7 +69,6 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @endif
                 </tbody>
             </table>
         </div>

@@ -130,7 +130,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
         //payments
 
-        Route::get('payments',[PaymentController::class,'index'])->name('payments.index');
+        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index');
 
         Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
