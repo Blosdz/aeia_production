@@ -51,18 +51,15 @@
 @endphp
 
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('home.index') }}">
+    <a class="nav-link" href="{{ route('suscriptor.home') }}">
         <i class="fa-solid fa-house"></i>
         <span>Inicio</span>
     </a>
 </li>
 
+
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
-    @if ($session_validate == 2)
-        <a class="nav-link {{ Request::is('profiles*') ? 'active' : '' }}" href="{{ route('profiles.verified') }}">
-    @else
-        <a class="nav-link {{ Request::is('profiles*') ? 'active' : '' }}" href="{{ route('profiles.user') }}">
-    @endif
+    <a class="nav-link" href="{{ route('user.profile_edit') }}">
         <i class="fa-solid fa-user-check"></i>
         <span>Verificación</span>
     </a>
@@ -83,6 +80,7 @@
         <span>Historial</span>
     </a>
 </li>
+
 
 @php
   }

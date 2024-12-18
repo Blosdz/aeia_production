@@ -159,6 +159,11 @@
                     {{--  End of Topbar  --}}
 
                     <div class="container-fluid">
+                        @if($user->validated==0)
+                        <div class="alert alert-info" role="alert">
+                                Tu perfil no está verificado. Ingresa a la opción Verificación del menú lateral y completa la información requerida.
+                        </div>
+                        @endif
                         @yield('content')
                     </div>
 

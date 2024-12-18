@@ -183,38 +183,7 @@ class HomeController extends Controller
     }
 
     public function getUserReferidos(){
-        $user = Auth::user();
-        $uniqueCode = $user->unique_code;
-        if (!$uniqueCode) {
-            // Generar un unique_code si el usuario no tiene uno
-            $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
-            $user->unique_code = $uniqueCode;
-            $user->save();
-        }
-        $inviteLink = route('register', ['refered_code' => $uniqueCode]);
 
-        $dataInvitados = User::where('refered_code', $uniqueCode)->count();
-        $totalClientes = User::all()->count();
-        $qrCode =  QrCode::size(250)->generate($inviteLink);
-
-        $montoGenerado = SubscriptorDataModel::where('user_table_id', $user->id)->pluck('membership_collected')->first();
-        $infoSuscriptor = SuscriptorHistorial::where('refered_code', $user->unique_code)->get();
-
-        // Generar los datos para el gráfico
-        $chartDataSus = [];
-        $totalCollected = 0;
-        foreach ($infoSuscriptor as $historial) {
-            $totalCollected += $historial->membership_collected;
-            $chartDataSus[] = [
-                'date' => $historial->created_at->format('Y-m-d'),
-                'total_collected' => $totalCollected
-            ];
-        }
-
-        // dd($chartDataSus);
-        $porcentajeInvitados = $totalClientes > 0 ? ($dataInvitados / $totalClientes) * 100 : 0;
-
-        return view('home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus','qrCode'));
     }
 
 
@@ -386,9 +355,40 @@ class HomeController extends Controller
         return view('admin_funciones_new.home', compact('fondos', 'fondosChartData', 'membresias', 'totalsumado'));
     }
 
-    public function suscriptor(){
+    public function homeSuscriptor(){
+        $user = Auth::user();
+        $uniqueCode = $user->unique_code;
+        if (!$uniqueCode) {
+            // Generar un unique_code si el usuario no tiene uno
+            $uniqueCode = Str::random(10); // o cualquier otra lógica para generar el código
+            $user->unique_code = $uniqueCode;
+            $user->save();
+        }
+        $inviteLink = route('register', ['refered_code' => $uniqueCode]);
 
-        return view();
+        $dataInvitados = User::where('refered_code', $uniqueCode)->count();
+        $totalClientes = User::all()->count();
+        $qrCode =  QrCode::size(250)->generate($inviteLink);
+
+        $montoGenerado = SubscriptorDataModel::where('user_table_id', $user->id)->pluck('membership_collected')->first();
+        $infoSuscriptor = SuscriptorHistorial::where('refered_code', $user->unique_code)->get();
+
+        // Generar los datos para el gráfico
+        $chartDataSus = [];
+        $totalCollected = 0;
+        foreach ($infoSuscriptor as $historial) {
+            $totalCollected += $historial->membership_collected;
+            $chartDataSus[] = [
+                'date' => $historial->created_at->format('Y-m-d'),
+                'total_collected' => $totalCollected
+            ];
+        }
+
+        // dd($chartDataSus);
+        $porcentajeInvitados = $totalClientes > 0 ? ($dataInvitados / $totalClientes) * 100 : 0;
+
+        return view('suscriptor_funciones/home', compact('inviteLink', 'dataInvitados', 'totalClientes', 'porcentajeInvitados', 'montoGenerado', 'chartDataSus','qrCode'));
+
 
     }
 

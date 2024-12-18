@@ -117,11 +117,23 @@ Route::middleware(['auth'])->group(function() {
 
 
     });
-    Route::middleware('role:2')->group(function(){
-        //home 
 
+    //suscriptor
+    Route::middleware('role:2')->group(function(){
+        // home 
+
+        Route::get('/suscriptor/home',[HomeController::class,'homeSuscriptor'])->name('suscriptor.home');
+        // Verificacion
+        Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
+        Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
+        // Clientes    
+        Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
+        Route::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
+        // historial
+        // Pagos  / retiros
     });
     
+    //cliente normal
     Route::middleware(['role:3'])->group(function(){
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
@@ -145,6 +157,8 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
     });
+
+    //cliente business
     Route::middleware(['role:4'])->group(function(){
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
@@ -152,6 +166,8 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
         //payments
+
+        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index');
         Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
         Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
         Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');
@@ -163,14 +179,25 @@ Route::middleware(['auth'])->group(function() {
 
     });
 
+    //gerente->suscriptor
     Route::middleware('role:5')->group(function(){
         // home 
+        // verificacion
+        // suscriptores
+        // historial
+        // Pagos / retiros
 
     });
+
+    //verificador
     Route::middleware('role:6')->group(function(){
         // home 
+        // Verificar - Usuarios
+        // Pagos
 
     });
+
+    //banco
     Route::middleware('role:8')->group(function(){
         // home banco
 
@@ -188,9 +215,9 @@ Route::middleware(['auth'])->group(function() {
     // descargar documentos 
     Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
     // 
-    Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
+
+
     Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
-    ROute::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
     Route::get('/dataSuscriptor/{id}',[SuscriptorInfo::class,'detailSuscriptor'])->name('detailSuscriptor');
 
     Route::get('/dataSuscriptor',[SuscriptorInfo::class,'tableSuscriptors'])->name('tableSuscriptor');
