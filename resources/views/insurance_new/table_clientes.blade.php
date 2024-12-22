@@ -4,10 +4,20 @@
 @endphp
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Depositos</h1>
+    <h1 class="h3 mb-0 text-gray-800">Seguro</h1>
 </div>
 
 
+{{-- 
+
+    como se va ver los pagos del seguro 
+    dropdown
+
+
+    ClientInsurance es 
+    id |  status  | user_id  |  profile_id   | created_at | updated_at | insurance_id
+
+--}}
 
 <div class="card shadow mb-4">
 
@@ -15,7 +25,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Historial de Pagos</h6>
         {!! Form::label('filtrar', '&nbsp;') !!}
         @if ($user_session->validated == 1)
-            <a href="{{ route('payment.plan') }}" style="background-color:green" class="form-control btn btn-success">Nuevo depósito</a>
+            <a href="{{ route('payment.plan') }}" style="background-color:green" class="form-control btn btn-success">Contratar Seguro</a>
         @else
             <button type="button" class="form-control btn btn-success" onclick="showAlert()">Nuevo depósito</button>
         @endif
@@ -25,53 +35,17 @@
             <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="1">
                 <thead>
                     <tr>
-                        <th>Fondo</th>
+                        <th>Mes</th>
                         <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Status</th>
-                        <th>Documentos</th>
-                        <th>Recibo</th>
+                        <th>Ultima Actualización</th>
+                        <th>Recibos</th>
                         <th>Más</th>
                     </tr>
                 </thead>
                 <tbody>
-                        @foreach ($payments as $payment)
+                        @foreach ($ClientInsuranceData as $ClientInsurance)
                             <tr>
-                                <!-- Mostrar el primer fondo_name relacionado o 'null' -->
-                                <td>
-                                    {{-- {{ $payment->clientPayments->first()?->fondo_name ?? 'null' }} --}}
-                                </td>
-                                <td>{{ $payment->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $payment->total }}</td>
-                                <td>{{ $payment->status }}</td>
-                                <td>
-                                    {{-- <a href="{{ route('payments.show', [$payment->id]) }}" class="btn btn-success">Ver detalle</a> --}}
-                                    @if ($payment->contract && $payment->contract->signature_image)
-                                        <a href="{{ route('contracts.pdf', [$payment->contract->id]) }}" target="_blank" class="btn btn-info">Ver contrato</a>
-                                        @if ($payment->declaracion)
-                                            <a href="{{ route('declaracion.pdf', [$payment->declaracion->id]) }}" target="_blank" class="btn btn-info">Ver Declaración</a>
-                                        @else
-                                            <span class="text-danger">No hay declaración disponible</span>
-                                        @endif
-                                    @else
-                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateSignatureModal-{{ $payment->id }}">
-                                            Actualizar firma
-                                        </button>
-                                        <a href="" class="btn btn-disabled disabled">Ver contrato</a>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($payment->comprobante)
 
-                                        <a href="{{ Storage::url($payment->comprobante) }}" target="_blank" class="btn btn-info">Comprobante</a>
-                                        {{-- <a href="{{ asset('storage/' . $payment->voucher_picture) }}" target="_blank" class="btn btn-info">Ver recibo</a> --}}
-                                    @else
-                                        <span class="text-danger">No hay recibo</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-primary">Ver</a>
-                                </td>
                             </tr>
                         @endforeach
                 </tbody>

@@ -235,7 +235,7 @@
 
         <!-- Submit Field -->
         <div class="form-group col-sm-12">
-            {!! Form::submit('Enviar a revision', ['class' => 'btn btn-primary save-client', 'id'=>'btn-send']) !!}
+            {!! Form::submit('Enviar a revisión', ['class' => 'btn btn-primary save-client', 'id'=>'btn-send']) !!}
         </div>
 </div>
 <script src="{{ asset('upload_file.js') }}"></script>

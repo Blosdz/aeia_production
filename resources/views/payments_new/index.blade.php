@@ -12,7 +12,7 @@
 @endphp
 
 {{-- Si el rol es 3 --}}
-@if ($user_session->rol == 3)
+@if ($user_session->rol == 3 || $user_session->rol==4)
     {{-- @if ($user_session->validated == 1) --}}
         {{-- <a href="{{ route('payment.plan') }}" style="background-color:green" class="form-control btn btn-success">Nuevo depósito</a> --}}
     {{-- @else --}}

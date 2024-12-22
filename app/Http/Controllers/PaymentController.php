@@ -81,12 +81,15 @@ class PaymentController extends AppBaseController
     public function index_user(Request $request)
     {
         $user=Auth::user();
+        if($user->rol==1){
+            $payments=$this->paymentRepository->all();
+            return view('payments_new.index')->with(compact('payments'));
+        }
 
-        $payments = Payment::where('user_id',$user->id)->get();
-
-
-        return view('payments_new.index')
-            ->with(compact('payments'));
+        else{
+            $payments = Payment::where('user_id',$user->id)->get();
+            return view('payments_new.index')->with(compact('payments'));
+        }
     }
 
     /**
@@ -437,127 +440,121 @@ class PaymentController extends AppBaseController
     }
 
     public function client_pay(ClientPaymentRequest $request)
-    {
-        $input = $request->all();
-
-        $months = [
-            0 => 'Diciembre',
-            1 => 'Enero',
-            2 => 'Febrero',
-            3 => 'Marzo',
-            4 => 'Abril',
-            5 => 'Mayo',
-            6 => 'Junio',
-            7 => 'Julio',
-            8 => 'Agosto',
-            9 => 'Setiembre',
-            10 => 'Octubre',
-            11 => 'Noviembre',
-            12 => 'Diciembre'
-        ];
-             // Procesar y guardar la imagen del canvas
-        if ($request->has('canvas_image')) {
-            $imageData = $request->input('canvas_image');
-            $imageParts = explode(";base64,", $imageData);
-            $imageBase64 = base64_decode($imageParts[1]);
-            $fileName = 'signatures/' . uniqid() . '.png'; // Ruta de guardado en 'storage/app/public/signatures'
-            // Guardar la imagen en el almacenamiento de Laravel (public disk)
-            Storage::disk('public')->put($fileName, $imageBase64);
-            // Asignar la ruta de la imagen al campo 'signature_image'
-            $input['signature_image'] = $fileName;
-        }
-
-        $currentDate = Carbon::now();
-        $dayOfMonth = (int)$currentDate->format('d');
-        $currentMonth = (int)$currentDate->format('m');
-        $month = $months[($dayOfMonth >= 28 ? ($currentMonth + 1) % 12 : $currentMonth)];
-        $input["month"] = $month;
-	    $input["user_name"]=Auth::user()->name;
-        $input["total"] = $input["amount"];
-        //$input["date_transaction"] = Carbon::parse()->format('Y-m-d');
-        $input["name"] = $input["month"];
-        $input["details"] = $input["month"];
-	    $filePath='vouchers/';
-	    if ($request->hasFile('voucher_picture')) {
-		    if (!file_exists(storage_path($filePath))) {
-                	Storage::makeDirectory('public/'.$filePath, 0777, true);
-            	}
-		    $name=uniqid().'.'.$request->file('voucher_picture')->getClientOriginalExtension();
-		    $path=$filePath.$name;
-		    $request->file('voucher_picture')->storeAs('public/'.$filePath,$name);
-		    $input["voucher_picture"] = '/storage/vouchers/' . $name;
-        }else{
-            $input["voucher_picture"]="noimgadded";
-        }  	
-
-        $input["user_id"] = Auth::user()->id;
-
-        $input["date_transaction"] = Carbon::now()->format('Y-m-d H:i:s');
-
-        $payment = $this->paymentRepository->create($input);
-
-        $profile = Profile::where('user_id',$payment->user_id)->first();
-        $contract = [
-            'user_id' => $profile->user_id,
-            'type' => 2,
-            'full_name' => $profile->first_name.' '.$profile->lastname,
-            'country' => $profile->country,
-            'city' => $profile->city,
-            'state' => $profile->state,
-            'address' => $profile->address,
-            'country_document' => $profile->country_document,
-            'type_document' => $profile->type_document,
-            'identification_number' => $profile->identification_number,
-            'code' => uniqid(),
-            'signature_image' => $fileName, // Usar la ruta guardada
-            'payment_id' => $payment->id
-        ];
-        
-	    $contract = Contract::create($contract);
-
-        $declaraciones = Declaraciones::create([
-            'user_id' => $profile->user_id,
-            'type' => 2,
-            'full_name' => $profile->first_name.' '.$profile->lastname,
-            'country' => $profile->country,
-            'city' => $profile->city,
-            'state' => $profile->state,
-            'address' => $profile->address,
-            'country_document' => $profile->country_document,
-            'type_document' => $profile->type_document,
-            'identification_number' => $profile->identification_number,
-            'code' => uniqid(),
-            'signature_image' => $fileName, // Usar la ruta guardada
-            'payment_id' => $payment->id
-
-        ]);
-
-        $declaraciones->touch();
-        $referred_user = Auth::user()->refered_code;
-
-        $client_payment = [
-            'user_id' => $profile->user_id,
-            'payment_id' => $payment->id,
-            'referred_code' => $referred_user ,
-            'plan_id' => $input['plan_id'],
-	        'code' => uniqid(),
-	        'total'=>$input['total'],
-        ];
+{
+    $input = $request->all();
 
 
-            // Buscar el usuario que refirió
-        $referredUser = User::where('unique_code', Auth::user()->refered_code)->first();
-        if(!empty($referred_user))
-        {
+    // dd($input);
+    $months = [
+        0 => 'Diciembre',
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Setiembre',
+        10 => 'Octubre',
+        11 => 'Noviembre',
+        12 => 'Diciembre'
+    ];
+
+    // Procesar y guardar la imagen del canvas
+    if ($request->has('canvas_image')) {
+        $imageData = $request->input('canvas_image');
+        $imageParts = explode(";base64,", $imageData);
+        $imageBase64 = base64_decode($imageParts[1]);
+        $fileName = 'signatures/' . uniqid() . '.png';
+        Storage::disk('public')->put($fileName, $imageBase64);
+        $input['signature_image'] = $fileName;
+    }
+
+    $currentDate = Carbon::now();
+    $dayOfMonth = (int) $currentDate->format('d');
+    $currentMonth = (int) $currentDate->format('m');
+    $month = $months[($dayOfMonth >= 28 ? ($currentMonth + 1) % 12 : $currentMonth)];
+    $input["month"] = $month;
+    $input["user_name"] = Auth::user()->name;
+    $input["total"] = $input["amount"];
+    $input["name"] = $input["month"];
+    $input["details"] = $input["month"];
+
+
+    $filePath = 'vouchers/';
+    if ($request->hasFile('voucher_picture')) {
+        Storage::makeDirectory('public/' . $filePath, 0777, true);
+        $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
+        $path = $filePath . $name;
+        $request->file('voucher_picture')->storeAs('public/' . $filePath, $name);
+        $input["voucher_picture"] = '/storage/vouchers/' . $name;
+    } else {
+        $input["voucher_picture"] = "noimgadded";
+    }
+
+    $input["user_id"] = Auth::user()->id;
+    $input["date_transaction"] = Carbon::now()->format('Y-m-d H:i:s');
+    $payment = $this->paymentRepository->create($input);
+
+    $profile = Profile::where('user_id', $payment->user_id)->first();
+
+    $contract = [
+        'user_id' => $profile->user_id,
+        'type' => 2,
+        'full_name' => $profile->first_name . ' ' . $profile->lastname,
+        'country' => $profile->country,
+        'city' => $profile->city,
+        'state' => $profile->state,
+        'address' => $profile->address,
+        'country_document' => $profile->country_document,
+        'type_document' => $profile->type_document,
+        'identification_number' => $profile->identification_number,
+        'code' => uniqid(),
+        'signature_image' => $fileName ?? null, // Usar la ruta guardada
+        'payment_id' => $payment->id
+    ];
+
+    Contract::create($contract);
+
+    Declaraciones::create([
+        'user_id' => $profile->user_id,
+        'type' => 2,
+        'full_name' => $profile->first_name . ' ' . $profile->lastname,
+        'country' => $profile->country,
+        'city' => $profile->city,
+        'state' => $profile->state,
+        'address' => $profile->address,
+        'country_document' => $profile->country_document,
+        'type_document' => $profile->type_document,
+        'identification_number' => $profile->identification_number,
+        'code' => uniqid(),
+        'signature_image' => $fileName ?? null,
+        'payment_id' => $payment->id
+    ])->touch();
+
+    $referred_user = Auth::user()->refered_code;
+    $client_payment = [
+        'user_id' => $profile->user_id,
+        'payment_id' => $payment->id,
+        'referred_code' => $referred_user,
+        'plan_id' => $input['plan_id'] ?? null,
+        'rescue_money' => $input['rescue_money'] ?? null,
+        'code' => uniqid(),
+        'total' => $input['total'],
+    ];
+
+    if (!empty($referred_user)) {
+        $referredUser = User::where('unique_code', $referred_user)->first();
+        if ($referredUser) {
             $client_payment['referred_user_id'] = $referredUser->id;
         }
-
-        ClientPayment::create($client_payment);
-
-
-
-	    return redirect()->back()->with('success'); 
     }
+
+    ClientPayment::create($client_payment);
+
+    return redirect()->back()->with('success', 'Transacción completada con éxito.');
+}
 
     public function updateStatus($id, Request $request)
     {

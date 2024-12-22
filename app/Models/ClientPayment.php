@@ -42,7 +42,7 @@ class ClientPayment extends Model
         'plan_id',
         'code',
         'fondo_name',
-        'rescue-money'
+        'rescue_money'
     ];
 
     /**
@@ -56,7 +56,9 @@ class ClientPayment extends Model
         'referred_code' => 'string',
         'referred_user_id' => 'integer',
         'plan_id' => 'integer',
-        'code' => 'string'
+        'code' => 'string',
+        'fondo_name' => 'nullable|string',
+        'rescue_money' => 'boolean',
     ];
 
     /**

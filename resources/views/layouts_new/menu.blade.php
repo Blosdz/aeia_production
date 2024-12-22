@@ -23,7 +23,7 @@
 </li>
 
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('payments.index') }}">
+    <a class="nav-link" href="{{route('payments.index_admin')}}">
         <i class="fa-solid fa-building-columns"></i>
         <span>Depositos</span>
     </a>
@@ -100,10 +100,15 @@
 </li>
 
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('payments.index') }}">
+    <a class="nav-link" href="{{ route('payments.index_user') }}">
         <i class="fa-solid fa-piggy-bank"></i>
         <span>Depositar</span>
     </a>
+</li>
+
+<li>
+    <a href=""></a>
+    <span>Seguro</span>
 </li>
 
 

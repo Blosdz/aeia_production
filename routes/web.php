@@ -82,7 +82,7 @@ Route::middleware(['auth'])->group(function() {
 
         //index
         // Route::resource('payments',PaymentController::class);
-        Route::get('payments',[PaymentController::class,'index'])->name('payments.index');
+        Route::get('payments_admin',[PaymentController::class,'index'])->name('payments.index_admin');
 
         Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.update.status');
@@ -142,7 +142,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
         //payments
 
-        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index');
+        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index_user');
 
         Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
         Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
         //payments
 
-        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index');
+        Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index_user');
         Route::get('/payments/client/data', [PaymentController::class, 'client_index'])->name('clients.index');
         Route::get('/payments/select/plan', [PaymentController::class, 'select_plan'])->name('payment.plan');
         Route::get('/payments/client/pay/{id}', [PaymentController::class, 'plan_detail'])->name('payment.detail');

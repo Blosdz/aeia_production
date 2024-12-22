@@ -1,3 +1,10 @@
+@php
+    $user_session = Auth::user();
+    $user = Auth::user();
+    $user_code = $user->unique_code; 
+    $profile = $user->profile;
+
+@endphp
 @extends('layouts_new.app')
 
 @section('content')
@@ -56,7 +63,19 @@
                                 {!! Form::number('amount', null, ['class' => 'form-control', 'min' => $plan->minimum_fee, 'max' => $plan->maximum_fee, 'required', 'placeholder' => $plan->minimum_fee, 'step' => 0.01, 'id' => 'amount-input']) !!}
                             </div>
                         </div>
+
                     </div>
+                    @if($user_session->rol==4)
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <div class="form-group col-sm-6 mb-5">
+                            <!-- Cambia 'rescue' a 'rescue_money' -->
+                            {!! Form::checkbox('rescue_money', '1', null, ['class' => 'form-check-input', 'id' => 'rescue_money']) !!}
+                            {!! Form::label('rescue_money', 'Habilitar Rescatar Fondo') !!}
+                        </div>
+                    </div>
+                    @endif
+                     
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="form-group col-sm-6 mb-5">
@@ -139,6 +158,7 @@
             document.getElementById('amount-input').addEventListener('input', function() {
                 let amount = parseFloat(this.value);
                 let totalInversion = document.getElementById('total_inversion');
+                let rescueMoneyCheckbox=document.getElementById('rescue_money');
                 let amountModal = document.getElementById('amount-modal');
 
                 if (!isNaN(amount)) {
@@ -166,6 +186,8 @@
                     amountModal.textContent = '0.00';
                 }
             });
+
+            
 
             document.getElementById('flexCheckDefault').addEventListener('change', function() {
                 document.getElementById('modal-btn').disabled = !this.checked;
