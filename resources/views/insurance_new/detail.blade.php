@@ -18,7 +18,7 @@
     <div class="card-body">
         <div class="detail-payment-card p-4 bg-1">
             <div class="card-body row payment-card p-5">
-                <div class="card mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 25%;" id="rounded-container">
+                <div class="card col mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 30%;" id="rounded-container">
                     <span class="d-flex flex-column justify-content-center align-items-center">
                         <h1 class="float-left" style="color: white !important;">Fondo de Cobertura de Deportistas -18</h1>
                         <img class="card-img-top" style="width: 30%" src="{{ asset('/images/dashboard/aa seguros 1-1.webp')}}" alt="Card image cap">
@@ -44,8 +44,12 @@
                     </div>
                 </div>
 
-                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
+                <div class="card col mx-5 p-3 w-50 bg-1" id="rounded-container">
                     @include('profiles_new.fields_seguro')
+                    <label for="">Ya estoy registrado: </label>
+                    <a href="{{ route('insurance.pay') }}" class="btn btn-primary">Continuar con el pago</a>
+
+
                     {{-- <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h5>Personas aseguradas:</h5>

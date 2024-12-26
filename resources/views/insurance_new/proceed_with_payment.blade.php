@@ -24,7 +24,7 @@
     <div class="card-body">
         <div class="detail-payment-card p-4 bg-1">
             <div class="card-body row payment-card p-5">
-                <div class="card mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 25%;" id="rounded-container">
+                <div class="card col mx-auto p-3" style="background-color: #1c2a5b; color: white !important;" id="rounded-container">
                     <span class="d-flex flex-column justify-content-center align-items-center">
                         <h1 class="float-left" style="color: white !important;">Fondo de Cobertura de Deportistas -18</h1>
                         <img class="card-img-top" style="width: 30%" src="{{ asset('/images/dashboard/aa seguros 1-1.webp')}}" alt="Card image cap">
@@ -45,11 +45,12 @@
                         </p>
 
                         <p>Deposito permitido desde:</p>
-                        <h3 style="color: #eab226 !important;">180.00 PEN</h3>
+
+                        <h3 style="color: #eab226 !important;"> DESDE 15 o 180.00 PEN</h3>
                     </div>
                 </div>
 
-                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
+                <div class="card col mx-5 p-3 w-50 bg-1" id="rounded-container">
                     <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">Interbank: 4623340100022 </p>
                     <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">CCI: 00346201334010002298</p>
                     <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
