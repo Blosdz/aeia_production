@@ -51,8 +51,14 @@
                 </div>
 
                 <div class="card col mx-5 p-3 w-50 bg-1" id="rounded-container">
-                    <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">Interbank: 4623340100022 </p>
-                    <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">CCI: 00346201334010002298</p>
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif         
                     <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h5>Personas aseguradas:</h5>
@@ -61,7 +67,7 @@
                                 <div class="form-group">
                                     <label>
                                         <input type="checkbox" name="paid_persons[]" value="{{ $index }}"> 
-                                        {{ $person['first_name'] }} {{ $person['lastname'] }} - Monto: $<span class="person_amount">0</span>
+                                        {{ $person['first_name'] }} {{ $person['lastname'] }} - Monto: S/<span class="person_amount">0</span>
                                     </label>
                                 </div>
                             @endforeach
@@ -69,7 +75,7 @@
                             <p>No hay personas aseguradas disponibles.</p>
                         @endif
 
-                        <p><strong>Total a depositar: $<span id="total_monto"> </span></strong></p>
+                        <p><strong>Total a depositar: S/ <span id="total_monto"> </span></strong></p>
 
                         <div class="form-group">
                             <label for="payment_type">Seleccione el tipo de pago:</label><br>
@@ -77,7 +83,9 @@
                             <input type="radio" name="payment_type" value="annual" id="annualPayment" {{ $paymentType ?? '' == 'annual' ? 'checked' : '' }}> Pago Anual (S/.180)<br>
                             <input type="radio" name="payment_type" value="monthly" id="monthlyPayment" {{ $paymentType ?? '' == 'monthly' ? 'checked' : '' }}> Pago Mensual (S/.15)<br>
                         </div>
-
+                        <label for="">Depositar a:</label>
+                        <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">Interbank: 4623340100022 </p>
+                        <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">CCI: 00346201334010002298</p>
                         <div class="form-group">
                             {!! Form::label('voucher_picture', 'Sube tu voucher:') !!}
                             {!! Form::file('voucher_picture', ['class' => 'form-control', 'required' => true]) !!}

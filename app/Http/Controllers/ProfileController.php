@@ -365,37 +365,48 @@ class ProfileController extends AppBaseController
 
     public function upload_insurance(Request $request)
     {
-
-        $user=Auth::user();
-        $profile = Profile::where('user_id',$user->id)->first();
+        $user = Auth::user();
+        $profile = Profile::where('user_id', $user->id)->first();
+    
+        // Validar los datos del formulario
         $request->validate([
             'total_insured' => 'required|integer|min:1',
             'persons.*.dni' => 'required|string|max:255',
             'persons.*.first_name' => 'required|string|max:30',
             'persons.*.lastname' => 'required|string|max:30',
             'persons.*.type_document' => 'required|string|max:255',
-            'persons.*.dni_number' => 'required|string|max:30', // Nueva validación para dni_number
+            'persons.*.dni_number' => 'required|string|max:30',
             'persons.*.country_document' => 'required|string|max:255',
             'persons.*.address' => 'required|string|max:50',
         ]);
-
-        // Recuperar o inicializar el perfil
-        // $profile = Profile::firstOrNew(['id' => $request->input('profile_id')]);
-
-        // Fusionar datos nuevos con los existentes
+    
+        // Obtener las personas aseguradas actuales
         $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];
-        $newPersons = $request->input('persons');
-        $mergedPersons = array_merge($existingPersons, $newPersons);
-
-        // Actualizar datos
+    
+        // Comprobar duplicados en los datos ingresados
+        foreach ($request->input('persons') as $newPerson) {
+            foreach ($existingPersons as $existingPerson) {
+                // Comprobar si el DNI o el nombre y apellido ya existen
+                if ($newPerson['dni_number'] === $existingPerson['dni_number'] || 
+                    ($newPerson['first_name'] === $existingPerson['first_name'] && 
+                    $newPerson['lastname'] === $existingPerson['lastname'])) {
+                    
+                    return redirect()->back()->with('error', 'Ya existe una persona con el mismo DNI o nombre.');
+                }
+            }
+        }
+    
+        // Fusionar los datos nuevos con los existentes
+        $mergedPersons = array_merge($existingPersons, $request->input('persons'));
+    
+        // Actualizar el perfil
         $profile->total_insured = $request->input('total_insured');
         $profile->data_filled_insured = json_encode($mergedPersons);
         $profile->update();
     
         return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');
-
-        // return redirect()->back()->with('success', 'Datos actualizados correctamente.');
     }
+    
 
     public function upload_file(Request $request){
 

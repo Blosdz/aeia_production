@@ -7,6 +7,7 @@
 @extends('layouts_new.app')
 
 @section('content')
+
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
 </div>
@@ -45,6 +46,14 @@
                 </div>
 
                 <div class="card col mx-5 p-3 w-50 bg-1" id="rounded-container">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif         
                     @include('profiles_new.fields_seguro')
                     <label for="">Ya estoy registrado: </label>
                     <a href="{{ route('insurance.pay') }}" class="btn btn-primary">Continuar con el pago</a>
