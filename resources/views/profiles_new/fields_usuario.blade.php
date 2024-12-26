@@ -1,4 +1,6 @@
 {{-- <div class="row"> --}}
+
+{!! Form::model($profile, ['route' => ['profiles.update2', $profile->id], 'method' => 'post', 'files' => true]) !!}
 <div class="justify-content-center text-align-center p-5">
         <!-- Dni Field -->
         <div class="form-group col" >
@@ -238,6 +240,8 @@
             {!! Form::submit('Enviar a revisión', ['class' => 'btn btn-primary save-client', 'id'=>'btn-send']) !!}
         </div>
 </div>
+
+{!! Form::close() !!}
 <script src="{{ asset('upload_file.js') }}"></script>
 <script>
     $( document ).ready(function() {

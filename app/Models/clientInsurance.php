@@ -22,6 +22,12 @@ class clientInsurance extends Model
         'insurance_id',
     ];
 
+    protected $casts=[
+        'status'=>'boolean',
+        'user_id'=>'integer',
+        'profile_id'=>'integer',
+        'insurance_id'=>'integer',
+    ];
     public function referred_user(): BelongsTo
     {
         return $this->belongsTo(User::class,'user_id','id');

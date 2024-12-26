@@ -6,22 +6,45 @@
     <h1 class="h3 mb-0 text-gray-800">Seguro</h1>
 </div>
 
-<div class=" card shadow mb-4 row  " id="rounded-container">
+<div class=" card shadow mb-4 row   " id="rounded-container">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Selecciona tu plan</h6>
     </div>
-    <div class="card-body">
-        <div class="card" style="width: 18rem;">
-            <img src="{{URL::assets('/images/dashboard/aa seguros 1-1.webp')}}" class="card-img-top" alt="...">
+    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+        <div class="card d-flex flex-column justify-content-center align-items-center" style="width: 18rem;">
+            <img src="{{ asset('/images/dashboard/aa seguros 1-1.webp') }}" class="card-img-top d-flex justify-content-center align-items-center" alt="..." style="width:30%">
             <div class="card-body">
-              <h5 class="card-title">Seguro para Deportistas</h5>
+              <h5 class="card-title">Fondo de Cobertura de Deportistas</h5>
+
+              <h6 style="font-weight:bolder !important">FCD menores de 18</h6>
+              
               <p class="card-text">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, omnis placeat eum ipsa fugit, voluptatum incidunt quaerat modi ducimus aperiam soluta autem quibusdam amet debitis delectus harum a tenetur ad tempore illo neque possimus quo rerum nesciunt? Laborum, earum quia?
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias dolores, fugiat exercitationem qui ullam veniam cum magnam dolorem, ad esse accusantium? Similique nobis, culpa maxime doloribus ipsam alias adipisci saepe dolorem beatae quos nisi dignissimos perspiciatis impedit ab dolore illo nihil corporis eius sit repellat expedita ullam, tempora obcaecati at? Voluptate consectetur doloremque animi facere odio laborum cumque, quam tempore! Quisquam, quidem.
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure inventore vero omnis cumque dolore, libero nisi! Fugiat rem sequi animi doloribus possimus aperiam atque facere magni, ad qui delectus molestiae.
-              </p>
-              <a href="{{url('/insurance/create')}}" class="btn btn-primary">Contratar</a>
+
+                <p class="card-text mt-4 text-left" style="color: rgb(0, 0, 0) !important;">Deposito permitido desde:</p>
+                    <h3 style="color: #eab226 !important;">
+                         S/ 15 o  S/ 180 soles
+                    </h3>
+                <ul>
+                    <li>
+                        <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">
+                        Pago Anual:</p>S/.180.00 soles (carencia  2 meses de la suscripción)
+                    </li>
+                    <li>
+                        <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">
+                        Pago Mensual: </p>S/.15.00 soles (carencia 3 meses de la suscripción)
+                    </li>
+                    <li>
+                        <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">
+                        Cobertura:</p>S/.1000.00 soles
+                    </li>
+
+
+                </ul>             
+                </p>
+              <a href="{{route('insurance.create')}}" class="btn btn-primary">Contratar</a>
             </div>
         </div>
     </div>
 </div>
+
+@endsection

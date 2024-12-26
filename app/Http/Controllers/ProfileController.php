@@ -15,6 +15,7 @@ use App\Models\Notification;
 use App\Models\RejectionHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -27,6 +28,7 @@ use Carbon\Carbon;
 use App\Traits\MakeFile;
 use App\Traits\BellTrait;
 use App\Models\Document;
+use dd;
 
 class ProfileController extends AppBaseController
 {
@@ -359,6 +361,38 @@ class ProfileController extends AppBaseController
         // session()->flash('success', 'Información enviada con éxito');
         return redirect()->back()->with('success', 'La información se ha enviado para revisión.');
 	    // return redirect(route('profiles.user'));
+    }
+
+    public function upload_insurance(Request $request)
+    {
+
+        $user=Auth::user();
+        $profile = Profile::where('user_id',$user->id)->first();
+        $request->validate([
+            'total_insured' => 'required|integer|min:1',
+            'persons.*.dni' => 'required|string|max:255',
+            'persons.*.first_name' => 'required|string|max:30',
+            'persons.*.lastname' => 'required|string|max:30',
+            'persons.*.type_document' => 'required|string|max:255',
+            'persons.*.country_document' => 'required|string|max:255',
+            'persons.*.address' => 'required|string|max:50',
+        ]);
+
+        // Recuperar o inicializar el perfil
+        // $profile = Profile::firstOrNew(['id' => $request->input('profile_id')]);
+
+        // Fusionar datos nuevos con los existentes
+        $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];
+        $newPersons = $request->input('persons');
+        $mergedPersons = array_merge($existingPersons, $newPersons);
+
+        // Actualizar datos
+        $profile->total_insured = $request->input('total_insured');
+        $profile->data_filled_insured = json_encode($mergedPersons);
+        $profile->update();
+    
+
+        return redirect()->back()->with('success', 'Datos actualizados correctamente.');
     }
 
     public function upload_file(Request $request){

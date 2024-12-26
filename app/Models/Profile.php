@@ -115,6 +115,9 @@ class Profile extends Model
 	    'card_number',
 	    'cci_card',
         'KYC',
+
+        'total_insured',
+        'data_filled_insured',
     ];
 
     /**
@@ -137,6 +140,8 @@ class Profile extends Model
         'card_number'=>'string',
         'cci_card'=>'string',
         'KYC' => 'string',
+        'total_insured' => 'integer',
+        'data_filled_insured' => 'json',
     ];
 
     /**

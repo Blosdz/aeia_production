@@ -140,6 +140,8 @@ Route::middleware(['auth'])->group(function() {
         //profile
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
+        //insurance
+        Route::post('/upload-insurance', [ProfileController::class, 'upload_insurance'])->name('profiles.upload_insurance');
         //payments
 
         Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index_user');
@@ -155,6 +157,14 @@ Route::middleware(['auth'])->group(function() {
         Route::resource('contracts', App\Http\Controllers\ContractController::class);
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
+
+        //seguros 
+        
+        Route::get('insurances/plans', [App\Http\Controllers\InsuranceController::class,'showInsurancePlans'])->name('insurance.plans');
+        Route::post('insurances/store', [App\Http\Controllers\InsuranceController::class, 'insurance_pay'])->name('insurance.store');
+        Route::get('insurances/create',[App\Http\Controllers\InsuranceController::class,'create'])->name('insurance.create');
+        Route::get('insurances',[App\Http\Controllers\InsuranceController::class,'index'])->name('insurance.index');
+        // Route::resource('insurances', App\Http\Controllers\InsuranceController::class);
 
     });
 

@@ -28,21 +28,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($payments  as $payment)
+                {{-- @foreach($payments  as $payment) --}}
                         <tr>
-                            <td>{{$payment->user_name}}</td>
-                            <td>{{$payment->date_transaction}}</td>
-                            <td>{{$payment->total}}</td>
-
-                            <td>{{$payment->status}}</td>
-                            <td>
+                            {{-- <td>{{$payment->user_name}}</td> --}}
+                            {{-- <td>{{$payment->date_transaction}}</td> --}}
+                            {{-- <td>{{$payment->total}}</td> --}}
+                            {{-- <td>{{$payment->status}}</td> --}}
+                            {{-- <td>
                                 <form action="{{ route('payments.update.status', $payment->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-success">Validar</button>
                                 </form>
-                            </td>
-                            <td>
+                            </td> --}}
+                            {{-- <td>
                                 @if ($payment->voucher_picture!="noimgadded")
                                     <a href="{{ Storage::url($payment->voucher_picture) }}" target="_blank" class="btn btn-info">Ver recibo</a>
                                 @else
@@ -55,7 +54,7 @@
 
 
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>

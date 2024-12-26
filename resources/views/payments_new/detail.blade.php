@@ -36,8 +36,8 @@
                         <p class="text-left" style="color: white !important; font-weight: bolder !important;">Membresía: ${{ $plan->annual_membership }} /Anual</p>
                         <p class="text-left" style="color: white !important; font-weight: bolder !important;">Comisión: {{ $plan->commission }}%</p>
                         <p style="color: white !important; font-weight: bolder !important;">"La comisión se ejecuta sobre la ganancia y se realiza al finalizar el ciclo de inversión"</p>
-                        <p style="color: white !important; font-weight: bolder !important;">CTA dólares Banbif: 8028712533</p>
-                        <p style="color: white !important; font-weight: bolder !important;">CCI: 038-730-208028712533-80</p>
+                        <p style="color: white !important; font-weight: bolder !important;">Interbank: 4623340100022 </p>
+                        <p style="color: white !important; font-weight: bolder !important;">CCI: 00346201334010002298</p>
                     </div>
                 </div>
 

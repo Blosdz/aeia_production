@@ -106,9 +106,12 @@
     </a>
 </li>
 
-<li>
-    <a href=""></a>
+
+<li class="nav-item {{ Request::is('insurance*') ? 'active' : '' }}">
+    <a href="{{route('insurance.index')}}" class="nav-link">
+    <i class="fa-solid fa-suitcase-medical"></i>
     <span>Seguro</span>
+    </a>
 </li>
 
 

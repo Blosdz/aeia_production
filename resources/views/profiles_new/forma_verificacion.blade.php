@@ -21,7 +21,6 @@
         </div>
       @endif
       <div class="col p-4" id="rounded-container">
-        {!! Form::model($profile, ['route' => ['profiles.update2', $profile->id], 'method' => 'post', 'files' => true]) !!}
           @php
             if ($user_session->rol==2) {
           @endphp
@@ -43,7 +42,7 @@
               <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Principal</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="seguro-tab" data-toggle="tab" href="#seguro" role="tab" aria-controls="seguro" aria-selected="false">Seguro</a>
+              <a class="nav-link" id="seguro-tab" data-toggle="tab" href="#seguro" role="tab" aria-controls="seguro" aria-selected="false">Cobertura</a>
             </li>
           </ul>
           
@@ -75,7 +74,6 @@
           @php
             }
           @endphp
-        {!! Form::close() !!}
       </div>
   </div>
 @endsection
