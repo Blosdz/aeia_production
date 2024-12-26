@@ -1,7 +1,7 @@
 <div class="justify-content-center text-align-center p-5">
     <form id="insuranceForm" action="{{ route('profiles.upload_insurance') }}" method="POST">
         @csrf
-        <label for="input">CUÁNTAS PERSONAS DESEA ASEGURAR?</label>
+        <label for="input">¿CUÁNTAS PERSONAS DESEA INCLUIR EN LA COBERTURA?</label>
         <input type="number" id="input" name="total_insured" class="form-control" placeholder="Ingrese un número" required>
         
         <div class="accordion mt-4" id="accordionExample"></div>
@@ -53,6 +53,11 @@
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="dni_number${i}">Número de DNI o Documento:</label>
+                                <input type="text" class="form-control" id="dni_number${i}" name="persons[${i}][dni_number]" maxlength="30" required>
                             </div>
 
                             <div class="form-group col-sm-6">

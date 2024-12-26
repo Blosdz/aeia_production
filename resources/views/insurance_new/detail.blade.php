@@ -1,13 +1,14 @@
 @php
     $totalAmount = (is_array($insuredPersons) ? count($insuredPersons) : 0) * $costPerPerson ?? 0;
 
+    $document_types = ["DNI"=>"DNI", "Pasaporte"=>"Pasaporte", "Carnet de extranjería"=>"Carnet de extranjería"];
 @endphp
 
 @extends('layouts_new.app')
 
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Seguro</h1>
+    <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
 </div>
 
 <div class="card shadow mb-4 row" id="rounded-container">
@@ -24,7 +25,7 @@
                     </span>
                     <div class="card-body text-center">
                         <p class="card-text">
-                        El Plan de Seguro Deportivo cubre una amplia gama de lesiones, desde fracturas y esguinces hasta contusiones y traumatismos, con una cobertura máxima de S/.1000.00 soles por evento anual
+                        El Plan de Cobertura Deportivo cubre una amplia gama de lesiones, desde fracturas y esguinces hasta contusiones y traumatismos, con una cobertura máxima de S/.1000.00 soles por evento anual
                         Los montos a pagar por la cobertura son los siguientes:
                         <ul>
                             <li>
@@ -39,12 +40,13 @@
                         </p>
 
                         <p>Deposito permitido desde:</p>
-                        <h3 style="color: #eab226 !important;">100.00 PEN</h3>
+                        <h3 style="color: #eab226 !important;"> DESDE 15 o 180.00 PEN</h3>
                     </div>
                 </div>
 
                 <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
-                    <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
+                    @include('profiles_new.fields_seguro')
+                    {{-- <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h5>Personas aseguradas:</h5>
                         @if (!empty($insuredPersons))
@@ -70,7 +72,7 @@
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-success">Completar pago</button>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
         </div>

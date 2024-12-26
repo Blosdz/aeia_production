@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Insurance;
+
+use Monarobase\CountryList\CountryListFacade;
+use App\Models\Profile;
 use App\Models\clientInsurance;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Models\Profile;
 use DB;
+use App\Http\Requests\CreateProfileRequest;
+use App\Http\Requests\UpdateProfileRequest;
 
 
 class InsuranceController extends Controller
@@ -59,6 +63,25 @@ class InsuranceController extends Controller
             'costPerPerson' => $costPerPerson
         ]);
     }
+    public function pay()
+    {
+        $user = Auth::user(); // Obtener usuario autenticado
+        $profile = Profile::where('user_id',$user->id)->first(); // Obtener el perfil del usuario
+
+        $insuredPersons = $profile ? json_decode($profile->data_filled_insured, true) : []; // Personas aseguradas
+// 
+        $costPerPerson = 100; // Monto fijo por persona
+        $annualPayment = 180; // Pago anual
+        $monthlyPayment = 15; // Pago mensual
+        // dd($insuredPersons,$user,$profile);
+
+        return view('insurance_new.proceed_with_payment', [
+            'profile' => $profile,
+            'insuredPersons' => $insuredPersons,
+            'costPerPerson' => $costPerPerson
+        ]);
+    }
+
     public function insurance_pay(Request $request)
 {
     // Validar los datos del formulario
@@ -94,6 +117,7 @@ class InsuranceController extends Controller
         $insuranceData["persona#$index"] = [
             'nombre' => "Persona $index", // Esto debe ser ajustado si tienes los datos reales de cada persona
             'fecha' => $currentDate,
+            'monto_pay' =>$request->payment_type,
             'monto' => $costPerPerson,
             'img_url' => $voucherPath,
             'contrato_id' => null,
@@ -111,7 +135,7 @@ class InsuranceController extends Controller
         'insurance_id' => $insurance->id, // Relación con el seguro
     ]);
 
-    return redirect()->back()->with('success', 'Pago realizado y seguro creado correctamente.');
+    return redirect()->route('index.insurance')->with('success', 'Pago realizado y seguro creado correctamente.');
 }
 
      

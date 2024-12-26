@@ -374,6 +374,7 @@ class ProfileController extends AppBaseController
             'persons.*.first_name' => 'required|string|max:30',
             'persons.*.lastname' => 'required|string|max:30',
             'persons.*.type_document' => 'required|string|max:255',
+            'persons.*.dni_number' => 'required|string|max:30', // Nueva validación para dni_number
             'persons.*.country_document' => 'required|string|max:255',
             'persons.*.address' => 'required|string|max:50',
         ]);
@@ -391,8 +392,9 @@ class ProfileController extends AppBaseController
         $profile->data_filled_insured = json_encode($mergedPersons);
         $profile->update();
     
+        return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');
 
-        return redirect()->back()->with('success', 'Datos actualizados correctamente.');
+        // return redirect()->back()->with('success', 'Datos actualizados correctamente.');
     }
 
     public function upload_file(Request $request){

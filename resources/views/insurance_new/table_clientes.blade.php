@@ -4,7 +4,7 @@
 @endphp
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Seguro</h1>
+    <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
 </div>
 
 
@@ -25,7 +25,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Historial de Pagos</h6>
         {!! Form::label('filtrar', '&nbsp;') !!}
         @if ($user_session->validated == 1)
-            <a href="{{ route('insurance.plans') }}" style="background-color:green" class="form-control btn btn-success">Contratar Seguro</a>
+            <a href="{{ route('insurance.plans') }}" style="background-color:green" class="form-control btn btn-success">Contratar Cobertura</a>
         @else
             <button type="button" class="form-control btn btn-success" onclick="showAlert()">Nuevo depósito</button>
         @endif
