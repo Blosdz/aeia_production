@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Seguro</h1>
+    <h1 class="h3 mb-0 text-gray-800">Coberturas</h1>
 </div>
 
 
@@ -11,7 +11,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Contratos</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Clientes Cobertura</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -19,42 +19,25 @@
                 <thead>
                     <tr>
                         <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Status</th>
-                        <th>Actualizar</th>
-                        <th>Voucher</th>
-                        <th>Mas Acciones</th>
+                        <th>Usuarios Cubiertos</th>
+                        <th>Estado</th>
+                        <th>Pagos</th>
+                        <th>Mes Contratado</th>
+                        <th>Incidencias</th>
                     </tr>
                 </thead>
                 <tbody>
-                {{-- @foreach($payments  as $payment) --}}
-                        <tr>
-                            {{-- <td>{{$payment->user_name}}</td> --}}
-                            {{-- <td>{{$payment->date_transaction}}</td> --}}
-                            {{-- <td>{{$payment->total}}</td> --}}
-                            {{-- <td>{{$payment->status}}</td> --}}
-                            {{-- <td>
-                                <form action="{{ route('payments.update.status', $payment->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success">Validar</button>
-                                </form>
-                            </td> --}}
-                            {{-- <td>
-                                @if ($payment->voucher_picture!="noimgadded")
-                                    <a href="{{ Storage::url($payment->voucher_picture) }}" target="_blank" class="btn btn-info">Ver recibo</a>
-                                @else
-                                    <span class="text-danger">No hay recibo</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-primary">Ver</a>
-                            </td>
+                @foreach($profiles_user  as $profile)
+                <tr>
+                    <td>{{ $profile['name'] }}</td>
+                    <td>{{ $profile['total_users'] }}</td>
+                    <td>{{ $profile['total_users'] > 0 ? 'Activo' : 'Inactivo' }}</td>
+                    <td>{{ $profile['insurance_payment'] ?? 'Sin pago' }}</td>
+                    <td>{{ $profile['month'] ?? 'Sin mes' }}</td>
+                    <td>{{ $profile['incidents'] ?? 'Sin incidencias' }}</td>
+                </tr>
 
-
-                        </tr>
-                    @endforeach --}}
+                @endforeach 
                 </tbody>
             </table>
         </div>

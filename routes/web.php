@@ -110,9 +110,14 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/table-fondo/edit/{id}/update-investing',[FondoController::class,'updateGanancia'])->name('fondos.update-ganancia');
 
         
+    
         Route::resource('contracts', App\Http\Controllers\ContractController::class);
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
+
+        //insurance 
+
+        Route::get('/insurancesAdmin',[App\Http\Controllers\InsuranceController::class,'index_admin'])->name('insurance.admin');
 
 
 
@@ -135,15 +140,18 @@ Route::middleware(['auth'])->group(function() {
     
     //cliente normal
     Route::middleware(['role:3'])->group(function(){
+
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
+        
         //profile
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
+        
         //insurance
         Route::post('/upload-insurance', [ProfileController::class, 'upload_insurance'])->name('profiles.upload_insurance');
-        //payments
 
+        //payments
         Route::get('payments',[PaymentController::class,'index_user'])->name('payments.index_user');
 
         Route::get('payments/{id}', [PaymentController::class, 'edit'])->name('payments.edit');
@@ -159,7 +167,6 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
         //seguros 
-        
         Route::get('insurances/plans', [App\Http\Controllers\InsuranceController::class,'showInsurancePlans'])->name('insurance.plans');
         Route::post('insurances/store', [App\Http\Controllers\InsuranceController::class, 'insurance_pay'])->name('insurance.store');
         Route::get('insurances/create',[App\Http\Controllers\InsuranceController::class,'create'])->name('insurance.create');

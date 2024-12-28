@@ -25,16 +25,63 @@ class InsuranceController extends Controller
         //entonces si lol es se pasa y la informacion del pago se registra en el insurance Id de client Insurance -> profile id deberia darnos la cantidad de personas elegidas al seguro 
         // se debe de agregar a la base de datos cuantas personas se van a asegurar ademas de eso se pasa a un json la data que se mando por medio de profiles 
         // la forma de verlos una vez agregado es colocando un dropdown menu con los fields a asegurados
-        if($user_session->rol==3){
-            $ClientInsuranceData=ClientInsurance::where('user_id',$user_session->id)->get();
-            return view('insurance_new.table_insurance',compact('ClientInsuranceData','user_session'));
-        }
-        if($user_session->rol==1){
-            $insurance=ClientInsurance::all()->get();
-            return view('insurance_new.table_insurance')->with('insurance',$insurance);
-        }
+        $ClientInsuranceData=ClientInsurance::where('user_id',$user_session->id)->get();
+        return view('insurance_new.table_insurance',compact('ClientInsuranceData','user_session'));
+
 
     }
+    public function index_admin()
+    {
+        $profiles = Profile::all();
+        $profiles_user = [];
+
+        foreach ($profiles as $profile) {
+            $userData = [];
+
+            // Concatenar el nombre y apellido
+            $userData['name'] = $profile->first_name . ' ' . $profile->lastname;
+
+            // Obtener el total de personas aseguradas
+            $dataFilledInsured = json_decode($profile->data_filled_insured, true);
+            
+            $userData['total_users'] = is_array($dataFilledInsured) ? count($dataFilledInsured) : 0;
+
+            // Buscar el seguro asociado al usuario
+            $insurance = ClientInsurance::where('user_id', $profile->user_id)->first();
+
+            if ($insurance && $insurance->insurance_id) {
+                $insuranceData = Insurance::find($insurance->insurance_id);
+
+                if ($insuranceData) {
+                    $jsonData = json_decode($insuranceData->json, true);
+
+                    // Sumar los montos de pago en el JSON
+                    $userData['insurance_payment'] = collect($jsonData)->flatMap(function ($month) {
+                        return collect($month)->pluck('monto');
+                    })->sum();
+
+                    // Obtener el mes de creación del seguro
+                    $userData['month'] = $insuranceData->created_at->format('F Y');
+                } else {
+                    $userData['insurance_payment'] = null;
+                    $userData['month'] = null;
+                }
+            } else {
+                $userData['insurance_payment'] = null;
+                $userData['month'] = null;
+            }
+
+            // Agregar datos del usuario al array final
+            $profiles_user[] = $userData;
+        }
+
+
+        // Enviar los datos a la vista
+        return view('insurance_new.table_admin', [
+            'profiles_user' => $profiles_user,
+        ]);
+    }
+
 
     public function show($id){
         // $insurance=ClientInsurance::find($id);

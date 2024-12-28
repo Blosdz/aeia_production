@@ -12,8 +12,8 @@
 </div>
 
 <div class="row  row-fil3-client">
-    <div class="col p-3">
-        <div class="dropdown">
+    <div class="col p-3 card shadow mb-4" >
+        <div class="dropdown card-header py-3">
             <button class="btn btn-primary dropdown-toggle" type="button" id="fondoDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Seleccionar Fondo
             </button>
@@ -25,8 +25,8 @@
                 @endforeach
             </div>
         </div>
-        <div class="col p-3">
-            <div class="counter h-100 w-100 bg-1" id="rounded-container">
+        <div class="col p-3 card-body">
+            <div class="counter h-100 w-100 bg-1 chart-area" id="rounded-container">
                 <div class="col h-100 p-3">
                     <div class="chart_general_data">
                         <div id="fondoChart"></div>
@@ -37,8 +37,8 @@
     </div>
 
     <div class="col-3 p-3">
-        <div class="counter h-50 w-100 bg-1" id="rounded-container">
-            <div class="col h-100 p-3">
+        <div class="counter h-50 w-100 bg-1 card border-left-primary shadow  py-2" id="rounded-container">
+            <div class="col card-body h-100 p-3">
                 <h5>Información del Fondo</h5>
                 <p><strong>Nombre:</strong> <span id="fondoName">{{ $fondos->first()->fondo_name }}</span></p>
                 <p><strong>Fecha:</strong> <span id="fondoDate">{{ $fondos->first()->created_at->format('d-m-Y') }}</span></p>
@@ -48,34 +48,43 @@
     </div>
 </div>
 <div class="row">
-    <div class="col p-3">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable">
+    <div class="col p-3 card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Cryptos</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
 
-                <thead>
-                    <tr>
-                        <th>Crypto</th>
-                        <th>Valor USD</th>
-                        <th>Porcentaje</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (!empty($cryptos) && is_iterable($cryptos))
-                        @foreach ($cryptos as $crypto)
-                            <tr>
-                                <td>{{ $crypto->name }}</td>
-                                <td>{{ $crypto->rates }}</td>
-                                <td>{{ $crypto->percentage }}</td>
-                            </tr>
-                        @endforeach
-                    @else
+                <table class="table table-bordered" id="dataTable">
+
+                    <thead>
                         <tr>
-                            <td colspan="3">No hay datos disponibles.</td>
+                            <th>Crypto</th>
+                            <th>Valor USD</th>
+                            <th>Porcentaje</th>
                         </tr>
-                    @endif
+                    </thead>
+                    <tbody>
+                        @if (!empty($cryptos) && is_iterable($cryptos))
+                            @foreach ($cryptos as $crypto)
+                                <tr>
+                                    <td>{{ $crypto->name }}</td>
+                                    <td>{{ $crypto->rates }}</td>
+                                    <td>{{ $crypto->percentage }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td>No hay datos disponibles.</td>
+                                <td>No hay datos disponibles.</td>
+                                <td>No hay datos disponibles.</td>
+                            </tr>
+                        @endif
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div> 
 </div>

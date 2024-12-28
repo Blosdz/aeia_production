@@ -34,6 +34,14 @@
         <span>Subir Documentos</span>
     </a>
 </li>
+
+<li class="nav-item {{ Request::is('insurance*') ? 'active' : '' }}">
+    <a href="{{route('insurance.admin')}}" class="nav-link" >
+        <i class="fa-solid fa-suitcase-medical"></i>
+        <span>Cobertura</span>
+    </a>
+</li>
+
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('tableFondos') }}">
         <i class="fa-solid fa-arrows-rotate"></i>

@@ -26,7 +26,7 @@
                     </span>
                     <div class="card-body text-center">
                         <p class="card-text">
-                        El Plan de Cobertura Deportivo cubre una amplia gama de lesiones, desde fracturas y esguinces hasta contusiones y traumatismos, con una cobertura máxima de S/.1000.00 soles por evento anual
+                        El Plan de Cobertura Deportiva cubre una amplia gama de lesiones, desde fracturas y esguinces hasta contusiones y traumatismos, con una cobertura máxima de S/.1000.00 soles por evento anual
                         Los montos a pagar por la cobertura son los siguientes:
                         <ul>
                             <li>
