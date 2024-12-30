@@ -9,6 +9,7 @@ use Monarobase\CountryList\CountryListFacade;
 use App\Models\Profile;
 use App\Models\clientInsurance;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use App\Http\Requests\CreateProfileRequest;
@@ -32,7 +33,10 @@ class InsuranceController extends Controller
     }
     public function index_admin()
     {
-        $profiles = Profile::all();
+        // Filtrar usuarios con rol 3 o 4
+        $user_where = User::whereIn('rol', [3, 4])->pluck('id');
+        // Filtrar perfiles de los usuarios con los roles especificados
+        $profiles = Profile::whereIn('user_id', $user_where)->get();
         $profiles_user = [];
 
         foreach ($profiles as $profile) {
@@ -41,6 +45,7 @@ class InsuranceController extends Controller
             // Concatenar el nombre y apellido
             $userData['name'] = $profile->first_name . ' ' . $profile->lastname;
 
+            $userData['user_id'] = $profile->user_id;
             // Obtener el total de personas aseguradas
             $dataFilledInsured = json_decode($profile->data_filled_insured, true);
             
@@ -83,12 +88,67 @@ class InsuranceController extends Controller
     }
 
 
-    public function show($id){
-        // $insurance=ClientInsurance::find($id);
-        // $dataInsurance=Insurance::find($insurance->insurance_id);
-        return view('insurance_new.show');
+    public function show($id)
+    {
+        $user = User::find($id);
+        
+        //debemos obtener las personas que tienen el id odel profile el json que tiene los valores del json son los siguientes
+        //dentro de profiles tenemos foto del dni frontal 
+        //nombres 
+        //apellidos 
+        //tipo de documento 
+        //numero del documento 
+        //pais 
+        //direccion de residencia
 
+
+        //en el json de insurance tenemos los siguientes valores 
+        // 
+        // Obtener el perfil del usuario
+        $profile = Profile::where('user_id', $id)->first();
+        
+        // Obtener los clientes asociados al usuario
+        $insurance_clients = ClientInsurance::where('user_id', $id)->get();
+        
+        // Obtener los datos de los seguros asociados a los clientes
+        $insurance_data = Insurance::whereIn('id', $insurance_clients->pluck('insurance_id'))->get();
+        
+        // Obtener los datos de las personas aseguradas desde el perfil
+        $data_filled_insured = [];
+        if ($profile && $profile->data_filled_insured) {
+            $data_filled_insured = json_decode($profile->data_filled_insured, true);
+        }
+        
+        // Crear un arreglo con las personas aseguradas y sus pagos relacionados
+        $insured_with_payments = [];
+    
+        if ($insurance_data->isNotEmpty()) {
+            foreach ($insurance_data as $insurance) {
+                // Asociar los pagos a las personas aseguradas
+                // foreach ($insurance->payments as $payment) {
+                //     $persona_key = 'persona#' . $payment->persona_id; // Identificador único de la persona
+    
+                //     // Si la persona está en los datos de personas aseguradas, agregar el pago
+                //     if (isset($data_filled_insured[$payment->persona_id])) {
+                //         // Si no existe la persona en el array, la agregamos
+                //         if (!isset($insured_with_payments[$persona_key])) {
+                //             $insured_with_payments[$persona_key] = $data_filled_insured[$payment->persona_id];
+                //         }
+    
+                //         // Agregar el pago correspondiente
+                //         $insured_with_payments[$persona_key]['payments'][] = [
+                //             'fecha' => $payment->fecha,
+                //             'monto' => $payment->monto,
+                //             'voucher' => $payment->voucher_url ?? null,
+                //         ];
+                //     }
+                // }
+            }
+        }
+    
+        return view('insurance_new.show', compact('user', 'profile', 'insurance_clients', 'insurance_data', 'insured_with_payments'));
     }
+    
 
     public function showInsurancePlans(){
         return view('insurance_new.select_plan');
@@ -195,6 +255,7 @@ class InsuranceController extends Controller
     ClientInsurance::updateOrCreate(
         ['user_id' => $user->id], // Condición para verificar si ya existe
         [
+            'profile_id'=>$profile->id,
             'status' => false, // Estado inicial del seguro
             'profile_id' => $user->profile_id, // Asegúrate de obtener el perfil relacionado
             'insurance_id' => $insurance->id, // Relación con el seguro

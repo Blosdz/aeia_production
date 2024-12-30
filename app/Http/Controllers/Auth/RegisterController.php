@@ -40,6 +40,31 @@ class RegisterController extends Controller
     protected $redirectTo = "/home";
 
     /**
+     * Redirigir a los usuarios según su rol después del registro.
+     *
+     * @return string
+     */
+    public function redirectTo()
+    {
+        $role = auth()->user()->rol;
+        switch ($role) {
+            case 1:
+                return '/admin/home';
+            case 2:
+                return '/suscriptor/home';
+            case 3:
+            case 4:
+                return '/user/home';
+            case 5:
+                return '/gerente/home';
+            case 6:
+                return 'verificador/home';
+            case 8:
+                return 'banco/home';
+        }
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -71,7 +96,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-     
         //dd($data);
         $data['name'] = explode("@", $data['email'])[0];
         $user = User::create([
@@ -84,9 +108,9 @@ class RegisterController extends Controller
             'refered_code' => $data['refered_code'] ?? 'aeia',
         ]);
 
-    // Crear el registro en SubscritorData si el rol es 1, 2 o 5
+        // Crear el registro en SubscritorData si el rol es 1, 2 o 5
         if (in_array($data['rol'], [1, 2, 5])) {
-            $suscriptor_data=SubscriptorDataModel::create([
+            $suscriptor_data = SubscriptorDataModel::create([
                 'name' => $data['name'],
                 'membership_collected' => 0,
                 'user_table_id' => $user->id, // Aquí asignamos el ID del usuario recién creado

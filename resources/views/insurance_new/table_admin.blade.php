@@ -1,14 +1,6 @@
 @extends('layouts_new.app')
 
 @section('content')
-
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Coberturas</h1>
-</div>
-
-
-
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Clientes Cobertura</h6>
@@ -24,10 +16,11 @@
                         <th>Pagos</th>
                         <th>Mes Contratado</th>
                         <th>Incidencias</th>
+                        <th>Más Información</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($profiles_user  as $profile)
+                @foreach($profiles_user as $profile)
                 <tr>
                     <td>{{ $profile['name'] }}</td>
                     <td>{{ $profile['total_users'] }}</td>
@@ -35,18 +28,19 @@
                     <td>{{ $profile['insurance_payment'] ?? 'Sin pago' }}</td>
                     <td>{{ $profile['month'] ?? 'Sin mes' }}</td>
                     <td>{{ $profile['incidents'] ?? 'Sin incidencias' }}</td>
+                    <td>
+                        <a href="{{ route('insurance.show', $profile['user_id']) }}" class="btn btn-info btn-sm">
+                            Más Información
+                        </a>
+                    </td>
                 </tr>
-
                 @endforeach 
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-
 @endsection
-
 {{--                        <th>Observaciones</th>
                             <td>
                             
