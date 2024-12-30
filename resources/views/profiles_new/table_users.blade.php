@@ -41,7 +41,7 @@
                                 <td>
                                     {{ $profile->first_name . ' ' . $profile->lastname }}
                                     <br>
-                                    {{ $profile->user->email }} 
+                                    {{ isset($profile->user) ? $profile->user->email : 'No email disponible' }} 
                                 </td>
                                 <td>
                                     {{ $verified_list[$profile->verified]}}
@@ -57,7 +57,7 @@
 
                                 </td>
                                 <td>
-                                    {{ $user_type[$profile->user->rol]}}
+                                    {{-- {{ $user_type[$profile->user->rol]}} --}}
                                 </td>
                                 <td>
                                     <a href="{{ route('profiles.edit', [$profile->id]) }}" class='btn btn-ghost-info'>

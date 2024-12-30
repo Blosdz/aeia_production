@@ -372,6 +372,7 @@ class ProfileController extends AppBaseController
         $request->validate([
             'total_insured' => 'required|integer|min:1',
             'persons.*.dni' => 'required|string|max:255',
+            'persons.*.dni_r' => 'required|string|max:255',
             'persons.*.first_name' => 'required|string|max:30',
             'persons.*.lastname' => 'required|string|max:30',
             'persons.*.type_document' => 'required|string|max:255',
@@ -379,6 +380,30 @@ class ProfileController extends AppBaseController
             'persons.*.country_document' => 'required|string|max:255',
             'persons.*.address' => 'required|string|max:50',
         ]);
+
+        $profile_fields=[];
+        $profile_fields[0]="dni";
+        $profile_fields[1]="dni_r";
+        for($i=0;$i<size_of($profile_fields);$i++){
+            if ($request->hasFile($file_fields[$i])) {
+                $filePath = 'profile/';
+
+                if (!file_exists(storage_path($filePath))) {
+                    Storage::makeDirectory('public/insurance_dnis/'.$filePath, 0777, true);
+                }
+                $name = uniqid().'.'.$request->file($file_fields[$i])->getClientOriginalExtension();
+                $path = $filePath.$name;
+
+                if (is_file(storage_path('/app/public/insurance_dnis'.$profile[$file_fields[$i]]))){   
+                   unlink(storage_path('/app/public/insurance_dnis'.$profile[$file_fields[$i]]));
+                }
+                $request->file($file_fields[$i])->storeAs('public/insurance_dnis'.$filePath, $name);
+                // $profile->update([$file_fields[$i] => $path]);
+            } 
+        }
+
+        //agregar el file subido a la base de datos y crear la url al file si es necesario para su vista 
+
     
         // Obtener las personas aseguradas actuales
         $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];

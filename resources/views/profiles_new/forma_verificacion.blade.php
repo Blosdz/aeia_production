@@ -41,18 +41,14 @@
             <li class="nav-item">
               <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Principal</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" id="seguro-tab" data-toggle="tab" href="#seguro" role="tab" aria-controls="seguro" aria-selected="false">Cobertura</a>
-            </li>
+
           </ul>
           
           <div class="row card shadow tab-content d-flex justify-content-between align-items-center" id="myTabContent">
             <div class="tab-pane fade show active bg-1 rounded" id="home" role="tabpanel" aria-labelledby="home-tab">
               @include('profiles_new.fields_usuario')
             </div>
-            <div class="tab-pane fade bg-1 rounded" id="seguro" role="tabpanel" aria-labelledby="seguro-tab">
-              @include('profiles_new.fields_seguro')
-            </div>
+
           </div>
 
           @php
