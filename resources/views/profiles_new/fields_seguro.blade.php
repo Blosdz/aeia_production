@@ -1,5 +1,5 @@
 <div class="justify-content-center text-align-center p-5">
-    <form id="insuranceForm" action="{{ route('profiles.upload_insurance') }}" method="POST">
+    <form id="insuranceForm" action="{{ route('profiles.upload_insurance') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="input">¿CUÁNTAS PERSONAS DESEA INCLUIR EN LA COBERTURA?</label>
         <input type="number" id="input" name="total_insured" class="form-control" placeholder="Ingrese un número" required>
@@ -10,12 +10,13 @@
 </div>
 
 <script>
-    const input = document.getElementById('input');
-    const accordionContainer = document.getElementById('accordionExample');
+$(document).ready(function () {
+    const input = $('#input');
+    const accordionContainer = $('#accordionExample');
 
-    input.addEventListener('input', function () {
-        const numPersons = parseInt(this.value) || 0;
-        accordionContainer.innerHTML = ''; // Limpia el contenedor
+    input.on('input', function () {
+        const numPersons = parseInt($(this).val()) || 0;
+        accordionContainer.html(''); // Limpia el contenedor
 
         for (let i = 1; i <= numPersons; i++) {
             const accordionItem = `
@@ -33,76 +34,124 @@
                             <strong>Formulario para Persona #${i}:</strong>
                             <div class="form-group mt-2">
                                 <label for="dni${i}">Cargar foto de DNI frontal:</label>
-                                <input type="file" accept="image/*" class="form-control" id="dni${i}" name="persons[${i}][dni]" required>
-                            </div>
+                                <input type="file" accept="image/*" class="form-control file-input" id="dni${i}" name="persons[${i}][dni_file]" required>
+                                <div class="progress mt-2" id="progress-dni${i}" style="display: none;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <img id="preview-dni${i}" class="img-fluid mt-2" style="max-width: 200px; display: none;" />
 
-                            <div class="form-group col-sm-6">
-                                <label for="first_name${i}">Nombres:</label>
-                                <input type="text" class="form-control" id="first_name${i}" name="persons[${i}][first_name]" maxlength="30" required>
-                            </div>
+                                <div class="form-group mt-2">
+                                    <label for="dni_r${i}">Cargar foto de DNI posterior:</label>
+                                    <input type="file" accept="image/*" class="form-control file-input" id="dni_r${i}" name="persons[${i}][dni_r_file]" required>
+                                    <div class="progress mt-2" id="progress-dni_r${i}" style="display: none;">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                    </div>
+                                </div>
+                                <img id="preview-dni_r${i}" class="img-fluid mt-2" style="max-width: 200px; display: none;" />
 
-                            <div class="form-group col-sm-6">
-                                <label for="lastname${i}">Apellidos:</label>
-                                <input type="text" class="form-control" id="lastname${i}" name="persons[${i}][lastname]" maxlength="30" required>
-                            </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="first_name${i}">Nombres:</label>
+                                    <input type="text" class="form-control" id="first_name${i}" name="persons[${i}][first_name]" maxlength="30" required>
+                                </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="type_document${i}">Tipo de documento de identidad:</label>
-                                <select class="form-control" id="type_document${i}" name="persons[${i}][type_document]" required>
-                                    @foreach($document_types as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="lastname${i}">Apellidos:</label>
+                                    <input type="text" class="form-control" id="lastname${i}" name="persons[${i}][lastname]" maxlength="30" required>
+                                </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="dni_number${i}">Número de DNI o Documento:</label>
-                                <input type="text" class="form-control" id="dni_number${i}" name="persons[${i}][dni_number]" maxlength="30" required>
-                            </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="type_document${i}">Tipo de documento de identidad:</label>
+                                    <select class="form-control" id="type_document${i}" name="persons[${i}][type_document]" required>
+                                        @foreach($document_types as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="country_document${i}">País emisor del documento de identidad:</label>
-                                <select class="form-control" id="country_document${i}" name="persons[${i}][country_document]" required>
-                                    @foreach($countries as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="dni_number${i}">Número de DNI o Documento:</label>
+                                    <input type="text" class="form-control" id="dni_number${i}" name="persons[${i}][dni_number]" maxlength="30" required>
+                                </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="address${i}">Dirección de residencia:</label>
-                                <input type="text" class="form-control" id="address${i}" name="persons[${i}][address]" maxlength="50" required>
+                                <div class="form-group col-sm-6">
+                                    <label for="country_document${i}">País emisor del documento de identidad:</label>
+                                    <select class="form-control" id="country_document${i}" name="persons[${i}][country_document]" required>
+                                        @foreach($countries as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <label for="address${i}">Dirección de residencia:</label>
+                                    <input type="text" class="form-control" id="address${i}" name="persons[${i}][address]" maxlength="50" required>
+                                </div>
+
+ 
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             `;
-            accordionContainer.innerHTML += accordionItem;
+            accordionContainer.append(accordionItem);
         }
-        // Asegurarse de que solo un acordeón esté abierto
-        const allAccordionButtons = accordionContainer.querySelectorAll('.accordion-button');
-        allAccordionButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const currentlyExpanded = this.getAttribute('aria-expanded') === 'true';
-
-                // Cierra todos los demás acordeones
-                allAccordionButtons.forEach(btn => {
-                    const targetCollapse = document.querySelector(btn.getAttribute('data-bs-target'));
-                    if (btn !== this) {
-                        btn.classList.add('collapsed');
-                        btn.setAttribute('aria-expanded', 'false');
-                        targetCollapse.classList.remove('show');
-                    }
-                });
-
-                // Alternar el estado del actual
-                const targetCollapse = document.querySelector(this.getAttribute('data-bs-target'));
-                if (!currentlyExpanded) {
-                    this.classList.remove('collapsed');
-                    this.setAttribute('aria-expanded', 'true');
-                    targetCollapse.classList.add('show');
-                }
-            });
-        });
     });
+
+    // Delegación para botones del acordeón
+    accordionContainer.on('click', '.accordion-button', function () {
+        const currentlyExpanded = $(this).attr('aria-expanded') === 'true';
+
+        // Cierra todos los demás acordeones
+        accordionContainer.find('.accordion-button').each(function () {
+            const targetCollapse = $(this).data('bs-target');
+            $(this).addClass('collapsed').attr('aria-expanded', 'false');
+            $(targetCollapse).removeClass('show');
+        });
+
+        // Alternar el estado del actual
+        const targetCollapse = $(this).data('bs-target');
+        if (!currentlyExpanded) {
+            $(this).removeClass('collapsed').attr('aria-expanded', 'true');
+            $(targetCollapse).addClass('show');
+        }
+    });
+
+    // Manejo de carga de archivos y previsualización
+    $(document).on('change', '.file-input', function (e) {
+        const inputId = $(this).attr('id');
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        const progressId = `progress-${inputId}`;
+        const previewId = `preview-${inputId}`;
+        
+        $(`#${progressId}`).show();
+        $(`#${progressId} .progress-bar`).css('width', '0%').text('0%');
+
+        reader.onloadstart = function () {
+            $(`#${previewId}`).hide();
+        };
+
+        reader.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percentComplete = Math.round((event.loaded / event.total) * 100);
+                $(`#${progressId} .progress-bar`).css('width', `${percentComplete}%`).text(`${percentComplete}%`);
+            }
+        };
+
+        reader.onload = function (event) {
+            $(`#${previewId}`).attr('src', event.target.result).show();
+        };
+
+        reader.onloadend = function () {
+            $(`#${progressId}`).hide();
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
 </script>

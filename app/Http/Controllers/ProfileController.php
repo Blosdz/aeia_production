@@ -362,17 +362,20 @@ class ProfileController extends AppBaseController
         return redirect()->back()->with('success', 'La información se ha enviado para revisión.');
 	    // return redirect(route('profiles.user'));
     }
-
     public function upload_insurance(Request $request)
     {
         $user = Auth::user();
-        $profile = Profile::where('user_id', $user->id)->first();
+        // Verificar si el perfil existe; si no, crearlo
+        $profile = Profile::firstOrCreate(
+            ['user_id' => $user->id], 
+            ['data_filled_insured' => json_encode([]), 'total_insured' => 0]
+        );
     
-        // Validar los datos del formulario
+        // Validar datos del formulario
         $request->validate([
             'total_insured' => 'required|integer|min:1',
-            'persons.*.dni' => 'required|string|max:255',
-            'persons.*.dni_r' => 'required|string|max:255',
+            'persons.*.dni_file' => 'required|file|image|max:2048',
+            'persons.*.dni_r_file' => 'required|file|image|max:2048',
             'persons.*.first_name' => 'required|string|max:30',
             'persons.*.lastname' => 'required|string|max:30',
             'persons.*.type_document' => 'required|string|max:255',
@@ -380,54 +383,47 @@ class ProfileController extends AppBaseController
             'persons.*.country_document' => 'required|string|max:255',
             'persons.*.address' => 'required|string|max:50',
         ]);
-
-        $profile_fields=[];
-        $profile_fields[0]="dni";
-        $profile_fields[1]="dni_r";
-        for($i=0;$i<size_of($profile_fields);$i++){
-            if ($request->hasFile($file_fields[$i])) {
-                $filePath = 'profile/';
-
-                if (!file_exists(storage_path($filePath))) {
-                    Storage::makeDirectory('public/insurance_dnis/'.$filePath, 0777, true);
-                }
-                $name = uniqid().'.'.$request->file($file_fields[$i])->getClientOriginalExtension();
-                $path = $filePath.$name;
-
-                if (is_file(storage_path('/app/public/insurance_dnis'.$profile[$file_fields[$i]]))){   
-                   unlink(storage_path('/app/public/insurance_dnis'.$profile[$file_fields[$i]]));
-                }
-                $request->file($file_fields[$i])->storeAs('public/insurance_dnis'.$filePath, $name);
-                // $profile->update([$file_fields[$i] => $path]);
-            } 
-        }
-
-        //agregar el file subido a la base de datos y crear la url al file si es necesario para su vista 
-
     
-        // Obtener las personas aseguradas actuales
+        // Obtener asegurados actuales
         $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];
     
-        // Comprobar duplicados en los datos ingresados
-        foreach ($request->input('persons') as $newPerson) {
+        foreach ($request->input('persons') as $index => $personData) {
+            // Validar duplicados
             foreach ($existingPersons as $existingPerson) {
-                // Comprobar si el DNI o el nombre y apellido ya existen
-                if ($newPerson['dni_number'] === $existingPerson['dni_number'] || 
-                    ($newPerson['first_name'] === $existingPerson['first_name'] && 
-                    $newPerson['lastname'] === $existingPerson['lastname'])) {
-                    
+                if (
+                    $personData['dni_number'] === $existingPerson['dni_number'] || 
+                    ($personData['first_name'] === $existingPerson['first_name'] && $personData['lastname'] === $existingPerson['lastname'])
+                ) {
                     return redirect()->back()->with('error', 'Ya existe una persona con el mismo DNI o nombre.');
                 }
             }
+    
+            // Subir archivos y generar rutas
+            foreach (['dni_file', 'dni_r_file'] as $field) {
+                if ($request->hasFile("persons.$index.$field")) {
+                    $filePath = 'insurance_dnis/';
+                    $name = uniqid() . '.' . $request->file("persons.$index.$field")->getClientOriginalExtension();
+    
+                    if (!Storage::exists('public/' . $filePath)) {
+                        Storage::makeDirectory('public/' . $filePath, 0777, true);
+                    }
+    
+                    $path = $filePath . $name;
+                    $request->file("persons.$index.$field")->storeAs('public/' . $filePath, $name);
+    
+                    // Agregar ruta al asegurado
+                    $personData[$field] = $path;
+                }
+            }
+    
+            // Agregar asegurado al arreglo de existentes
+            $existingPersons[] = $personData;
         }
     
-        // Fusionar los datos nuevos con los existentes
-        $mergedPersons = array_merge($existingPersons, $request->input('persons'));
-    
-        // Actualizar el perfil
-        $profile->total_insured = $request->input('total_insured');
-        $profile->data_filled_insured = json_encode($mergedPersons);
-        $profile->update();
+        // Actualizar perfil
+        $profile->total_insured = count($existingPersons); // Actualizar con el total correcto
+        $profile->data_filled_insured = json_encode($existingPersons);
+        $profile->save();
     
         return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');
     }

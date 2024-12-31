@@ -170,13 +170,14 @@ class InsuranceController extends Controller
             'costPerPerson' => $costPerPerson
         ]);
     }
+
     public function pay()
     {
         $user = Auth::user(); // Obtener usuario autenticado
         $profile = Profile::where('user_id',$user->id)->first(); // Obtener el perfil del usuario
 
         $insuredPersons = $profile ? json_decode($profile->data_filled_insured, true) : []; // Personas aseguradas
-// 
+
         $costPerPerson = 100; // Monto fijo por persona
         $annualPayment = 180; // Pago anual
         $monthlyPayment = 15; // Pago mensual
@@ -190,80 +191,80 @@ class InsuranceController extends Controller
     }
 
     public function insurance_pay(Request $request)
-{
-    // Validar los datos del formulario
-    $validatedData = $request->validate([
-        'voucher_picture' => 'required|image|max:2048',
-        'paid_persons' => 'required|array|min:1', // Asegurar que al menos una persona esté seleccionada
-    ]);
-
-    // Subir el archivo de imagen y obtener su ruta
-    $voucherPath = $request->file('voucher_picture')->store('vouchers', 'public');
-
-    // Obtener el usuario autenticado
-    $user = Auth::user();
-
-    $profile = Profile::where('user_id', $user->id)->first(); // Obtener el perfil del usuario
-
-    // Validar y calcular el monto total a pagar basado en las personas seleccionadas
-    $paidPersons = $request->input('paid_persons');
-    $costPerPerson = 100; // Costo por persona (puedes obtenerlo dinámicamente si es necesario)
-    $totalAmount = count($paidPersons) * $costPerPerson;
-
-    // Buscar si ya existe un seguro para este usuario basado en el número de teléfono
-    $insurance = Insurance::where('phonenumber', $profile->phone_extension . '.' . $profile->phone)->first();
-
-    // Si el seguro no existe, crear uno nuevo
-    if (!$insurance) {
-        $insurance = new Insurance();
-        $insurance->user_id = $user->id;
-        $insurance->phonenumber = $profile->phone_extension . '.' . $profile->phone; // Número de teléfono único
-        $insurance->email = $user->email;
-    }
-
-    // Crear el JSON con la información del pago por persona
-    $currentMonth = Carbon::now()->format('F');
-    $currentDate = Carbon::now()->toDateString();
-
-    $insuranceData = [];
+    {
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'voucher_picture' => 'required|image|max:2048',
+            'paid_persons' => 'required|array|min:1', // Asegurar que al menos una persona esté seleccionada
+        ]);
     
-    // Si el seguro ya tiene datos, los decodificamos
-    if ($insurance->json) {
-        $existingData = json_decode($insurance->json, true);
-        if (isset($existingData[$currentMonth])) {
-            $insuranceData = $existingData[$currentMonth]; // Usamos los datos existentes de este mes
+        // Subir el archivo de imagen y obtener su ruta
+        $voucherPath = $request->file('voucher_picture')->store('vouchers', 'public');
+    
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+    
+        $profile = Profile::where('user_id', $user->id)->first(); // Obtener el perfil del usuario
+    
+        // Validar y calcular el monto total a pagar basado en las personas seleccionadas
+        $paidPersons = $request->input('paid_persons');
+        $costPerPerson = 100; // Costo por persona (puedes obtenerlo dinámicamente si es necesario)
+        $totalAmount = count($paidPersons) * $costPerPerson;
+    
+        // Buscar si ya existe un seguro para este usuario basado en el número de teléfono
+        $insurance = Insurance::where('phonenumber', $profile->phone_extension . '.' . $profile->phone)->first();
+    
+        // Si el seguro no existe, crear uno nuevo
+        if (!$insurance) {
+            $insurance = new Insurance();
+            $insurance->user_id = $user->id;
+            $insurance->phonenumber = $profile->phone_extension . '.' . $profile->phone; // Número de teléfono único
+            $insurance->email = $user->email;
         }
+    
+        // Crear el JSON con la información del pago por persona
+        $currentMonth = Carbon::now()->format('F');
+        $currentDate = Carbon::now()->toDateString();
+    
+        $insuranceData = [];
+        
+        // Si el seguro ya tiene datos, los decodificamos
+        if ($insurance->json) {
+            $existingData = json_decode($insurance->json, true);
+            if (isset($existingData[$currentMonth])) {
+                $insuranceData = $existingData[$currentMonth]; // Usamos los datos existentes de este mes
+            }
+        }
+    
+        // Agregar las nuevas personas al JSON
+        foreach ($paidPersons as $index) {
+            $insuranceData["persona#$index"] = [
+                'nombre' => "Persona $index", // Esto debe ser ajustado si tienes los datos reales de cada persona
+                'fecha' => $currentDate,
+                'monto_pay' => $request->payment_type,
+                'monto' => $costPerPerson,
+                'img_url' => $voucherPath,
+                'contrato_id' => null,
+            ];
+        }
+    
+        // Guardar el JSON actualizado
+        $insurance->json = json_encode([$currentMonth => $insuranceData]);
+        $insurance->save(); // Si el seguro ya existía, esto actualizará el registro
+    
+        // Crear o actualizar la entrada en ClientInsurance
+        ClientInsurance::updateOrCreate(
+            ['user_id' => $user->id], // Condición para verificar si ya existe
+            [
+                'profile_id'=>$profile->id,
+                'status' => false, // Estado inicial del seguro
+                'profile_id' => $user->profile_id, // Asegúrate de obtener el perfil relacionado
+                'insurance_id' => $insurance->id, // Relación con el seguro
+            ]
+        );
+    
+        return redirect()->route('insurance.index')->with('success', 'Pago realizado y seguro creado/actualizado correctamente.');
     }
-
-    // Agregar las nuevas personas al JSON
-    foreach ($paidPersons as $index) {
-        $insuranceData["persona#$index"] = [
-            'nombre' => "Persona $index", // Esto debe ser ajustado si tienes los datos reales de cada persona
-            'fecha' => $currentDate,
-            'monto_pay' => $request->payment_type,
-            'monto' => $costPerPerson,
-            'img_url' => $voucherPath,
-            'contrato_id' => null,
-        ];
-    }
-
-    // Guardar el JSON actualizado
-    $insurance->json = json_encode([$currentMonth => $insuranceData]);
-    $insurance->save(); // Si el seguro ya existía, esto actualizará el registro
-
-    // Crear o actualizar la entrada en ClientInsurance
-    ClientInsurance::updateOrCreate(
-        ['user_id' => $user->id], // Condición para verificar si ya existe
-        [
-            'profile_id'=>$profile->id,
-            'status' => false, // Estado inicial del seguro
-            'profile_id' => $user->profile_id, // Asegúrate de obtener el perfil relacionado
-            'insurance_id' => $insurance->id, // Relación con el seguro
-        ]
-    );
-
-    return redirect()->route('insurance.index')->with('success', 'Pago realizado y seguro creado/actualizado correctamente.');
-}
      
 
     public function edit($id){
