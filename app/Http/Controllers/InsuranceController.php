@@ -15,6 +15,8 @@ use DB;
 use App\Http\Requests\CreateProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 
+use Illuminate\Support\Facades\Storage;
+
 
 class InsuranceController extends Controller
 {
@@ -196,12 +198,17 @@ class InsuranceController extends Controller
         $validatedData = $request->validate([
             'voucher_picture' => 'required|image|max:2048',
             'paid_persons' => 'required|array|min:1', // Asegurar que al menos una persona esté seleccionada
+            'payment_type'=> 'required|string',
         ]);
     
         // Subir el archivo de imagen y obtener su ruta
-        $voucherPath = $request->file('voucher_picture')->store('vouchers', 'public');
-    
-        // Obtener el usuario autenticado
+        $filePath = 'insurance_payment/';
+        $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
+
+        if (!Storage::exists('public/' . $filePath)) {
+            Storage::makeDirectory('public/' . $filePath, 0777, true);
+        }
+
         $user = Auth::user();
     
         $profile = Profile::where('user_id', $user->id)->first(); // Obtener el perfil del usuario
@@ -210,6 +217,12 @@ class InsuranceController extends Controller
         $paidPersons = $request->input('paid_persons');
         $costPerPerson = 100; // Costo por persona (puedes obtenerlo dinámicamente si es necesario)
         $totalAmount = count($paidPersons) * $costPerPerson;
+
+        // Subir el archivo de imagen y obtener su ruta
+        $voucherPath = $filePath . $name; 
+        $request->file("voucher_picture")->storeAs('public/' . $filePath, $name);
+
+
     
         // Buscar si ya existe un seguro para este usuario basado en el número de teléfono
         $insurance = Insurance::where('phonenumber', $profile->phone_extension . '.' . $profile->phone)->first();

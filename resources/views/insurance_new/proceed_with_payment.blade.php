@@ -139,6 +139,41 @@
         // Inicializar el monto total
         updateTotalAmount();
     });
+
+    // Manejo de carga de archivos y previsualización
+    $(document).on('change', '.file-input', function (e) {
+        const inputId = $(this).attr('id');
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        const progressId = `progress-${inputId}`;
+        const previewId = `preview-${inputId}`;
+        
+        $(`#${progressId}`).show();
+        $(`#${progressId} .progress-bar`).css('width', '0%').text('0%');
+
+        reader.onloadstart = function () {
+            $(`#${previewId}`).hide();
+        };
+
+        reader.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percentComplete = Math.round((event.loaded / event.total) * 100);
+                $(`#${progressId} .progress-bar`).css('width', `${percentComplete}%`).text(`${percentComplete}%`);
+            }
+        };
+
+        reader.onload = function (event) {
+            $(`#${previewId}`).attr('src', event.target.result).show();
+        };
+
+        reader.onloadend = function () {
+            $(`#${progressId}`).hide();
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 
 @endsection
