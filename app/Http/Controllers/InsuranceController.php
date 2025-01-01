@@ -92,65 +92,64 @@ class InsuranceController extends Controller
 
     public function show($id)
     {
-        $user = User::find($id);
-        
-        //debemos obtener las personas que tienen el id odel profile el json que tiene los valores del json son los siguientes
-        //dentro de profiles tenemos foto del dni frontal 
-        //nombres 
-        //apellidos 
-        //tipo de documento 
-        //numero del documento 
-        //pais 
-        //direccion de residencia
-
-
-        //en el json de insurance tenemos los siguientes valores 
-        // 
         // Obtener el perfil del usuario
         $profile = Profile::where('user_id', $id)->first();
-        
-        // Obtener los clientes asociados al usuario
-        $insurance_clients = ClientInsurance::where('user_id', $id)->get();
-        
-        // Obtener los datos de los seguros asociados a los clientes
-        $insurance_data = Insurance::whereIn('id', $insurance_clients->pluck('insurance_id'))->get();
-        
-        // Obtener los datos de las personas aseguradas desde el perfil
         $data_filled_insured = [];
+    
         if ($profile && $profile->data_filled_insured) {
+            // Decodificar JSON en el campo data_filled_insured
             $data_filled_insured = json_decode($profile->data_filled_insured, true);
         }
-        
-        // Crear un arreglo con las personas aseguradas y sus pagos relacionados
-        $insured_with_payments = [];
     
-        if ($insurance_data->isNotEmpty()) {
-            foreach ($insurance_data as $insurance) {
-                // Asociar los pagos a las personas aseguradas
-                // foreach ($insurance->payments as $payment) {
-                //     $persona_key = 'persona#' . $payment->persona_id; // Identificador único de la persona
+        // Obtener seguros relacionados al usuario
+        $insurance_data = Insurance::where('user_id', $id)->get();
     
-                //     // Si la persona está en los datos de personas aseguradas, agregar el pago
-                //     if (isset($data_filled_insured[$payment->persona_id])) {
-                //         // Si no existe la persona en el array, la agregamos
-                //         if (!isset($insured_with_payments[$persona_key])) {
-                //             $insured_with_payments[$persona_key] = $data_filled_insured[$payment->persona_id];
-                //         }
+        // Preparar el arreglo combinado
+        $insured_with_details = [];
+        foreach ($data_filled_insured as $index => $person) {
+            $persona_key = "persona#{$index}";
     
-                //         // Agregar el pago correspondiente
-                //         $insured_with_payments[$persona_key]['payments'][] = [
-                //             'fecha' => $payment->fecha,
-                //             'monto' => $payment->monto,
-                //             'voucher' => $payment->voucher_url ?? null,
-                //         ];
-                //     }
-                // }
+            // Datos base de la persona
+            $insured_with_details[$persona_key] = [
+                "nombre" => "{$person['first_name']} {$person['lastname']}",
+                "dni" => "{$person['type_document']} - {$person['dni_number']}",
+                "country_document" => $person['country_document'],
+                "photo_url" => [
+                    "front" => asset($person['dni_file']),
+                    "back" => asset($person['dni_r_file']),
+                ],
+                "address" => $person['address'],
+                "insurance_details" => [], // Inicializar seguros
+            ];
+        }
+    
+        // Combinar información de seguros con las personas
+        foreach ($insurance_data as $insurance) {
+            $insurance_json = $insurance->json; // Acceder al JSON desde el modelo
+            if (is_array($insurance_json)) {
+                foreach ($insurance_json as $persona_key => $insurance_info) {
+                    if (isset($insured_with_details[$persona_key])) {
+                        $insured_with_details[$persona_key]['insurance_details'][] = [
+                            "fecha" => $insurance_info['fecha'] ?? null,
+                            "monto" => $insurance_info['monto'] ?? null,
+                            "monto_pay" => $insurance_info['monto_pay'] ?? null,
+                            "img_url" => isset($insurance_info['img_url']) ? asset($insurance_info['img_url']) : null,
+                            "contrato_id" => $insurance_info['contrato_id'] ?? null,
+                        ];
+                    }
+                }
             }
         }
     
-        return view('insurance_new.show', compact('user', 'profile', 'insurance_clients', 'insurance_data', 'insured_with_payments'));
+        // Renderizar la vista
+        return view('insurance_new.show', [
+            'insured_with_details' => $insured_with_details,
+            'user' => User::find($id),
+            'profile' => $profile,
+        ]);
     }
-    
+     
+       
 
     public function showInsurancePlans(){
         return view('insurance_new.select_plan');
