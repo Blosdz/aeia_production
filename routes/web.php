@@ -119,6 +119,7 @@ Route::middleware(['auth'])->group(function() {
 
         Route::get('/insurancesAdmin',[App\Http\Controllers\InsuranceController::class,'index_admin'])->name('insurance.admin');
         Route::get('/insurancesAdmin/{id}', [App\Http\Controllers\InsuranceController::class, 'show'])->name('insurance.show');
+        Route::post('/insurancesAdmin/{id}/update', [App\Http\Controllers\InsuranceController::class, 'updateStatus'])->name('insurance.updateStatus');
 
 
 

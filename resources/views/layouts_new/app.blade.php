@@ -49,7 +49,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/app.css')}}"/>
     {{--<link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>--}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qK0oI0kfdPAe+Tx9B5JcO1OTk5ci62A4XJymNeCEc5d/3UybA6WfrM8eIhvXXF5g" crossorigin="anonymous"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qK0oI0kfdPAe+Tx9B5JcO1OTk5ci62A4XJymNeCEc5d/3UybA6WfrM8eIhvXXF5g" crossorigin="anonymous"></script> --}}
 
     {{--<link rel="stylesheet" href="{{URL::asset('/newDashboard/app_mobile.css')}}"/>--}}
 </head>
@@ -173,20 +173,14 @@
         </div>
 
 </body>
-<script>
-    function toggleDropdown() {
-        var dropdownMenu = document.getElementById('dropdown-menu');
-        dropdownMenu.style.display = dropdownMenu.style.display === "none" ? "block" : "none";
-    }
-</script>
+
     
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src ={{URL::asset('/newDashboard/js/app_new.js')}}></script>
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
 <script src={{asset('dashboard/js/sb-admin-2.js')}}></script>
 {{-- bundle js bootstrap --}}
-
-<script src="{{ asset('vendor/bootstrap/bootstrap/js/bootstrap.bundle.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@2.1.16/dist/js/coreui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

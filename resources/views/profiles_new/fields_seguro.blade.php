@@ -49,17 +49,19 @@ $(document).ready(function () {
                                 </div>
                                 <img id="preview-dni_r${i}" class="img-fluid mt-2" style="max-width: 200px; display: none;" />
 
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col">
                                     <label for="first_name${i}">Nombres:</label>
                                     <input type="text" class="form-control" id="first_name${i}" name="persons[${i}][first_name]" maxlength="30" required>
                                 </div>
 
-                                <div class="form-group col-sm-6">
+
+
+                                <div class="form-group col">
                                     <label for="lastname${i}">Apellidos:</label>
                                     <input type="text" class="form-control" id="lastname${i}" name="persons[${i}][lastname]" maxlength="30" required>
                                 </div>
 
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col">
                                     <label for="type_document${i}">Tipo de documento de identidad:</label>
                                     <select class="form-control" id="type_document${i}" name="persons[${i}][type_document]" required>
                                         @foreach($document_types as $key => $value)
@@ -68,21 +70,31 @@ $(document).ready(function () {
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col">
                                     <label for="dni_number${i}">Número de DNI o Documento:</label>
                                     <input type="text" class="form-control" id="dni_number${i}" name="persons[${i}][dni_number]" maxlength="30" required>
                                 </div>
 
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col">
+                                    <label for="Deporte${i}">Deporte:</label>
+                                    <input type="text" class="form-control" id="deporte${i}" name="persons[${i}][deporte]" maxlength="30" required>
+                                </div>
+
+
+                                <div class="form-group col">
+                                    <label for="Club${i}">Club:</label>
+                                      <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Opcional"></i>Opcional
+                                        <input type="text" class="form-control" id="club${i}" name="persons[${i}][club]" maxlength="30" placeholder="Opcional">
+                                </div>
+
+                                <div class="form-group col">
                                     <label for="country_document${i}">País emisor del documento de identidad:</label>
                                     <select class="form-control" id="country_document${i}" name="persons[${i}][country_document]" required>
-                                        @foreach($countries as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
+                                        <option value="Perú">Perú</option>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col">
                                     <label for="address${i}">Dirección de residencia:</label>
                                     <input type="text" class="form-control" id="address${i}" name="persons[${i}][address]" maxlength="50" required>
                                 </div>

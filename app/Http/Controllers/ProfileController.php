@@ -380,6 +380,8 @@ class ProfileController extends AppBaseController
             'persons.*.lastname' => 'required|string|max:30',
             'persons.*.type_document' => 'required|string|max:255',
             'persons.*.dni_number' => 'required|string|max:30',
+            'persons.*.deporte' => 'required|string|max:30',
+            'persons.*club'=> 'required|string|max:30',
             'persons.*.country_document' => 'required|string|max:255',
             'persons.*.address' => 'required|string|max:50',
         ]);

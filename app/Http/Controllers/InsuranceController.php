@@ -101,11 +101,16 @@ class InsuranceController extends Controller
             $data_filled_insured = json_decode($profile->data_filled_insured, true);
         }
     
+        $insurance_data_client = clientInsurance::where('user_id', $id)->first();
         // Obtener seguros relacionados al usuario
-        $insurance_data = Insurance::where('user_id', $id)->get();
+        $insurance_data_all = Insurance::where('id', $insurance_data_client->insurance_id)->first();
     
         // Preparar el arreglo combinado
+        $insurance_data=json_decode($insurance_data_all->json,true);
+
         $insured_with_details = [];
+
+        // dd($insurance_data);
         foreach ($data_filled_insured as $index => $person) {
             $persona_key = "persona#{$index}";
     
@@ -114,34 +119,36 @@ class InsuranceController extends Controller
                 "nombre" => "{$person['first_name']} {$person['lastname']}",
                 "dni" => "{$person['type_document']} - {$person['dni_number']}",
                 "country_document" => $person['country_document'],
+                "Club" => $person['club'] ?? 'N/A',
+                "deporte" => $person['deporte'] ?? 'N/A',
                 "photo_url" => [
                     "front" => asset($person['dni_file']),
                     "back" => asset($person['dni_r_file']),
+                    // "voucher" => asset
                 ],
                 "address" => $person['address'],
                 "insurance_details" => [], // Inicializar seguros
             ];
         }
     
-        // Combinar información de seguros con las personas
-        foreach ($insurance_data as $insurance) {
-            $insurance_json = $insurance->json; // Acceder al JSON desde el modelo
-            if (is_array($insurance_json)) {
-                foreach ($insurance_json as $persona_key => $insurance_info) {
-                    if (isset($insured_with_details[$persona_key])) {
-                        $insured_with_details[$persona_key]['insurance_details'][] = [
-                            "fecha" => $insurance_info['fecha'] ?? null,
-                            "monto" => $insurance_info['monto'] ?? null,
-                            "monto_pay" => $insurance_info['monto_pay'] ?? null,
-                            "img_url" => isset($insurance_info['img_url']) ? asset($insurance_info['img_url']) : null,
-                            "contrato_id" => $insurance_info['contrato_id'] ?? null,
-                        ];
-                    }
+       // Pasar por los datos de seguro y combinar con insured_with_details
+       foreach ($insurance_data as $month => $details) {
+            foreach ($details as $persona_key => $insurance_details) {
+                // Validar si el persona_key existe en insured_with_details
+                if (isset($insured_with_details[$persona_key])) {
+                    $insured_with_details[$persona_key]['insurance_details'][] = [
+                        "mes" => $month,
+                        "fecha" => $insurance_details['fecha'],
+                        "monto_pay" => $insurance_details['monto_pay'],
+                        "monto" => $insurance_details['monto'],
+                        "img_url" => asset($insurance_details['img_url']),
+                    ];
                 }
             }
         }
     
         // Renderizar la vista
+        // dd($insured_with_details);
         return view('insurance_new.show', [
             'insured_with_details' => $insured_with_details,
             'user' => User::find($id),
@@ -154,6 +161,63 @@ class InsuranceController extends Controller
     public function showInsurancePlans(){
         return view('insurance_new.select_plan');
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        // Recuperar los datos de seguro del cliente
+        $insurance_data_client = clientInsurance::where('user_id', $id)->first();
+
+        if (!$insurance_data_client) {
+            return redirect()->back()->with('error', 'Seguro no encontrado para este usuario.');
+        }
+
+        // Buscar el seguro
+        $insurance_data_all = Insurance::where('id', $insurance_data_client->insurance_id)->first();
+
+        if (!$insurance_data_all) {
+            return redirect()->back()->with('error', 'Cobertura de seguro no encontrada.');
+        }
+
+        // Decodificar el JSON de datos del seguro
+        $insurance_json = json_decode($insurance_data_all->json, true);
+
+        // Validar el input de estado que viene del request (validar, no validar, etc.)
+        $validated = $request->validate([
+            'persona_id' => 'required|string', // Ejemplo persona#0, persona#1, etc.
+            'status' => 'required|string|in:validar,no_validar,corregir_data', // estado validado o no validado
+            'month' => 'required|string', // mes, en este caso December
+        ]);
+
+        // Obtener la persona y mes desde el request
+        $persona_key = $request->input('persona_id'); // ejemplo persona#0
+        $month_key = $request->input('month');  // Aquí recibes "December"
+
+        // Verificar si el mes existe en el JSON
+        if (isset($insurance_json[$month_key])) {
+            // Verificar si la persona existe dentro del mes
+            if (isset($insurance_json[$month_key][$persona_key])) {
+                // Actualizar el valor "stats" dentro de la persona
+                $insurance_json[$month_key][$persona_key]['stats'] = $request->input('status');
+            } else {
+                return redirect()->back()->with('error', "Persona no encontrada en el mes $month_key.");
+            }
+        } else {
+            return redirect()->back()->with('error', 'Mes no encontrado en los datos del seguro.');
+        }
+
+        // Volver a codificar el JSON y guardarlo en el modelo
+        $insurance_data_all->json = json_encode($insurance_json);
+
+        // Guardar los cambios en la base de datos
+        $insurance_data_all->save();
+
+        // Redirigir con éxito
+        return redirect()->route('insurance.show', ['id' => $id])
+                         ->with('success', 'Estado actualizado correctamente');
+    }
+
+
+    
 
     public function create()
     {
