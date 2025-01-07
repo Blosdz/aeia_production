@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Profile;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+use Carbon\Carbon;
+use dd;
 
 class PdfController extends Controller
 {
-    //  
+    //
     public function create()
         {
             return view('pdfUpload');
         }
-    
+
     public function store(Request $request){
 	$filePath = 'pdfs/';
 
@@ -23,7 +30,7 @@ class PdfController extends Controller
             if (!file_exists(storage_path($filePath))) {
                 Storage::makeDirectory('public/'.$filePath, 0777, true);
             }
-            
+
             // Generar un nombre único para el archivo PDF
             $name = uniqid().'.'.$request->file('pdf_file')->getClientOriginalExtension();
             // Ruta completa donde se guardará el archivo PDF
@@ -46,13 +53,13 @@ class PdfController extends Controller
         }
 
     }
-    
+
 
     public function show(){
 	    $documents = Document::all();
 	    return view('showproduct', compact('documents'));
     }
-    
+
     public function view($id){
         $document = Document::find($id);
 	    if (!$document) {

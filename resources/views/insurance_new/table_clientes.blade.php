@@ -7,22 +7,9 @@
     <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
 </div>
 
-
-{{-- 
-
-    como se va ver los pagos del seguro 
-    dropdown
-
-
-    ClientInsurance es 
-    id |  status  | user_id  |  profile_id   | created_at | updated_at | insurance_id
-
---}}
-
 <div class="card shadow mb-4">
-
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Historial de Pagos</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Historial de Beneficiarios y Pagos</h6>
         {!! Form::label('filtrar', '&nbsp;') !!}
         @if ($user_session->validated == 1)
             <a href="{{ route('insurance.plans') }}" style="background-color:green" class="form-control btn btn-success">Contratar Cobertura</a>
@@ -32,39 +19,52 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered display" id="dataTable" width="100%" cellspacing="1">
+            <table class="table table-bordered" id="dataTable">
                 <thead>
                     <tr>
-                        <th>Mes</th>
-                        <th>Fecha</th>
-                        <th>Ultima Actualización</th>
-                        <th>Recibos</th>
-                        <th>Más</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Documento</th>
+                        <th>Deporte</th>
+                        <th>Club</th>
+                        <th>Dirección</th>
+                        <th>Monto Pagado</th>
+                        <th>Fecha de Pago</th>
+                        <th>Recibo</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($ClientInsuranceData as $ClientInsurance)
+                    @foreach ($combinedData as $data)
                         <tr>
-                            <td>{{ $months[Carbon\Carbon::parse($ClientInsurance->created_at)->month] }}</td>
-                            <td>{{ $ClientInsurance->created_at->format('d/m/Y') }}</td>
-                            <td>{{ $ClientInsurance->updated_at->format('d/m/Y') }}</td>
-                            <td>
-                                @if ($ClientInsurance->voucher_path)
-                                    <a href="{{ asset('storage/' . $ClientInsurance->voucher_path) }}" target="_blank">Ver recibo</a>
-                                @else
-                                    No disponible
-                                @endif
-                            </td>
-                            <td>
-                                {{-- <a href="{{ route('insurance.details', $ClientInsurance->id) }}" class="btn btn-info btn-sm">Ver detalles</a> --}}
-                            </td>
+                            <td>{{ $data['persona']['first_name'] }}</td>
+                            <td>{{ $data['persona']['lastname'] }}</td>
+                            <td>{{ $data['persona']['type_document'] }}: {{ $data['persona']['dni_number'] }}</td>
+                            <td>{{ $data['persona']['deporte'] ?? ""}} </td>
+                            <td>{{ $data['persona']['club']  ?? ""}}</td>
+                            <td>{{ $data['persona']['address'] }}</td>
+                            @if (!empty($data['pagos']))
+                                @foreach ($data['pagos'] as $pago)
+                                        <td>S/{{ $pago['monto'] }}</td>
+                                        <td>{{ Carbon\Carbon::parse($pago['fecha'])->format('d/m/Y') }}</td>
+                                        <td>
+                                            @if (!empty($pago['img_url']))
+                                                <a href="{{ asset('storage/' . $pago['img_url']) }}" target="_blank">Ver recibo</a>
+                                            @else
+                                                No disponible
+                                            @endif
+                                        </td>
+                                @endforeach
+                            @else
+                                <td colspan="" class="text-center">No hay pagos registrados</td>
+                            @endif
                         </tr>
                     @endforeach
-                </tbody> 
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
 
 
 <script>

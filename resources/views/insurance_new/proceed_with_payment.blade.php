@@ -12,6 +12,9 @@
 
 @extends('layouts_new.app')
 
+
+<script src="https://sandbox-checkout.izipay.pe/payments/v1/js/index.js"></script>
+
 @section('content')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
@@ -40,7 +43,7 @@
                                 <li>
                                     Pago Mensual: S/.15.00 soles (cobertura efectiva a los 3 meses de la suscripción).
                                 </li>
-                            </ul>             
+                            </ul>
                             Este plan le ofrece tranquilidad y seguridad, sabiendo que su hijo(a) estará cubierto en caso de lesiones deportivas, con la facilidad de elegir entre opciones de pago anuales o mensuales según su conveniencia.
                         </p>
 
@@ -58,7 +61,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                    @endif         
+                    @endif
                     <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h5>Personas aseguradas:</h5>
@@ -66,9 +69,11 @@
                             @foreach ($insuredPersons as $index => $person)
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" name="paid_persons[]" value="{{ $index }}"> 
+                                        <input type="checkbox" name="paid_persons[]" value="{{ $index }}">
                                         {{ $person['first_name'] }} {{ $person['lastname'] }} - Monto: S/<span class="person_amount">0</span>
                                     </label>
+                                    <input type="hidden" name="first_names[]" value="{{ $person['first_name'] }}">
+                                    <input type="hidden" name="last_names[]" value="{{ $person['lastname'] }}">
                                 </div>
                             @endforeach
                         @else
@@ -79,7 +84,7 @@
 
                         <div class="form-group">
                             <label for="payment_type">Seleccione el tipo de pago:</label><br>
-                            
+
                             <input type="radio" name="payment_type" value="annual" id="annualPayment" {{ $paymentType ?? '' == 'annual' ? 'checked' : '' }}> Pago Anual (S/.180)<br>
                             <input type="radio" name="payment_type" value="monthly" id="monthlyPayment" {{ $paymentType ?? '' == 'monthly' ? 'checked' : '' }}> Pago Mensual (S/.15)<br>
                         </div>
@@ -108,7 +113,7 @@
         const annualPayment = document.getElementById('annualPayment');
         const monthlyPayment = document.getElementById('monthlyPayment');
         const personAmounts = document.querySelectorAll('.person_amount');
-        
+
         // Función para recalcular el monto total
         function updateTotalAmount() {
             let total = 0;
@@ -147,7 +152,7 @@
         const reader = new FileReader();
         const progressId = `progress-${inputId}`;
         const previewId = `preview-${inputId}`;
-        
+
         $(`#${progressId}`).show();
         $(`#${progressId} .progress-bar`).css('width', '0%').text('0%');
 

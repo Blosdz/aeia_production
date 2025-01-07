@@ -85,7 +85,7 @@
 </style>
 <body>
     <div class="date">{{$timestamp}}</div>
-    <div class="background-container"></div> 
+    <div class="background-container"></div>
     <p>
         Conste por el presente Contrato para Administración de Capital, que celebran de una parte AEIA INVESTMENT E.I.R.L. identificado con RUC Nº 20608381741, provincia y departamento de Arequipa país Perú, a quien en adelante se le denominará LA EMPRESA; y de otra parte el Sr(a) {{ $profile->name . $profile->lastname}}, con DNI Nº {{}}, con domicilio fiscal {{$donde_vive}}, {{$distrito}}, provincia y departamento de {{$country}}, a quien en lo sucesivo se le denominará EL SUSCRIPTOR. El presente contrato, se celebra en los términos y condiciones siguientes:
     </p>
@@ -97,7 +97,7 @@
             <td><b>EL SUSCRIPTOR</b> </td>
         </tr>
     </table>
-    
+
 
 </body>
 </html>

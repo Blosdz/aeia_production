@@ -22,17 +22,40 @@ class InsuranceController extends Controller
 {
 
     //
+
+
+
     public function index(){
-        $user_session= Auth::user();
-        //en insurances tenemos que ferificar si el usuario esta en clientInsurances con el profile se busca si se habilita el boton de agregar seguro 
-        //entonces si lol es se pasa y la informacion del pago se registra en el insurance Id de client Insurance -> profile id deberia darnos la cantidad de personas elegidas al seguro 
-        // se debe de agregar a la base de datos cuantas personas se van a asegurar ademas de eso se pasa a un json la data que se mando por medio de profiles 
-        // la forma de verlos una vez agregado es colocando un dropdown menu con los fields a asegurados
-        $ClientInsuranceData=ClientInsurance::where('user_id',$user_session->id)->get();
-        return view('insurance_new.table_insurance',compact('ClientInsuranceData','user_session'));
+        $user_session = Auth::user();
+
+        // Obtener el perfil del usuario
+        $profile = Profile::where('user_id', $user_session->id)->first();
+        $dataFilledInsured = $profile ? json_decode($profile->data_filled_insured, true) : [];
+
+        // Obtener los datos de ClientInsurance e Insurance
+        $clientInsurance = ClientInsurance::where('user_id', $user_session->id)
+            ->with('insurance') // Relación con Insurance
+            ->first();
+
+        $insuranceData = $clientInsurance ? json_decode($clientInsurance->insurance->json ?? '{}', true) : [];
+
+        // Combinar Profile con Insurance
+        $combinedData = [];
+        foreach ($dataFilledInsured as $key => $persona) {
+            $insurancePayments = $insuranceData[$key] ?? []; // Buscar pagos en Insurance
+
+            $combinedData[] = [
+                'persona' => $persona,
+                'pagos' => $insurancePayments,
+            ];
+        }
 
 
+        return view('insurance_new.table_insurance', compact('combinedData','user_session'));
     }
+
+
+
     public function index_admin()
     {
         // Filtrar usuarios con rol 3 o 4
@@ -50,7 +73,7 @@ class InsuranceController extends Controller
             $userData['user_id'] = $profile->user_id;
             // Obtener el total de personas aseguradas
             $dataFilledInsured = json_decode($profile->data_filled_insured, true);
-            
+
             $userData['total_users'] = is_array($dataFilledInsured) ? count($dataFilledInsured) : 0;
 
             // Buscar el seguro asociado al usuario
@@ -95,16 +118,16 @@ class InsuranceController extends Controller
         // Obtener el perfil del usuario
         $profile = Profile::where('user_id', $id)->first();
         $data_filled_insured = [];
-    
+
         if ($profile && $profile->data_filled_insured) {
             // Decodificar JSON en el campo data_filled_insured
             $data_filled_insured = json_decode($profile->data_filled_insured, true);
         }
-    
+
         $insurance_data_client = clientInsurance::where('user_id', $id)->first();
         // Obtener seguros relacionados al usuario
         $insurance_data_all = Insurance::where('id', $insurance_data_client->insurance_id)->first();
-    
+
         // Preparar el arreglo combinado
         $insurance_data=json_decode($insurance_data_all->json,true);
 
@@ -113,7 +136,7 @@ class InsuranceController extends Controller
         // dd($insurance_data);
         foreach ($data_filled_insured as $index => $person) {
             $persona_key = "persona#{$index}";
-    
+
             // Datos base de la persona
             $insured_with_details[$persona_key] = [
                 "nombre" => "{$person['first_name']} {$person['lastname']}",
@@ -130,7 +153,7 @@ class InsuranceController extends Controller
                 "insurance_details" => [], // Inicializar seguros
             ];
         }
-    
+
        // Pasar por los datos de seguro y combinar con insured_with_details
        foreach ($insurance_data as $month => $details) {
             foreach ($details as $persona_key => $insurance_details) {
@@ -146,7 +169,7 @@ class InsuranceController extends Controller
                 }
             }
         }
-    
+
         // Renderizar la vista
         // dd($insured_with_details);
         return view('insurance_new.show', [
@@ -155,8 +178,8 @@ class InsuranceController extends Controller
             'profile' => $profile,
         ]);
     }
-     
-       
+
+
 
     public function showInsurancePlans(){
         return view('insurance_new.select_plan');
@@ -217,7 +240,7 @@ class InsuranceController extends Controller
     }
 
 
-    
+
 
     public function create()
     {
@@ -255,16 +278,15 @@ class InsuranceController extends Controller
         ]);
     }
 
-    public function insurance_pay(Request $request)
-    {
-        // Validar los datos del formulario
+    public function insurance_pay(Request $request){
         $validatedData = $request->validate([
             'voucher_picture' => 'required|image|max:2048',
-            'paid_persons' => 'required|array|min:1', // Asegurar que al menos una persona esté seleccionada
-            'payment_type'=> 'required|string',
+            'paid_persons' => 'required|array|min:1',
+            'first_names' => 'required|array',
+            'last_names' => 'required|array',
+            'payment_type' => 'required|string',
         ]);
-    
-        // Subir el archivo de imagen y obtener su ruta
+
         $filePath = 'insurance_payment/';
         $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
 
@@ -273,75 +295,63 @@ class InsuranceController extends Controller
         }
 
         $user = Auth::user();
-    
-        $profile = Profile::where('user_id', $user->id)->first(); // Obtener el perfil del usuario
-    
-        // Validar y calcular el monto total a pagar basado en las personas seleccionadas
-        $paidPersons = $request->input('paid_persons');
-        $costPerPerson = 100; // Costo por persona (puedes obtenerlo dinámicamente si es necesario)
-        $totalAmount = count($paidPersons) * $costPerPerson;
+        $profile = Profile::where('user_id', $user->id)->first();
 
-        // Subir el archivo de imagen y obtener su ruta
-        $voucherPath = $filePath . $name; 
+        $costPerPerson = $request->payment_type === 'annual' ? 180 : 15;
+        $paidPersons = $request->input('paid_persons');
+        $firstNames = $request->input('first_names');
+        $lastNames = $request->input('last_names');
+        $voucherPath = $filePath . $name;
+
         $request->file("voucher_picture")->storeAs('public/' . $filePath, $name);
 
+        $insurance = Insurance::firstOrCreate(
+            ['phonenumber' => $profile->phone_extension . '.' . $profile->phone],
+            [
+                'user_id' => $user->id,
+                'email' => $user->email,
+            ]
+        );
 
-    
-        // Buscar si ya existe un seguro para este usuario basado en el número de teléfono
-        $insurance = Insurance::where('phonenumber', $profile->phone_extension . '.' . $profile->phone)->first();
-    
-        // Si el seguro no existe, crear uno nuevo
-        if (!$insurance) {
-            $insurance = new Insurance();
-            $insurance->user_id = $user->id;
-            $insurance->phonenumber = $profile->phone_extension . '.' . $profile->phone; // Número de teléfono único
-            $insurance->email = $user->email;
-        }
-    
-        // Crear el JSON con la información del pago por persona
-        $currentMonth = Carbon::now()->format('F');
         $currentDate = Carbon::now()->toDateString();
-    
-        $insuranceData = [];
-        
-        // Si el seguro ya tiene datos, los decodificamos
-        if ($insurance->json) {
-            $existingData = json_decode($insurance->json, true);
-            if (isset($existingData[$currentMonth])) {
-                $insuranceData = $existingData[$currentMonth]; // Usamos los datos existentes de este mes
-            }
-        }
-    
-        // Agregar las nuevas personas al JSON
+        $insuranceData = json_decode($insurance->json, true) ?? [];
+
         foreach ($paidPersons as $index) {
-            $insuranceData["persona#$index"] = [
-                'nombre' => "Persona $index", // Esto debe ser ajustado si tienes los datos reales de cada persona
+            if (!is_numeric($index) || !isset($firstNames[$index]) || !isset($lastNames[$index])) {
+                return redirect()->back()->withErrors('Los datos de las personas aseguradas son inconsistentes.');
+            }
+
+            $personaKey = md5($firstNames[$index] . $lastNames[$index]);
+
+            if (!isset($insuranceData[$personaKey])) {
+                $insuranceData[$personaKey] = [];
+            }
+
+            $insuranceData[$personaKey][] = [
+                'nombre' => $firstNames[$index],
+                'apellido' => $lastNames[$index],
                 'fecha' => $currentDate,
                 'monto_pay' => $request->payment_type,
                 'monto' => $costPerPerson,
                 'img_url' => $voucherPath,
-                'contrato_id' => null,
             ];
         }
-    
-        // Guardar el JSON actualizado
-        $insurance->json = json_encode([$currentMonth => $insuranceData]);
-        $insurance->save(); // Si el seguro ya existía, esto actualizará el registro
-    
-        // Crear o actualizar la entrada en ClientInsurance
+
+        $insurance->json = json_encode($insuranceData);
+        $insurance->save();
+
         ClientInsurance::updateOrCreate(
-            ['user_id' => $user->id], // Condición para verificar si ya existe
+            ['user_id' => $user->id],
             [
-                'profile_id'=>$profile->id,
-                'status' => false, // Estado inicial del seguro
-                'profile_id' => $user->profile_id, // Asegúrate de obtener el perfil relacionado
-                'insurance_id' => $insurance->id, // Relación con el seguro
+                'profile_id' => $profile->id,
+                'status' => false,
+                'insurance_id' => $insurance->id,
             ]
         );
-    
+
         return redirect()->route('insurance.index')->with('success', 'Pago realizado y seguro creado/actualizado correctamente.');
     }
-     
+
 
     public function edit($id){
 
@@ -356,5 +366,5 @@ class InsuranceController extends Controller
     }
 
 
-    
+
 }

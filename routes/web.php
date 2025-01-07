@@ -33,6 +33,14 @@ Route::get('/pgadmin', function() {
     abort(404);
 });
 
+Route::get('/izi_pay',function(){
+    return view('testIzi');
+});
+
+Route::get('/cobertura',function(){
+    return view('documentos_new/contrato_cobertura');
+})->name('cobertura_documento');
+
 // landing_page
 Route::get('/', function () {
     return view('landing_site');
@@ -57,7 +65,7 @@ $roles = [
 
 Route::middleware(['auth'])->group(function() {
     // home routes
-    /* 
+    /*
     |                                                      |
     |                                                      |
     |               manejo de rutas group                  |
@@ -69,8 +77,8 @@ Route::middleware(['auth'])->group(function() {
 
         Route::get('/admin/home',[HomeController::class,'homeAdmin'])->name('admin.home');
 
-        //profiles / Verified / KYC / DESTROY / 
-        
+        //profiles / Verified / KYC / DESTROY /
+
         Route::resource('profiles', App\Http\Controllers\ProfileController::class);
         Route::get('/profiles/{id}/edit', function ($id) {
             return redirect()->route('show-form-pdf');
@@ -78,7 +86,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/upload-file', [ProfileController::class, 'upload_file'])->name('upload_file');
         Route::delete('/profiles/mass-destroy', [ProfileController::class, 'massDestroy'])->name('profiles.massDestroy');
 
-        //payments 
+        //payments
 
         //index
         // Route::resource('payments',PaymentController::class);
@@ -88,14 +96,14 @@ Route::middleware(['auth'])->group(function() {
         Route::post('payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.update.status');
 
         //fondos
-        
+
         Route::get('table-fondo/fondo-select',[FondoController::class,'get_payments'])->name('adminSelect');
         Route::post('update-fondo-general', [FondoGeneralController::class, 'updateTotalAmount'])->name('fondo-general.update');
 
         Route::get('fondo-table',function(){
             return view('admin_funciones_new.tableFondos');
         });
-        // FONDOS NEW 
+        // FONDOS NEW
         // Route::get('table-fondo/edit',[FondoController::class , 'editFondo'])->name('editFondo');
         Route::get('/table-fondo/edit/{id}', [FondoController::class, 'editFondo'])->name('fondo.edit');
         // edit currencies
@@ -109,13 +117,13 @@ Route::middleware(['auth'])->group(function() {
         // Route::post('update-fondo-general', [FondoController::class, 'updateGanancia'])->name('fondos.update-ganancia');
         Route::post('/table-fondo/edit/{id}/update-investing',[FondoController::class,'updateGanancia'])->name('fondos.update-ganancia');
 
-        
-    
+
+
         Route::resource('contracts', App\Http\Controllers\ContractController::class);
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
-        //insurance 
+        //insurance
 
         Route::get('/insurancesAdmin',[App\Http\Controllers\InsuranceController::class,'index_admin'])->name('insurance.admin');
         Route::get('/insurancesAdmin/{id}', [App\Http\Controllers\InsuranceController::class, 'show'])->name('insurance.show');
@@ -127,29 +135,29 @@ Route::middleware(['auth'])->group(function() {
 
     //suscriptor
     Route::middleware('role:2')->group(function(){
-        // home 
+        // home
 
         Route::get('/suscriptor/home',[HomeController::class,'homeSuscriptor'])->name('suscriptor.home');
         // Verificacion
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
-        // Clientes    
+        // Clientes
         Route::get('/dataCliente/{id}',[SuscriptorInfo::class,'detailCliente'])->name('detailCliente');
         Route::get('/dataCliente',[SuscriptorInfo::class,'tableClientes'])->name('tableClientes');
         // historial
         // Pagos  / retiros
     });
-    
+
     //cliente normal
     Route::middleware(['role:3'])->group(function(){
 
         // home client
         Route::get('/user/home',[HomeController::class,'homeUsers'])->name('user.home');
-        
+
         //profile
         Route::get('/profiles/user/data',[ProfileController::class,'edit2'])->name('user.profile_edit');
         Route::post('/profiles/user/data/{id}', [ProfileController::class, 'update2'])->name('profiles.update2');
-        
+
         //insurance
         Route::post('/upload-insurance', [ProfileController::class, 'upload_insurance'])->name('profiles.upload_insurance');
 
@@ -168,7 +176,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/contract_pdf/{id}', [App\Http\Controllers\ContractController::class, 'contract_pdf'])->name('contracts.pdf');
         Route::get('/declaracion_pdf/{id}',[App\Http\Controllers\ContractController::class, 'declaracion'])->name('declaracion.pdf');
 
-        //seguros 
+        //seguros
         Route::get('insurances/plans', [App\Http\Controllers\InsuranceController::class,'showInsurancePlans'])->name('insurance.plans');
         Route::post('insurances/store', [App\Http\Controllers\InsuranceController::class, 'insurance_pay'])->name('insurance.store');
         Route::get('insurances/create',[App\Http\Controllers\InsuranceController::class,'create'])->name('insurance.create');
@@ -201,7 +209,7 @@ Route::middleware(['auth'])->group(function() {
 
     //gerente->suscriptor
     Route::middleware('role:5')->group(function(){
-        // home 
+        // home
         // verificacion
         // suscriptores
         // historial
@@ -211,7 +219,7 @@ Route::middleware(['auth'])->group(function() {
 
     //verificador
     Route::middleware('role:6')->group(function(){
-        // home 
+        // home
         // Verificar - Usuarios
         // Pagos
 
@@ -232,9 +240,9 @@ Route::middleware(['auth'])->group(function() {
 
     Route::post('/client/update_signature/{id}', [PaymentController::class, 'client_update_signature'])->name('client.update_signature');
 
-    // descargar documentos 
+    // descargar documentos
     Route::get('/dataAdmin/{id}', [SuscriptorInfo::class, 'downloadDocuments'])->name('download.documents');
-    // 
+    //
 
 
     Route::get('/dataAdmin',[SuscriptorInfo::class,'tableAdmin'])->name('detalles');
@@ -246,7 +254,7 @@ Route::middleware(['auth'])->group(function() {
 
 
 
-    
+
     Route::get('/invite/user/link', [App\Http\Controllers\UserController::class, 'generateInviteLink'])->name('invite.user');
 
     Route::post('/invite/link/store', [App\Http\Controllers\UserController::class, 'link'])->name('users.link');
@@ -287,7 +295,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/view-pdf/{id}', [PdfController::class, 'view'])->name('viewproduct');
 
 
-    
+
     // Route::get('/home', [HomeController::class, 'showClientHistory'])->name('home');
     // Route::get('/home/{userId}', [HomeController::class, 'dataUsers'])->name('home');
 

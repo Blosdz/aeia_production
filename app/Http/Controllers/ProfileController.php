@@ -73,13 +73,13 @@ class ProfileController extends AppBaseController
                 Flash::error('Perfil no encontrado');
                 return redirect()->back();
             }
-    
+
             $user = User::find($profile->user_id);
-    
+
             if ($user) {
                 // Eliminar registros asociados en bells
                 Bells::where('user_id', $user->id)->delete(); // Eliminar registros físicamente
-                
+
                 // Eliminar el perfil y el usuario
                 $profile->delete(); // Esto usa SoftDeletes
                 $user->delete(); // También esto usa SoftDeletes
@@ -88,19 +88,19 @@ class ProfileController extends AppBaseController
                 $profile->delete();
             }
         });
-    
+
         Flash::success('Perfil eliminado correctamente.');
         return redirect()->route('profiles.index');
     }
-    
 
-    
+
+
     public function data_user($id){
         $payments = Payment::where("user_id", $id)
             ->with('contract', 'declaracion', 'client_payment') // Asegúrate de tener una relación con documentos si existe
             // Agrega los filtros necesarios
             ->get();
-        
+
         return view('profiles_new.user', compact('payments'));
     }
 
@@ -188,7 +188,7 @@ class ProfileController extends AppBaseController
     {
         //$profile = $this->profileRepository->find($id);
         $profile = Profile::where('id', $id)->with('user')->first();
-        
+
         if (empty($profile)) {
             Flash::error('Profile not found');
 
@@ -273,7 +273,7 @@ class ProfileController extends AppBaseController
         //dd($user);
 
 		$filePath = 'pdfs/';
-	
+
 	    // Almacenar el archivo PDF si está presente en la solicitud
 	    if ($request->hasFile('pdf_file')) {
 	        // Generar un nombre único para el archivo PDF
@@ -286,10 +286,10 @@ class ProfileController extends AppBaseController
 
             $profile->update(['KYC'=>$path]);
 
-            
+
 
 	        // Devolver una respuesta JSON con la URL del archivo y un mensaje de éxito
-	
+
         	Flash::success('Verificacion de informacion guardado correctamente.');
 
 	        return redirect(route('profiles.index'));
@@ -339,7 +339,7 @@ class ProfileController extends AppBaseController
 
             return redirect(route('profiles.index'));
         }
-		
+
         // session()->flash('success', 'Información enviada con éxito');
         return view('profiles_new.forma_verificacion')->with('profile', $profile);
     }
@@ -347,14 +347,14 @@ class ProfileController extends AppBaseController
     public function update2($id, UpdateProfileRequest $request)
     {
     // Obtener el user_id del formulario
-    	
-    
+
+
         $userId = $request->input('user_id');
         $profile = $this->profileRepository->find($id);
 	    $data=$request->all();
-	    $data['verified'] = 1; // Otra forma de actualizar el campo "verified" del perfil	
+	    $data['verified'] = 1; // Otra forma de actualizar el campo "verified" del perfil
 	    $profile=$this->profileRepository->update($data,$id);
-		
+
         //	    return redirect()->route('show-form-pdf');
         // dd($data);
 
@@ -362,74 +362,79 @@ class ProfileController extends AppBaseController
         return redirect()->back()->with('success', 'La información se ha enviado para revisión.');
 	    // return redirect(route('profiles.user'));
     }
+
     public function upload_insurance(Request $request)
-    {
-        $user = Auth::user();
-        // Verificar si el perfil existe; si no, crearlo
-        $profile = Profile::firstOrCreate(
-            ['user_id' => $user->id], 
-            ['data_filled_insured' => json_encode([]), 'total_insured' => 0]
-        );
-    
-        // Validar datos del formulario
-        $request->validate([
-            'total_insured' => 'required|integer|min:1',
-            'persons.*.dni_file' => 'required|file|image|max:2048',
-            'persons.*.dni_r_file' => 'required|file|image|max:2048',
-            'persons.*.first_name' => 'required|string|max:30',
-            'persons.*.lastname' => 'required|string|max:30',
-            'persons.*.type_document' => 'required|string|max:255',
-            'persons.*.dni_number' => 'required|string|max:30',
-            'persons.*.deporte' => 'required|string|max:30',
-            'persons.*club'=> 'required|string|max:30',
-            'persons.*.country_document' => 'required|string|max:255',
-            'persons.*.address' => 'required|string|max:50',
-        ]);
-    
-        // Obtener asegurados actuales
-        $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];
-    
-        foreach ($request->input('persons') as $index => $personData) {
-            // Validar duplicados
-            foreach ($existingPersons as $existingPerson) {
-                if (
-                    $personData['dni_number'] === $existingPerson['dni_number'] || 
-                    ($personData['first_name'] === $existingPerson['first_name'] && $personData['lastname'] === $existingPerson['lastname'])
-                ) {
-                    return redirect()->back()->with('error', 'Ya existe una persona con el mismo DNI o nombre.');
-                }
+{
+    $user = Auth::user();
+
+    // Verificar si el perfil existe; si no, crearlo
+    $profile = Profile::firstOrCreate(
+        ['user_id' => $user->id],
+        ['data_filled_insured' => json_encode([]), 'total_insured' => 0]
+    );
+
+    // Validar datos del formulario
+    $request->validate([
+        'total_insured' => 'required|integer|min:1',
+        'persons.*.dni_file' => 'required|file|image|max:2048',
+        'persons.*.dni_r_file' => 'required|file|image|max:2048',
+        'persons.*.first_name' => 'required|string|max:30',
+        'persons.*.lastname' => 'required|string|max:30',
+        'persons.*.type_document' => 'required|string|max:255',
+        'persons.*.dni_number' => 'required|string|max:30',
+        'persons.*.deporte' => 'required|string|max:30',
+        'persons.*club'=> 'required|string|max:30',
+        'persons.*.country_document' => 'required|string|max:255',
+        'persons.*.address' => 'required|string|max:50',
+    ]);
+
+    // Obtener asegurados actuales (como objeto asociativo)
+    $existingPersons = json_decode($profile->data_filled_insured, true) ?? [];
+
+    foreach ($request->input('persons') as $index => $personData) {
+        // Validar duplicados
+        foreach ($existingPersons as $key => $existingPerson) {
+            if (
+                $personData['dni_number'] === $existingPerson['dni_number'] ||
+                ($personData['first_name'] === $existingPerson['first_name'] && $personData['lastname'] === $existingPerson['lastname'])
+            ) {
+                return redirect()->back()->with('error', 'Ya existe una persona con el mismo DNI o nombre.');
             }
-    
-            // Subir archivos y generar rutas
-            foreach (['dni_file', 'dni_r_file'] as $field) {
-                if ($request->hasFile("persons.$index.$field")) {
-                    $filePath = 'insurance_dnis/';
-                    $name = uniqid() . '.' . $request->file("persons.$index.$field")->getClientOriginalExtension();
-    
-                    if (!Storage::exists('public/' . $filePath)) {
-                        Storage::makeDirectory('public/' . $filePath, 0777, true);
-                    }
-    
-                    $path = $filePath . $name;
-                    $request->file("persons.$index.$field")->storeAs('public/' . $filePath, $name);
-    
-                    // Agregar ruta al asegurado
-                    $personData[$field] = $path;
-                }
-            }
-    
-            // Agregar asegurado al arreglo de existentes
-            $existingPersons[] = $personData;
         }
-    
-        // Actualizar perfil
-        $profile->total_insured = count($existingPersons); // Actualizar con el total correcto
-        $profile->data_filled_insured = json_encode($existingPersons);
-        $profile->save();
-    
-        return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');
+
+        // Subir archivos y generar rutas
+        foreach (['dni_file', 'dni_r_file'] as $field) {
+            if ($request->hasFile("persons.$index.$field")) {
+                $filePath = 'insurance_dnis/';
+                $name = uniqid() . '.' . $request->file("persons.$index.$field")->getClientOriginalExtension();
+
+                if (!Storage::exists('public/' . $filePath)) {
+                    Storage::makeDirectory('public/' . $filePath, 0777, true);
+                }
+
+                $path = $filePath . $name;
+                $request->file("persons.$index.$field")->storeAs('public/' . $filePath, $name);
+
+                // Agregar ruta al asegurado
+                $personData[$field] = $path;
+            }
+        }
+
+        // Generar una clave única basada en el tamaño actual de $existingPersons
+        $nextKey = 'persona' . count($existingPersons);
+
+        // Agregar el nuevo asegurado con la clave generada
+        $existingPersons[$nextKey] = $personData;
     }
-    
+
+    // Actualizar perfil con el JSON y total de asegurados
+    $profile->total_insured = count($existingPersons); // Actualizar con el total correcto
+    $profile->data_filled_insured = json_encode($existingPersons, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $profile->save();
+
+    return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');
+}
+
 
     public function upload_file(Request $request){
 
@@ -437,18 +442,18 @@ class ProfileController extends AppBaseController
 
         $file_fields=[];
         $file_fields[0] = "dni";
-        $file_fields[1] = "dni_r"; 
-        $file_fields[2] = "profile_picture"; 
+        $file_fields[1] = "dni_r";
+        $file_fields[2] = "profile_picture";
         $file_fields[3] = "dni2";
-        $file_fields[4] = "dni2_r"; 
-        $file_fields[5] = "profile_picture2"; 
+        $file_fields[4] = "dni2_r";
+        $file_fields[5] = "profile_picture2";
         $file_fields[6] = "dni3";
-        $file_fields[7] = "dni3_r"; 
-        $file_fields[8] = "profile_picture3"; 
+        $file_fields[7] = "dni3_r";
+        $file_fields[8] = "profile_picture3";
 
-        $file_fields[9] = "business_file"; 
-        $file_fields[10] = "power_file"; 
-        $file_fields[11] = "taxes_file"; 
+        $file_fields[9] = "business_file";
+        $file_fields[10] = "power_file";
+        $file_fields[11] = "taxes_file";
 
         $path=[];
         $name=[];
@@ -464,7 +469,7 @@ class ProfileController extends AppBaseController
                 $name = uniqid().'.'.$request->file($file_fields[$i])->getClientOriginalExtension();
                 $path = $filePath.$name;
 
-                if (is_file(storage_path('/app/public/'.$profile[$file_fields[$i]]))){   
+                if (is_file(storage_path('/app/public/'.$profile[$file_fields[$i]]))){
                    unlink(storage_path('/app/public/'.$profile[$file_fields[$i]]));
                 }
                 $request->file($file_fields[$i])->storeAs('public/'.$filePath, $name);
