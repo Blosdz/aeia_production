@@ -30,7 +30,7 @@
                         <th>Dirección</th>
                         <th>Monto Pagado</th>
                         <th>Fecha de Pago</th>
-                        <th>Recibo</th>
+                        <th>Carencia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,31 +38,50 @@
                         <tr>
                             <td>{{ $data['persona']['first_name'] }}</td>
                             <td>{{ $data['persona']['lastname'] }}</td>
-                            <td>{{ $data['persona']['type_document'] }}: {{ $data['persona']['dni_number'] }}</td>
-                            <td>{{ $data['persona']['deporte'] ?? ""}} </td>
-                            <td>{{ $data['persona']['club']  ?? ""}}</td>
+                            <td>{{ $data['persona']['dni_number'] }}</td>
+                            <td>{{ $data['persona']['deporte'] }}</td>
+                            <td>{{ $data['persona']['club'] }}</td>
                             <td>{{ $data['persona']['address'] }}</td>
-                            @if (!empty($data['persona']['pagos']))
-                                @foreach ($data['persona']['pagos'] as $pago)
-                                        <td>S/{{ $pago['monto'] }}</td>
-                                        <td>{{ Carbon\Carbon::parse($pago['fecha'])->format('d/m/Y') }}</td>
-                                        <td>
-                                            @if (!empty($pago['img_url']))
-                                                <a href="{{ asset('storage/' . $pago['img_url']) }}" target="_blank">Ver recibo</a>
-                                                <td>
-                                                    No disponible
-                                                </td>
-                                            @endif
-                                        </td>
-                                @endforeach
-                            @else                                               
-                            <td>No disponible</td>
-                            <td>No disponible</td>
-                            <td>No disponible</td>
-                            @endif
+                            <td>
+                                @php
+                                    $totalAmount = 0;
+                                    if (!empty($data['pagos']['monto_pays'])) {
+                                        foreach ($data['pagos']['monto_pays'] as $type) {
+                                            $totalAmount += $type === 'monthly' ? 15 : ($type === 'annual' ? 180 : 0);
+                                        }
+                                    }
+                                @endphp
+                                ${{ $totalAmount }}
+                            </td>
+                            <td>
+                                @if (!empty($data['pagos']['fechas']))
+                                    <ul>
+                                        @foreach ($data['pagos']['fechas'] as $fecha)
+                                            <li>{{ $fecha }}</li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    Sin pagos
+                                @endif
+                            </td>
+                            <td>
+                                @php
+                                    $carencia = 'Sin Validar';
+                                    if (!empty($data['pagos']['status']) && $data['pagos']['status'] === 'validar') {
+                                        $validationDate = \Carbon\Carbon::parse($data['pagos']['validation_date']);
+                                        $monthsToAdd = ($data['pagos']['monto_pays'][0] ?? '') === 'monthly' ? 3 : 2;
+                                        $carenciaDate = $validationDate->addMonths($monthsToAdd);
+                                        $diferenciaDias = now()->diffInDays($carenciaDate, false);
+                                        $carencia = $diferenciaDias > 0
+                                            ? "Faltan $diferenciaDias días para cobertura"
+                                            : "Cobertura activa";
+                                    }
+                                @endphp
+                                {{ $carencia }}
+                            </td>
                         </tr>
                     @endforeach
-                </tbody>
+                    </tbody> 
             </table>
         </div>
     </div>

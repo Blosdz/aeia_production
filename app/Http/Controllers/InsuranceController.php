@@ -51,8 +51,7 @@ class InsuranceController extends Controller
                 'pagos' => $insurancePayments,
             ];
         }
-
-
+        
         return view('insurance_new.table_insurance', compact('combinedData','user_session'));
     }
 
@@ -212,23 +211,34 @@ class InsuranceController extends Controller
             'status' => 'required|string|in:validar,no_validar,corregir_data', // estado validado o no validado
             'month' => 'required|string', // mes, en este caso December
         ]);
+        //validar al json 
 
         // Obtener la persona y mes desde el request
-        $persona_key = $request->input('persona_id'); // ejemplo persona#0
+        $persona_key_n = $request->input('persona_id'); // ejemplo persona#0
+        $persona_key = str_replace('persona#', '', $persona_key_n); // Resultado: persona0
+
+        $status = $request->input('status');
         $month_key = $request->input('month');  // Aquí recibes "December"
 
         // Verificar si el mes existe en el JSON
-        if (isset($insurance_json[$month_key])) {
-            // Verificar si la persona existe dentro del mes
-            if (isset($insurance_json[$month_key][$persona_key])) {
-                // Actualizar el valor "stats" dentro de la persona
-                $insurance_json[$month_key][$persona_key]['stats'] = $request->input('status');
-            } else {
-                return redirect()->back()->with('error', "Persona no encontrada en el mes $month_key.");
-            }
-        } else {
-            return redirect()->back()->with('error', 'Mes no encontrado en los datos del seguro.');
+        if(!isset($insurance_json[$persona_key]['status'])){
+            $insurance_json[$persona_key]['status']=$status;
+            $insurance_json[$persona_key]['validation_date']=$month_key;
+        }else{
+            return redirect()->back->with('error','No se actualizo el json');
         }
+
+        // if (isset($insurance_json[$persona_key])) {
+        //     // Verificar si la persona existe dentro del mes
+        //     if (isset($insurance_json[$persona_key]['status'])) {
+        //         // Actualizar el valor "stats" dentro de la persona
+        //         $insurance_json[$persona_key]['status'] = $request->input('status');
+        //     } else {
+        //         return redirect()->back()->with('error', "Persona no encontrada en el mes $month_key.");
+        //     }
+        // } else {
+        //     return redirect()->back()->with('error', 'Mes no encontrado en los datos del seguro.');
+        // }
 
         // Volver a codificar el JSON y guardarlo en el modelo
         $insurance_data_all->json = json_encode($insurance_json);

@@ -59,7 +59,7 @@
                                     <p><strong>Monto:</strong> ${{ $insurance['monto'] }}</p>
                                     <p>
                                         <strong>Recibo:</strong> 
-                                        <img src="{{ Storage::url('insurance_payment/' . basename($insurance['img_url'])) }}" alt="DNI Posterior" style="max-width: 200px; height: auto;">
+                                        <img src="{{ Storage::url('insurance_payment/' . basename($insurance['img_urls'])) }}" alt="Voucher del usuario" style="max-width: 200px; height: auto;">
 
                                     </p>
                                 </li>
@@ -69,9 +69,12 @@
                             <p>No hay datos de seguros disponibles.</p>
                             @endif
                                    <!-- Formulario para actualizar los datos de seguros -->
-                            <form action="{{ route('insurance.updateStatus', ['id' => $persona_key]) }}" method="POST">
+                            <form action="{{ route('insurance.updateStatus', ['id' => $user->id]) }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
+                                    <p>{{$persona_key}}</p>
+                                    <input type="hidden" name="persona_id" value="{{$persona_key}}">
+                                    <input type="hidden" name="month" value="{{now()->format('Y-m-d')}}">
                                     <label for="dropdown{{ $persona_key }}" class="form-label">Seleccione acción</label>
                                     <select class="form-select" id="dropdown{{ $persona_key }}" name="status">
                                         <option value="validar">Validar</option>
