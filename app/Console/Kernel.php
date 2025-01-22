@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\UpdatePaidPayment;
 use App\Console\Commands\UpdatePaymentStatus;
 use App\Console\Commands\UpdatePaymentStatusExpirationDate;
+use App\Console\Commands\dummyFund;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Console\Commands\DeleteExpiredNotifications;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -20,6 +21,8 @@ class Kernel extends ConsoleKernel
         UpdatePaymentStatus::class,
         UpdatePaidPayment::class,
         DeleteExpiredNotifications::class,
+        dummyFund::class,
+
     ];
 
     /**
@@ -35,6 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('payments:update-paids')->dailyAt('23:59');
         $schedule->command('notifications:delete-expired')->daily();
         $schedule->command('update:crypto-rates')->daily();
+        $schedule->command('command:updateDummyFund')->hourly();
     }
 
     /**

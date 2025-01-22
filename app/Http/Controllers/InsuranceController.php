@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Insurance;
 
 use Monarobase\CountryList\CountryListFacade;
+
+use App\Http\Controllers\IziPayController;
 use App\Models\Profile;
 use App\Models\clientInsurance;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +32,7 @@ class InsuranceController extends Controller
 
         // Obtener el perfil del usuario
         $profile = Profile::where('user_id', $user_session->id)->first();
-        $dataFilledInsured = $profile ? json_decode($profile->data_filled_insured, true) : [];
+        $dataFilledInsured = $profile ? json_decode($profile->data_filled_insured, true) ?? [] : [];
 
         // Obtener los datos de ClientInsurance e Insurance
         $clientInsurance = ClientInsurance::where('user_id', $user_session->id)
@@ -264,6 +266,7 @@ class InsuranceController extends Controller
         $user = Auth::user(); // Obtener usuario autenticado
         $profile = Profile::where('user_id',$user->id)->first(); // Obtener el perfil del usuario
 
+
         $insuredPersons = $profile ? json_decode($profile->data_filled_insured, true) : []; // Personas aseguradas
 
         $costPerPerson = 100; // Monto fijo por persona
@@ -271,14 +274,28 @@ class InsuranceController extends Controller
         $monthlyPayment = 15; // Pago mensual
         // dd($insuredPersons,$user,$profile);
 
+        try {
+            $iziPayController = new IziPayController();
+            $paymentData = $iziPayController->showPaymentForm(); // Llama al método del controlador
+
+
+
+            $formToken = $paymentData['formToken'];
+            $qrCode = $paymentData['qrCode'] ?? null; // El QR puede no estar presente
+        } catch (\Exception $e) {
+            return back()->withErrors(['message' => $e->getMessage()]);
+        }
         return view('insurance_new.proceed_with_payment', [
             'profile' => $profile,
             'insuredPersons' => $insuredPersons,
-            'costPerPerson' => $costPerPerson
+            'costPerPerson' => $costPerPerson,
+            'formToken' => $formToken,
+            'qrCode' => $qrCode,
         ]);
     }
 
-    public function insurance_pay(Request $request){
+    public function insurance_pay(Request $request)
+    {
         $validatedData = $request->validate([
             'voucher_picture' => 'required|image|max:2048',
             'paid_persons' => 'required|array|min:1',
@@ -286,25 +303,26 @@ class InsuranceController extends Controller
             'last_names' => 'required|array',
             'payment_type' => 'required|string',
         ]);
-
+    
         $filePath = 'insurance_payment/';
         $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
-
+    
         if (!Storage::exists('public/' . $filePath)) {
             Storage::makeDirectory('public/' . $filePath, 0777, true);
         }
-
+    
         $user = Auth::user();
         $profile = Profile::where('user_id', $user->id)->first();
-
+    
         $costPerPerson = $request->payment_type === 'annual' ? 180 : 15;
-        $paidPersons = $request->input('paid_persons');
-        $firstNames = $request->input('first_names');
-        $lastNames = $request->input('last_names');
+        $paidPersons = $request->input('paid_persons'); // Ejemplo: ["persona0", "persona1"]
+        $firstNames = $request->input('first_names'); // Ejemplo: ["Juan", "Maria"]
+        $lastNames = $request->input('last_names'); // Ejemplo: ["Perez", "Gomez"]
         $voucherPath = $filePath . $name;
-
+    
+        // Guardar la imagen del voucher
         $request->file("voucher_picture")->storeAs('public/' . $filePath, $name);
-
+    
         $insurance = Insurance::firstOrCreate(
             ['phonenumber' => $profile->phone_extension . '.' . $profile->phone],
             [
@@ -312,34 +330,33 @@ class InsuranceController extends Controller
                 'email' => $user->email,
             ]
         );
-
+    
         $currentDate = Carbon::now()->toDateString();
         $insuranceData = json_decode($insurance->json, true) ?? [];
-
-        foreach ($paidPersons as $index) {
-            if (!is_numeric($index) || !isset($firstNames[$index]) || !isset($lastNames[$index])) {
-                return redirect()->back()->withErrors('Los datos de las personas aseguradas son inconsistentes.');
-            }
-
-            $personaKey = md5($firstNames[$index] . $lastNames[$index]);
-
+    
+        foreach ($paidPersons as $index => $personaKey) {
+            // Si no existe esta persona, inicializamos su estructura
             if (!isset($insuranceData[$personaKey])) {
-                $insuranceData[$personaKey] = [];
+                $insuranceData[$personaKey] = [
+                    'nombre' => $firstNames[$index],
+                    'apellido' => $lastNames[$index],
+                    'fechas' => [],
+                    'monto_pays' => [],
+                    'img_urls' => [],
+                ];
             }
-
-            $insuranceData[$personaKey][] = [
-                'nombre' => $firstNames[$index],
-                'apellido' => $lastNames[$index],
-                'fecha' => $currentDate,
-                'monto_pay' => $request->payment_type,
-                'monto' => $costPerPerson,
-                'img_url' => $voucherPath,
-            ];
+        
+            // Actualizar las fechas, imágenes y tipos de pago
+            $insuranceData[$personaKey]['fechas'][] = $currentDate;
+            $insuranceData[$personaKey]['monto_pays'][] = $request->payment_type;
+            $insuranceData[$personaKey]['img_urls'][] = $voucherPath;
         }
-
-        $insurance->json = json_encode($insuranceData);
+    
+        // Guardar el JSON actualizado en el modelo
+        $insurance->json = json_encode($insuranceData, JSON_PRETTY_PRINT);
         $insurance->save();
-
+    
+        // Actualizar o crear el registro de ClientInsurance
         ClientInsurance::updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -348,9 +365,10 @@ class InsuranceController extends Controller
                 'insurance_id' => $insurance->id,
             ]
         );
-
+    
         return redirect()->route('insurance.index')->with('success', 'Pago realizado y seguro creado/actualizado correctamente.');
     }
+
 
 
     public function edit($id){

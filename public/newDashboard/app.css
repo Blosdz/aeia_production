@@ -438,6 +438,24 @@ mark,
   background-color: #fcf8e3;
 }
 
+.user-icon-pfp{
+  width: 6vw;
+  height: 6vh;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-icon-pfp img{
+  /* width: 100%; */
+  height: 100%;
+  /* object-fit: cover; */
+  /* height: auto; */
+}
+
+
 .list-unstyled {
   padding-left: 0;
   list-style: none;

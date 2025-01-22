@@ -15,15 +15,15 @@
       <div class="container-fluid">
 
         <a href="index.html" style="text-decoration:none!important; color:white!important;" ><img src="{{URL::asset('/newDashboard/images/logovdf.png')}}" alt="logo" style="width:4vw !important;"/>AEIA INVESTMENTS <br></a>
-        
+
         <!-- Botón toggler, visible en pantallas medianas y pequeñas -->
         <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <!-- Offcanvas para pantallas pequeñas y medianas -->
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #0e359ef6;  ">
-            
+
           <div class="offcanvas-header">
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
@@ -50,12 +50,12 @@
 
                 <input type="checkbox" name="switch" id="theme" class="form-check-input" role="switch">
                 <label for="theme"></label>
-                
+
             </div>
- 
+
             <form class="d-flex mt-3" role="search">
-                <button type="button" onclick="window.location.href='{{ url('/login') }}'" class="btn btn-outline-success me-2">Login</button>
-                <button type="button" onclick="window.location.href='{{ url('/register') }}'" class="btn btn-outline-primary">Crear Cuenta</button>
+                <button type="button" onclick="window.location.href='{{ url('/login') }}'" class="btn btn-success me-2">Login</button>
+                <button type="button" onclick="window.location.href='{{ url('/register') }}'" class="btn btn-primary">Crear Cuenta</button>
             </form>
           </div>
         </div>
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                  
+
                 </div>
             </div>
         </div>
@@ -84,15 +84,15 @@
     <aside class="text-center">
         <div class="container px-5">
             <div class="row gx-5 justify-content-center" id="">
-                <div class="col-xl-8 bg-box-aeia position-relative" > 
-                    <div class="h4 fs-1 text-white mt-4 mb-4 text-lg-start">Fondo de Noviembre</div>
-                    
+                <div class="col-xl-8 bg-box-aeia position-relative" >
+                    <div class="h4 fs-1 text-white mt-4 mb-4 text-lg-start">Fondo de {{$month}}</div>
+
                         <p class=" text-lg-start" style="color:white; font-weight:bolder;">
-                            Recaudado: <span class="transparency-value"></span>                       
+                            Recaudado: <span class="transparency-value"></span>
                         </p>
 
                         <p class=" text-lg-start" style="color:white; font-weight:bolder;">
-                            Rentabilidad: <span class="rentability-value" style="color:#57b957;"></span> 
+                            Rentabilidad: <span class="rentability-value" style="color:#57b957;"></span>
                             <i class="bi bi-graph-up-arrow mx-3" style="background-color:green !important; padding:0.5vw; border-radius:50px; color:white;" ></i> </a>
                         </p>
                     <div class="card mt-4 p-4 custom-shadow"> <!-- Añadido custom-shadow para la sombra -->
@@ -222,7 +222,7 @@
                 <div class="col-12 col-lg-5 ">
                     <h2 class="display-4 lh-1 mb-4 mb-4">Forma parte del equipo de AEIA</h2>
                     <p class="lead fw-normal text-muted mb-5">Genera capital vendiendo suscripciones</p>
-                    
+
                     <h3 class="font-alt mb-4">¿Quién es un suscriptor?</h3>
                     <p class="lead fw-normal text-muted mb-5 mb-lg-5">
                         Es aquella persona que gestiona la venta y distribución de fondos de inversión para personas naturales y empresas.
@@ -236,7 +236,7 @@
 
                     <div class="row justify-content-center text-center mt-5 text-lg-start">
                         <div class="col-md-4 mb-2 col-6  mb-md-0">
-                            <p>Plan</p> 
+                            <p>Plan</p>
                         </div>
                         <div class="col-md-4 mb-2 col-6 mb-md-0">
                             <p>Comisión</p>
@@ -326,47 +326,47 @@
                             <div class="col-md-4 mb-3">
                                 <!-- Feature item-->
                                 <div class="text-center">
-                                
+
                                     <i class="bi bi-3-circle-fill" id="icon_number"></i>
                                     <p class=" mb-0"> Escoger el Plan de Inversión Decide cuanto dinero puedes invertir, no arriesgues más de lo que debes. </p>
                                 </div>
                             </div>
                         </div>
                         <div class="row gx-5 mt-5">
-                        
+
                             <div class="col-md-4 mb-3">
                                 <!-- Feature item-->
                                 <div class="text-center">
-                                
+
                                     <i class="bi bi-4-circle-fill" id="icon_number"></i>
                                     <p class="mb-0">
-                                         Depositar Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene 
+                                         Depositar Puedes realizar el pago con tu tarjeta de debito/credito o transferencia al wallet. Escoge el método de pago que mas te conviene
                                     </p>
                                 </div>
                             </div>
-                        
+
                             <div class="col-md-4 mb-3">
                                 <!-- Feature item-->
                                 <div class="text-center">
-                                
+
                                     <i class="bi bi-5-circle-fill" id="icon_number"></i>
                                     <p class="mb-0">
-                                         Esperar Proceso Trading de 1 año Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading. 
+                                         Esperar Proceso Trading de 1 año Mientras el proceso de inversión ocurre por periodo de un año, puedes verificar tus inversiones, solicitar reportes, inscribirte a nuestros eventos y aprender a hacer trading.
                                     </p>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <!-- Feature item-->
                                 <div class="text-center">
-                                
+
                                     <i class="bi bi-6-circle-fill" id="icon_number"></i>
                                     <p class="mb-0">
-                                         Retirar sus Ganancias o Incluir Nuevo Plan Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias. 
+                                         Retirar sus Ganancias o Incluir Nuevo Plan Despues del año de contrato puedes solicitar el retiro de tus fondos a la cuenta bancaria del titular o puedes reinvertir tu capital y ganancias.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                    
+
                 {{-- </div> --}}
             </div>
 
@@ -459,11 +459,13 @@
             </div>
         </div>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        let jsonData=@json($historial);
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{{URL::asset('/js/landing.js')}}"></script>
-    <script>
-        particlesJS("particles-js", {
+    <script> particlesJS("particles-js", {
             "particles": {
                 "number": {
                     "value": 30,
@@ -591,15 +593,15 @@
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left; // Coordenada relativa al contenedor
                 const y = e.clientY - rect.top;
-            
+
                 circle.style.left = `${x}px`;
                 circle.style.top = `${y}px`;
             });
-        
+
             container.addEventListener('mouseleave', () => {
                 circle.style.opacity = '0'; // Oculta el círculo al salir
             });
-        
+
             container.addEventListener('mouseenter', () => {
                 circle.style.opacity = '1'; // Muestra el círculo al entrar
             });

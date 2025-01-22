@@ -20,11 +20,14 @@
 
 
         <div class="text-center d-none d-md-block">
-
             @if ($profile && $profile->profile_picture)
-                <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" />
+                <div class="user-icon-pfp">
+                    <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" />
+                </div>
             @else 
-                <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
+                <div class="user-icon-pfp">
+                    <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
+                </div>
             @endif
             <p class="ms-3 text-white font-weight-bold" style="font-weight:bolder;">
                  {{ $userProfile->first_name ?? 'User' }}

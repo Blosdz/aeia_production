@@ -42,20 +42,23 @@
                             <td>{{ $data['persona']['deporte'] ?? ""}} </td>
                             <td>{{ $data['persona']['club']  ?? ""}}</td>
                             <td>{{ $data['persona']['address'] }}</td>
-                            @if (!empty($data['pagos']))
-                                @foreach ($data['pagos'] as $pago)
+                            @if (!empty($data['persona']['pagos']))
+                                @foreach ($data['persona']['pagos'] as $pago)
                                         <td>S/{{ $pago['monto'] }}</td>
                                         <td>{{ Carbon\Carbon::parse($pago['fecha'])->format('d/m/Y') }}</td>
                                         <td>
                                             @if (!empty($pago['img_url']))
                                                 <a href="{{ asset('storage/' . $pago['img_url']) }}" target="_blank">Ver recibo</a>
-                                            @else
-                                                No disponible
+                                                <td>
+                                                    No disponible
+                                                </td>
                                             @endif
                                         </td>
                                 @endforeach
-                            @else
-                                <td colspan="" class="text-center">No hay pagos registrados</td>
+                            @else                                               
+                            <td>No disponible</td>
+                            <td>No disponible</td>
+                            <td>No disponible</td>
                             @endif
                         </tr>
                     @endforeach

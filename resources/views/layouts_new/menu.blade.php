@@ -100,6 +100,9 @@
         <span>Inicio</span>
     </a>
 </li>
+
+<hr class="sidebar-divider my-0">
+
 <li class="nav-item {{ Request::is('profiles*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('user.profile_edit') }}">
         <i class="fa-solid fa-user-check"></i>
@@ -107,12 +110,16 @@
     </a>
 </li>
 
+<hr class="sidebar-divider my-0">
+
 <li class="nav-item {{ Request::is('payments*') ? 'active' : '' }}">
     <a class="nav-link" href="{{ route('payments.index_user') }}">
         <i class="fa-solid fa-piggy-bank"></i>
         <span>Depositar</span>
     </a>
 </li>
+
+<hr class="sidebar-divider my-0">
 
 
 <li class="nav-item {{ Request::is('insurance*') ? 'active' : '' }}">
@@ -122,6 +129,7 @@
     </a>
 </li>
 
+<hr class="sidebar-divider my-0">
 
 @php
   } if( $user->rol == 5 ) { //Gestor comercial

@@ -18,7 +18,10 @@ use App\Http\Controllers\FondoGeneralController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\IziPayController;
+use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\CheckoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,18 +36,86 @@ Route::get('/pgadmin', function() {
     abort(404);
 });
 
-Route::get('/izi_pay',function(){
-    return view('testIzi');
-});
+Route::get('/paymentIzi', [IziPayController::class, 'showPaymentForm'])->name('izi_pay_form');
+Route::post('/success_pay_izi',[IziPayController::class,'success'])->name('izi_pay.success');
+// Route::get('/izi_pay',function(){
+//     $url='https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment';
+//     $originalKey=env('IZI_USER').':'.env('IZI_PASSWORD');
+//     $authorizationKey=base64_encode($originalKey);
+//
+//
+//     return view('testIzi',compact('authorizationKey','url'));
+// });
+
+// Route::post('/izi_pay', function (\Illuminate\Http\Request $request) {
+//
+//     $url='https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment';
+//
+//     // Generar clave de autorización
+//     $originalKey = env('IZI_USER') . ':' . env('IZI_PASSWORD');
+//     $authorizationKey = base64_encode($originalKey);
+//
+//     // Crear el cuerpo de la solicitud desde los datos enviados por el cliente
+//     $body = [
+//         'amount' => $request->input('amount'),
+//         'currency' => $request->input('currency'),
+//         'customer' => [
+//             'email' => $request->input('customer_email'),
+//         ],
+//         'orderId' => $request->input('orderId'),
+//     ];
+//
+//     // Realizar la solicitud a la API externa
+//     $response = Http::withHeaders([
+//         'Authorization' => 'Basic ' . $authorizationKey,
+//         'Content-Type' => 'application/json',
+//     ])->post($url, $body);
+//
+//     // Retornar la respuesta al cliente
+//     return response()->json($response->json(), $response->status());
+// })->name('izi_pay');
+//
+// Route::post('/izi_pay_sent',function(){
+//         // URL del endpoint
+//     $url = 'https://api.micuentaweb.pe/api-payment/V4/Charge/SDKTest';
+//
+//     // Obtener la clave original desde el archivo .env
+//     $originalKey=env('IZI_USER').':'.env('IZI_PASSWORD');
+//
+//     // Codificar la clave en Base64
+//     $authorizationKey = base64_encode($originalKey);
+//
+//     // Cuerpo de la solicitud
+//     $body = [
+//         'value' => 'my testing value',
+//     ];
+//
+//     // Realizar la solicitud POST con el encabezado Authorization
+//     // Realizar la solicitud POST con el encabezado Authorization
+//     $response = Http::withHeaders([
+//         'Authorization' => 'Basic ' . $authorizationKey,
+//         'Content-Type' => 'application/json',
+//     ])->post($url, $body);
+//
+//     // Usar var_dump() para imprimir los valores de la respuesta
+//     var_dump($response->status());
+//     var_dump($response->json());
+//     exit;  // Detener la ejecución para ver el resultado
+//
+// });
+//
+
+//this url gets the token await
+Route::post('/checkout/token', [CheckoutController::class, 'generateToken'])->name('checkout.token');
+
 
 Route::get('/cobertura',function(){
+
     return view('documentos_new/contrato_cobertura');
 })->name('cobertura_documento');
 
 // landing_page
-Route::get('/', function () {
-    return view('landing_site');
-})->name('welcome');
+Route::get('/', [Controller::class,'landing'])->name('welcome');
 
 
 Route::get('/registration', function () {

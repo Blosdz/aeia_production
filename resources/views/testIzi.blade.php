@@ -1,33 +1,24 @@
-@php
-    $username = "87601604";
-    $password = "testpassword_CLP3ZmDHZkXBVKbiaEovfJCx6lWHzHpzyErrYIFYWWCN5";
-    $header = "Authorization: Basic " . base64_encode($username . ':' . $password);
-@endphp
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const url = "https://api.micuentaweb.pe/api-payment/V4/Charge/SDKTest";
-        const headers = {
-            "Authorization": "{{ $header }}",
-            "Content-Type": "application/json"
-        };
+<head>
 
-        const body = {
-            "value": "my testing value"
-        };
+<script type="text/javascript"
+        src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/stable/kr-payment-form.min.js"
+        kr-public-key="87601604:testpublickey_feXRj9DJp4IFcXyVk6P25ZksbQGTYHobft23o18tjNbPg"
+        kr-post-url-success="{{route('izi_pay.success')}}"
+        kr-language="en-EN">
+ </script>
 
-        fetch(url, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(body)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Success:", data);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-    });
-</script>
+  <!--  theme NEON should be loaded in the HEAD section   -->
+<link rel="stylesheet" href="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/ext/neon-reset.min.css">
+<script src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/ext/neon.js">
+ </script>
+</head>
+
+<div class="kr-smart-form" kr-popin kr-form-token="{{ $formToken ?? '' }}">
+
+
+
+<img src="data:image/png;base64,{{$qrCode ?? ''}} " alt="QR Code">
+
+
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Insurance extends Model
 {
     use HasFactory;
-    
+
     public $table="insurance";
 
     public $fillable=[

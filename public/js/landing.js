@@ -1,152 +1,93 @@
-// Función para generar datos diarios desde el 1 de noviembre hasta el 14 de noviembre con tendencia al alza
-function generateDailyData() {
-  const data = [];
-  const startDate = new Date(new Date().getFullYear(), 10, 1); // 1 de noviembre
-  const endDate = new Date(new Date().getFullYear(), 10, 15); // 14 de noviembre
-  let currentDate = startDate;
-  let lastValue = 100000; // Valor inicial de $100,000
 
-  while (currentDate <= endDate) {
-    // Generar un valor con un 80% de probabilidad de aumento
-    const randomFactor = Math.random();
-    if (randomFactor < 0.8) {
-      lastValue += Math.floor(Math.random() * 1000); // Aumento entre 0 y 1000
-    } else {
-      lastValue -= Math.floor(Math.random() * 500); // Disminución entre 0 y 500
-    }
+    // Transformar JSON a datos para ApexCharts
+    let initialData = [];
+    let firstAmount = null; // Primer valor encontrado
+    let lastRevenue = null; // Última rentabilidad encontrada
 
-    // Garantiza que el último valor esté por encima de $100,000
-    if (currentDate.getTime() === endDate.getTime() && lastValue < 100000) {
-      lastValue = 100000 + Math.floor(Math.random() * 1000); // Ajusta para mantener la tendencia
-    }
+    // Procesar datos
+    Object.keys(jsonData).forEach(month => {
+        Object.keys(jsonData[month]).forEach(day => {
+            jsonData[month][day].forEach((entry, index) => {
+                if (firstAmount === null) firstAmount = entry.amount; // Guardar el primer valor
+                lastRevenue = entry.revenue_percentage; // Actualizar la última rentabilidad
 
-    data.push([currentDate.getTime(), lastValue]);
-    currentDate.setDate(currentDate.getDate() + 1); // Avanza al siguiente día
-  }
-  return data;
-}
+                // Generar formato para ApexCharts
+                initialData.push({
+                    x: new Date(2025, month - 1, day, index, 0).getTime(), // Fecha
+                    y: entry.amount // Valor
+                });
+            });
+        });
+    });
 
-// Recuperar datos desde localStorage o generarlos si no existen
-function getOrGenerateData() {
-  const storedData = localStorage.getItem("novemberDailyData");
-  if (storedData) {
-    return JSON.parse(storedData); // Recuperar y parsear datos almacenados
-  } else {
-    const newData = generateDailyData();
-    localStorage.setItem("novemberDailyData", JSON.stringify(newData)); // Guardar datos en localStorage
-    return newData;
-  }
-}
-
-const initialData = getOrGenerateData();
-let data = [...initialData]; // Copia para los datos que se mostrarán en el gráfico
-
-// Extraer valor inicial y calcular rentabilidad
-const initialValue = initialData[0][1];
-const finalValue = initialData[initialData.length - 1][1];
-const rentability = (((finalValue - initialValue) / initialValue) * 100).toFixed(2);
-
-// Actualizar el HTML con transparencia y rentabilidad
-document.querySelector(".transparency-value").textContent = `$${initialValue.toLocaleString()}`;
-document.querySelector(".rentability-value").textContent = `${rentability}%`;
-
-// Configuración del gráfico
-var options = {
-  series: [{
-    data: data.slice()
-  }],
-  chart: {
-    id: 'realtime',
-    height: 350,
-    type: 'line',
-    background: '#000000', // Fondo negro
-    animations: {
-      enabled: true,
-      easing: 'linear',
-      dynamicAnimation: {
-        speed: 1000
-      }
-    },
-    toolbar: {
-      show: false
-    },
-    zoom: {
-      enabled: false
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  stroke: {
-    curve: 'smooth',
-    width: 2,
-    colors: ['#00ff00'] // Línea de color verde
-  },
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      type: 'vertical',
-      shadeIntensity: 0.5,
-      opacityFrom: 0.5,
-      opacityTo: 0,
-      stops: [0, 100],
-      colorStops: [
-        {
-          offset: 0,
-          color: '#00ff00',
-          opacity: 0.3
+    // Configuración del gráfico
+    var options = {
+        series: [{ data: initialData.slice(0, 1) }], // Iniciar con el primer dato
+        chart: {
+            id: 'realtime',
+            height: 350,
+            type: 'line',
+            background: '#000000',
+            animations: {
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                    speed: 1000
+                }
+            },
+            toolbar: { show: false },
+            zoom: { enabled: false }
         },
-        {
-          offset: 100,
-          color: '#00ff00',
-          opacity: 0
+        dataLabels: { enabled: false },
+        stroke: {
+            curve: 'smooth',
+            width: 2,
+            colors: ['#00ff00']
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'dark',
+                type: 'vertical',
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 100],
+                colorStops: [
+                    { offset: 0, color: '#00ff00', opacity: 0.3 },
+                    { offset: 100, color: '#00ff00', opacity: 0 }
+                ]
+            }
+        },
+        grid: { show: false },
+        markers: { size: 0 },
+        xaxis: {
+            type: 'datetime',
+            labels: { style: { colors: '#ffffff' } }
+        },
+        yaxis: {
+            labels: { style: { colors: '#ffffff' } }
+        },
+        legend: { show: false }
+    };
+
+    var chart = new ApexCharts(document.querySelector(".chart-area"), options);
+    chart.render();
+
+    // Mostrar valores iniciales
+    document.querySelector(".transparency-value").textContent = `$${firstAmount.toLocaleString()}`;
+    document.querySelector(".rentability-value").textContent = `${lastRevenue}%`;
+
+    // Actualización dinámica cada 4 segundos
+    let index = 0;
+    var interval = window.setInterval(function () {
+        index++;
+
+        // Si el índice supera la cantidad de datos, reinicia al inicio del array
+        if (index >= initialData.length) {
+            clearInterval(interval); // Detener al finalizar los datos
+        } else {
+            // Actualiza la serie en el gráfico para mostrar datos hasta el índice actual
+            chart.updateSeries([{ data: initialData.slice(0, index + 1) }]);
         }
-      ]
-    }
-  },
-  grid: {
-    show: false
-  },
-  markers: {
-    size: 0
-  },
-  xaxis: {
-    type: 'datetime',
-    labels: {
-      style: {
-        colors: '#ffffff' // Color de las etiquetas en el eje x
-      }
-    }
-  },
-  yaxis: {
-    labels: {
-      style: {
-        colors: '#ffffff' // Color de las etiquetas en el eje y
-      }
-    }
-  },
-  legend: {
-    show: false
-  }
-};
+    }, 4000);
 
-var chart = new ApexCharts(document.querySelector(".chart-area"), options);
-chart.render();
-
-// Actualización dinámica cada segundo en bucle
-let index = 0;
-var interval = window.setInterval(function () {
-  index++;
-
-  // Si el índice supera la cantidad de datos, reinicia al inicio del array
-  if (index >= initialData.length) {
-    index = 0;
-    data = [...initialData];
-  }
-
-  // Actualiza la serie en el gráfico para mostrar datos hasta el índice actual
-  chart.updateSeries([{
-    data: data.slice(0, index + 1)
-  }]);
-}, 4000);

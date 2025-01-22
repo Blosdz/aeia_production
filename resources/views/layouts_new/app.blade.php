@@ -1,7 +1,8 @@
 @php
     $user = Auth::user();
 
-    $profile = Auth::user()->with('profile')->first(); 
+    $userProfile= $user->profile;
+
 
     use App\Models\Notification;
 
@@ -14,7 +15,7 @@
         if ($user->validated == 0) {
             $badge = '<span class="badge badge-warning w-100">En Validacion</span>';
         }
-        $session_validate = $profile->verified;
+        $session_validate = $userProfile->verified;
     }
 
     switch ($session_validate) {
@@ -40,12 +41,16 @@
     <meta charset="UTF-8">
     <title>{{ config('app.name') }}</title>
 
+    <script src="https://sandbox-checkout.izipay.pe/payments/v1/js/index.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url('welcome_new/events.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
  
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{URL::asset('/newDashboard/app.css')}}"/>
     {{--<link rel="stylesheet" href="{{URL::asset('/css/table.css')}}"/>--}}
@@ -71,19 +76,26 @@
                     {{-- image client --}}
 
 
-                    <div class="text-center d-none d-md-block">
-
-                        @if ($profile && $profile->profile_picture)
-                            <img src="/storage/{{$profile->profile_picture}}" class="img-fluid profile-picture" />
+                    <div class="d-flex align-items-center justify-content-center mt-3">
+                        @if ($userProfile && $userProfile->profile_picture)
+                            <div class="user-icon-pfp ">
+                                <img src="/storage/{{$userProfile->profile_picture}}" class="img-fluid profile-picture" />
+                            </div>
                         @else 
-                            <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
+                            <div class="user-icon-pfp">
+                                <img src="/images/user-icon.png" class="img-fluid profile-picture" style="width: 45px; border-radius:100%;" />
+                            </div>
                         @endif
-                        <p class="ms-3 text-white font-weight-bold" style="font-weight:bolder;">
+
+
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center">
+                        <p class="text-white font-weight-bold text-center " style="font-weight:bolder;">
                              {{ $userProfile->first_name ?? 'User' }}
                         </p>
 
                     </div>
-
                     <hr class="sidebar-divider my-0">
 
                     @include('layouts_new.menu')
@@ -175,6 +187,7 @@
 </body>
 
     
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src ={{URL::asset('/newDashboard/js/app_new.js')}}></script>
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>

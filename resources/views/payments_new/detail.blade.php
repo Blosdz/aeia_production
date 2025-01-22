@@ -20,15 +20,15 @@
 
     </div>
     <div class="card-body">
-        <div class="detail-payment-card p-4 bg-1">
-            <div class="card-body row payment-card p-5">
-                <div class="card mx-auto p-3" style="background-color: #1c2a5b; color: white !important; width: 25%;" id="rounded-container">
+        <div class="detail-payment-card bg-1">
+            <div class="row payment-card d-flex text-align-center align-elements-center align-items-center justify-content-center">
+                <div class="col-sm col-lg-3  col-md-5 mx-2"  style="background-color: #1c2a5b; color: white !important;" id="rounded-container">
                     <span class="d-flex flex-column justify-content-center align-items-center">
                         <h1 class="float-left" style="color: white !important;">{{ $plan->name }}</h1>
                         <img class="card-img-top" style="width: 30%" src="/welcome_new/images/icons/{{ $plan->logo }}" alt="Card image cap">
                         &nbsp;
                     </span>
-                    <div class="card-body text-center" style="color: white !important;">
+                    <div class="text-center" style="color: white !important;">
                         <p class="card-text mt-4 text-left" style="color: white !important;">Deposito permitido desde:</p>
                         <h3 style="color: #eab226 !important;">
                             ${{ $plan->minimum_fee }} a {{ $plan->maximum_fee ? '$'.$plan->maximum_fee : "más" }}
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="card mx-5 p-3 w-50 bg-1" id="rounded-container">
+                <div class="col-sm col-lg-3 col-md-5 mx-2" id="rounded-container">
                     <p class="text-center">Complete el formulario para adquirir el plan escogido.</p>
 
                     <!-- Mensaje de éxito -->
@@ -53,8 +53,7 @@
 
                     {!! Form::open(['route' => 'client.payment', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'class' => 'py-3', 'id' => 'pay-form']) !!}
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="form-group col-sm-6 mb-5">
+                        <div class="form-group mb-5">
                             {!! Form::label('amount', 'Monto a depositar*:') !!}
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -67,8 +66,7 @@
                     </div>
                     @if($user_session->rol==4)
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="form-group col-sm-6 mb-5">
+                        <div class="form-group mb-5">
                             <!-- Cambia 'rescue' a 'rescue_money' -->
                             {!! Form::checkbox('rescue_money', '1', null, ['class' => 'form-check-input', 'id' => 'rescue_money']) !!}
                             {!! Form::label('rescue_money', 'Habilitar Rescatar Fondo') !!}
@@ -77,8 +75,7 @@
                     @endif
                      
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="form-group col-sm-6 mb-5">
+                        <div class="form-group mb-5">
                             <p>
                                 <strong>Capital a invertir: $<span id="total_inversion">0.00</span></strong>
                             </p>
@@ -88,8 +85,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="form-group col-sm-6 mb-5">
+                        <div class="form-group mb-5">
                             <p><strong>Sube tu voucher:</strong></p>
                             <div class="input-group">
                                 {!! Form::label('voucher_picture', "Seleccionar archivo", ['class' => 'custom-file-label', 'for' => 'voucher_picture', 'id' => 'file_input_voucher']) !!}
@@ -99,8 +95,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="form-check col-sm-6">
+                        <div class="form-check col">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                             <label class="form-check-label" for="flexCheckDefault">
                               <a href="{{route('declaracion')}}" target="_blank"> Acepta la declaración de sus Fondos. </a>

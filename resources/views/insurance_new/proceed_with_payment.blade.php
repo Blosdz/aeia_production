@@ -1,22 +1,36 @@
 @php
     $totalAmount = 0;
-
     // Si hay personas aseguradas y se seleccionó el pago mensual o anual
     if (is_array($insuredPersons)) {
         // Si se usa el pago anual o mensual, se puede establecer un monto base
         $paymentAmount = ($paymentType ?? '' == 'annual') ? 180 : 15;
     }
-
     $document_types = ["DNI"=>"DNI", "Pasaporte"=>"Pasaporte", "Carnet de extranjería"=>"Carnet de extranjería"];
 @endphp
+
+
+{{-- <!-- <script type="text/javascript" -->
+<!--         src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/stable/kr-payment-form.min.js" -->
+<!--         kr-public-key="87601604:testpublickey_feXRj9DJp4IFcXyVk6P25ZksbQGTYHobft23o18tjNbPg" -->
+<!--         kr-post-url-success="{{route('izi_pay.success')}}" -->
+<!--         kr-language="en-EN"> -->
+<!--  </script> -->
+<!----> --}}
+
+{{-- <script src="https://sandbox-checkout.izipay.pe/payments/v1/js/index.js"></script> --}}
+{{-- <!--  theme NEON should be loaded in the HEAD section   --> --}}
+{{-- <!-- <link rel="stylesheet" href="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/ext/neon-reset.min.css"> --> --}}
+
 
 @extends('layouts_new.app')
 
 
-<script src="https://sandbox-checkout.izipay.pe/payments/v1/js/index.js"></script>
 
 @section('content')
+
+
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
     <h1 class="h3 mb-0 text-gray-800">Cobertura</h1>
 </div>
 
@@ -26,34 +40,10 @@
     </div>
     <div class="card-body">
         <div class="detail-payment-card p-4 bg-1">
-            <div class="card-body row payment-card p-5">
-                <div class="card col mx-auto p-3" style="background-color: #1c2a5b; color: white !important;" id="rounded-container">
-                    <span class="d-flex flex-column justify-content-center align-items-center">
-                        <h1 class="float-left" style="color: white !important;">Fondo de Cobertura de Deportistas -18</h1>
-                        <img class="card-img-top" style="width: 30%" src="{{ asset('/images/dashboard/aa seguros 1-1.webp')}}" alt="Card image cap">
-                    </span>
-                    <div class="card-body text-center">
-                        <p class="card-text">
-                            El Plan de Cobertura Deportiva cubre una amplia gama de lesiones, desde fracturas y esguinces hasta contusiones y traumatismos, con una cobertura máxima de S/.1000.00 soles por evento anual.
-                            Los montos a pagar por la cobertura son los siguientes:
-                            <ul>
-                                <li>
-                                    Pago Anual: S/.180.00 soles (cobertura efectiva a los 2 meses de la suscripción).
-                                </li>
-                                <li>
-                                    Pago Mensual: S/.15.00 soles (cobertura efectiva a los 3 meses de la suscripción).
-                                </li>
-                            </ul>
-                            Este plan le ofrece tranquilidad y seguridad, sabiendo que su hijo(a) estará cubierto en caso de lesiones deportivas, con la facilidad de elegir entre opciones de pago anuales o mensuales según su conveniencia.
-                        </p>
+            <div class="row payment-card d-flex text-align-center align-elements-center align-items-center justify-content-center">
 
-                        <p>Deposito permitido desde:</p>
-
-                        <h3 style="color: #eab226 !important;"> DESDE 15 o 180.00 PEN</h3>
-                    </div>
-                </div>
-
-                <div class="card col mx-5 p-3 w-50 bg-1" id="rounded-container">
+                @include('insurance_new.information')
+               <div class="col-sm col-lg-3 col-md-5 mx-2 bg-1" id="rounded-container">
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
@@ -80,7 +70,6 @@
                             <p>No hay personas aseguradas disponibles.</p>
                         @endif
 
-                        <p><strong>Total a depositar: S/ <span id="total_monto"> </span></strong></p>
 
                         <div class="form-group">
                             <label for="payment_type">Seleccione el tipo de pago:</label><br>
@@ -88,19 +77,56 @@
                             <input type="radio" name="payment_type" value="annual" id="annualPayment" {{ $paymentType ?? '' == 'annual' ? 'checked' : '' }}> Pago Anual (S/.180)<br>
                             <input type="radio" name="payment_type" value="monthly" id="monthlyPayment" {{ $paymentType ?? '' == 'monthly' ? 'checked' : '' }}> Pago Mensual (S/.15)<br>
                         </div>
+                        {{-- izipay Form--}}
+                        {{-- <form action="">
+                            <button id="btnPayNow" class="buttonPay" type="button" disabled>
+                                loading...
+                            </button>
+                            <pre id="payment-message"></pre>
+                        </form> --}}
+
                         <label for="">Depositar a:</label>
                         <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">Interbank: 4623340100022 </p>
                         <p style="color: rgb(0, 0, 0) !important; font-weight: bolder !important;">CCI: 00346201334010002298</p>
-                        <div class="form-group">
+                        <!-- Botón que abre el modal -->
+                        <button type="button" class="btn mb-4" data-bs-toggle="modal" data-bs-target="#imageModal" style="background-color:#720E9E; font-weight:bolder; color:aliceblue;" >
+                            Paga con Yape
+                        </button>
+                         
+                        <p><strong>Total a depositar: S/ <span id="total_monto"> </span></strong></p>
+
+                        <div class="form-group mt-4">
                             {!! Form::label('voucher_picture', 'Sube tu voucher:') !!}
                             {!! Form::file('voucher_picture', ['class' => 'form-control', 'required' => true]) !!}
                         </div>
 
+                        {{-- qr cod iziPay card payment  --}}
+                            {{-- <img src="data:image/png;base64,{{$qrCode ?? ''}} " alt="QR Code">
+
                         <div class="form-group text-center">
+
+                            <div class="kr-smart-form" kr-popin kr-form-token="{{ $formToken ?? '' }}">
+                            <img src="data:image/png;base64,{{$qrCode ?? ''}} " alt="QR Code"> --}}
                             <button type="submit" class="btn btn-success">Completar pago</button>
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Yape</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" style="background-color:#720E9E">
+                <img src="{{ asset('images/dashboard/yape_cobertura.webp') }}" alt="Imagen" class="img-fluid">
             </div>
         </div>
     </div>
@@ -180,5 +206,7 @@
         }
     });
 </script>
+
+{{-- <script type="module" src="{{asset('iziPay/pay.js')}}"></script> --}}
 
 @endsection

@@ -66,7 +66,7 @@ class HomeController extends Controller
             case 2:
                 return $this->getUserReferidos();
             case 3:
-                return $this->getUserCliente();
+                return $this->homeUser();
             case 4:
                 return $this->getUserCliente();
             case 5:

@@ -29,7 +29,7 @@
 <div class="row justify-content-center align-items-center">
 
     {{-- ingresos --}}
-    <div class="col-xl-4 col-md-3 mb-4">
+    <div class="col-xl-4 col-md mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-md-3 mb-4">
+    <div class="col-xl-4 col-md mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="col-xl-4 col-md-3 mb-4">
+    <div class="col-xl-4 col-md mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -146,7 +146,19 @@
       <div class="counter w-100 h-100 bg-1 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
         @if (!empty($planData ?? ''))
-            <div id="chart" class="rounded p-4"></div>
+        <div class="card shadow ">
+            <div class="card-header ">
+                <div class="m-0 font-weight-bold text-primary">
+                    Fondo General
+                </div>
+
+            </div>
+            <div class="card-body">
+                    <div id="chart" class="rounded p-4"></div>
+
+
+            </div>
+        </div>
         @else
             {{-- <div class="  bg-1 container-size"> --}}
                 <div class="chart-container">
@@ -165,8 +177,21 @@
     <div class="col p-3">
         <div class="counter bg-1 w-100 h-100 d-flex text-align-center align-items-center justify-content-center container-size"  id="rounded-container">
 
+
+            
             @if (!empty($porcentajeInvertido ?? ''))
-                <div id="chart-dona" class="p-4"></div>
+                <div class="card shadow ">
+                    <div class="card-header ">
+                        <div class="m-0 font-weight-bold text-primary">
+                            Fondo General
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div id="chart-dona" class="p-4"></div>
+                    </div>
+                </div>
+
             @else
                 <div class="chart-container">
                     <div class="chart-overlay">Ejemplo</div>
@@ -183,8 +208,8 @@
 @if($planData ?? '')
     @foreach($planData ?? '' as $planName => $data)
     <div class="row row-fil1-client h-100 w-100">
-        <div class="col-4">
-            <div class="w-100 p-4 d-flex justify-content-between align-items-center bg-1 " id="rounded-container">
+        <div class="col-4 ">
+            <div class="w-100 card border-left-primary shadow py-2 p-4 d-flex justify-content-between align-items-center " id="rounded-container">
                 <div class="h-100 w-100 row">
                     <div class="col   d-flex text-align-center align-items-center justify-content-center  ">
                         <img src="/welcome_new/images/icons/{{$planName}}.png" alt="Logo" style="width:3vw">
@@ -198,9 +223,13 @@
             </div>
         </div>
         <div class="col-7 p-4">
-            <div class="w-100 h-100 d-flex bg-1 " id="rounded-container">
+            <div class="w-100 h-100 card shadow d-flex bg-1 " id="rounded-container">
                     @if (!empty($data['data']))
+                    <div class="card-body">
+
                       <div id="chart_{{ $planName }}" class="rounded p-4"></div>
+
+                    </div>
                     @else
                         <p class="text-center text-muted mt-5">No hay información disponible para realizar un gráfico.</p>
                     @endif
