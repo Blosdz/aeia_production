@@ -54,7 +54,7 @@
                     @endif
                     <form id="insuranceForm" action="{{ route('insurance.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <h5>Personas aseguradas:</h5>
+                        <h5>Personas Cubiertas:</h5>
                         @if (!empty($insuredPersons))
                             @foreach ($insuredPersons as $index => $person)
                                 <div class="form-group">
@@ -67,7 +67,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p>No hay personas aseguradas disponibles.</p>
+                            <p>No hay personas cubiertas.</p>
                         @endif
 
 
