@@ -1,7 +1,6 @@
 @extends('layouts_new.app')
 
 @section('content')
-
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Coberturas de {{ $user->name }}</h1>
 </div>
@@ -13,15 +12,17 @@
         </div>
         <div class="card-body">
 
-            <h5>Información del Perfil</h5>
+            <h5>Titular</h5>
             <ul>
                 <li><strong>Nombres:</strong> {{ $profile['first_name'] ?? 'N/A' }}</li>
                 <li><strong>Apellidos:</strong> {{ $profile['lastname'] ?? 'N/A' }}</li>
+                <li><strong>Dni:</strong> {{$profile['identification_number']}}</li>
+                <li><strong>Telefono:</strong> {{$profile['phone']}}</li>
                 <li><strong>Dirección:</strong> {{ $profile['address'] ?? 'N/A' }}</li>
             </ul>
 
         {{-- <div class="accordion" id="accordionExample"> --}}
-            <h5>USUARIOS REGISTRADOS A LA COBERTURA</h5>
+            <h5>Beneficiarios</h5>
             <div class="accordion" id="accordionExample">
                 @foreach($insured_with_details as $persona_key => $details)
                 <div class="accordion-item">
@@ -34,45 +35,69 @@
                         <div class="accordion-body">
                             <strong>Datos Generales:</strong>
                             <p><strong>País del documento:</strong> {{ $details['country_document'] }}</p>
+                            <p><strong>Número de Documento:</strong> {{$details['dni']}}</p>
+                            <p><strong>Deporte:</strong> {{$details['deporte']}}</p>
+                            <p><strong>Club:</strong> {{$details['Club']}}</p>
                             <p><strong>Dirección:</strong> {{ $details['address'] }}</p>
                             
-                            <strong>Fotos:</strong>
+                            <strong>Fotos del Documento:</strong> <br>
                             @if(isset($details['photo_url']['front']))
-                            <img src="{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['front'])) }}" alt="DNI Frontal" style="max-width: 200px; height: auto;">
-                            <img src="{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['back'])) }}" alt="DNI Posterior" style="max-width: 200px; height: auto;">
-                             
-                                {{-- <img src="{{asset('storage/insurance_dnis/basename/$details['photo_url']['front'] ')  }}" alt="DNI Frontal" style="max-width: 200px; height: auto;"> --}}
-                                {{-- <img src="{{ $details['photo_url']['back'] }}" alt="DNI Posterior" style="max-width: 200px; height: auto;"> --}}
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                   onclick="showImage('{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['front'])) }}')">
+                                    <img src="{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['front'])) }}" alt="DNI Frontal" style="max-width: 200px; height: auto;" class="mb-5">
+                                </a>
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                   onclick="showImage('{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['back'])) }}')">
+                                    <img src="{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['back'])) }}" alt="DNI Posterior" style="max-width: 200px; height: auto;">
+                                </a>
                             @else
                                 <p>No disponible</p>
-                            @endif
-            
+                            @endif 
+
                             @if(!empty($details['insurance_details']))
                             <hr>
-                            <strong>Detalles del Seguro:</strong>
+                            <strong>Detalles de la cobertura:</strong>
                             <ul>
-                                @foreach($details['insurance_details'] as $insurance)
-                                <li>
-                                    <p><strong>Mes:</strong> {{ $insurance['mes'] }}</p>
-                                    <p><strong>Fecha:</strong> {{ $insurance['fecha'] }}</p>
-                                    <p><strong>Método de pago:</strong> {{ $insurance['monto_pay'] }}</p>
-                                    <p><strong>Monto:</strong> ${{ $insurance['monto'] }}</p>
-                                    <p>
-                                        <strong>Recibo:</strong> 
-                                        <img src="{{ Storage::url('insurance_payment/' . basename($insurance['img_urls'])) }}" alt="Voucher del usuario" style="max-width: 200px; height: auto;">
-
-                                    </p>
-                                </li>
-                                @endforeach
+                                <!-- Mostrar el estado -->
+                                <p><strong>Estado del Beneficiado:</strong> {{ $details['insurance_details']['status'] ?? 'sin validado' }}</p>
+                        
+                                <!-- Iterar sobre montos de pago -->
+                                @if (!empty($details['insurance_details']['monto_pays']) && is_array($details['insurance_details']['monto_pays']))
+                                    @foreach ($details['insurance_details']['monto_pays'] as $monto)
+                                        @if ($monto == "monthly")
+                                            <p><strong>Monto pagado:</strong> S/15</p>
+                                        @else
+                                            <p><strong>Monto pagado:</strong> S/180</p>
+                                        @endif
+                                    @endforeach
+                                @endif
+                        
+                                <!-- Iterar sobre fechas -->
+                                @if (!empty($details['insurance_details']['fechas']) && is_array($details['insurance_details']['fechas']))
+                                    @foreach ($details['insurance_details']['fechas'] as $fecha)
+                                        <p><strong>Fechas de Pago:</strong> {{ $fecha }}</p>
+                                    @endforeach
+                                @endif
+                        
+                                <!-- Mostrar imágenes de seguros -->
+                                @if (!empty($details['insurance_details']['img_urls']) && is_array($details['insurance_details']['img_urls']))
+                                    @foreach ($details['insurance_details']['img_urls'] as $imgs)
+                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                                           onclick="showImage('{{ Storage::url($imgs) }}')">
+                                            <img src="{{ Storage::url($imgs) }}" alt="Voucher" style="max-width: 200px; height: auto;" class="mb-5"><br>
+                                        </a>
+                                    @endforeach
+                                @endif
+                             
                             </ul>
-                            @else
+                        @else
                             <p>No hay datos de seguros disponibles.</p>
-                            @endif
+                        @endif
+                         
                                    <!-- Formulario para actualizar los datos de seguros -->
                             <form action="{{ route('insurance.updateStatus', ['id' => $user->id]) }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <p>{{$persona_key}}</p>
                                     <input type="hidden" name="persona_id" value="{{$persona_key}}">
                                     <input type="hidden" name="month" value="{{now()->format('Y-m-d')}}">
                                     <label for="dropdown{{ $persona_key }}" class="form-label">Seleccione acción</label>
@@ -94,8 +119,33 @@
     
 
 </div>
+<!-- Modal -->
+{{-- <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center" >
+                <img src="{{ Storage::url('insurance_dnis/' . basename($details['photo_url']['front'])) }}" alt="DNI Frontal" style="max-width: 200px; height: auto;" class="mb-5"> <br>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+<!-- Modal Reutilizable -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content">
+                <img id="modalImage" src="" alt="Imagen Modal" style="width: 100%; height: auto; max-height: 90vh; object-fit: contain;">
+        </div>
+    </div>
+</div>
+
+
 
 <script>
+    function showImage(src) {
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = src;
+    }
 
 
 </script>

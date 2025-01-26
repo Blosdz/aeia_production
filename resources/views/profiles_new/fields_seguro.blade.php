@@ -3,7 +3,7 @@
         @csrf
         <label for="input">¿CUÁNTAS PERSONAS DESEA INCLUIR EN LA COBERTURA?</label>
         <input type="number" id="input" name="total_insured" class="form-control" placeholder="Ingrese un número" required>
-        
+
         <div class="accordion mt-4" id="accordionExample"></div>
         <button type="submit" class="btn btn-primary mt-3">Guardar Información</button>
     </form>
@@ -22,13 +22,13 @@ $(document).ready(function () {
             const accordionItem = `
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading${i}">
-                        <button class="accordion-button ${i === 1 ? '' : 'collapsed'}" type="button" 
-                                data-bs-toggle="collapse" data-bs-target="#collapse${i}" 
+                        <button class="accordion-button ${i === 1 ? '' : 'collapsed'}" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapse${i}"
                                 aria-expanded="${i === 1}" aria-controls="collapse${i}">
                             Persona #${i}
                         </button>
                     </h2>
-                    <div id="collapse${i}" class="accordion-collapse collapse ${i === 1 ? 'show' : ''}" 
+                    <div id="collapse${i}" class="accordion-collapse collapse ${i === 1 ? 'show' : ''}"
                          aria-labelledby="heading${i}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <strong>Formulario para Persona #${i}:</strong>
@@ -48,6 +48,10 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                                 <img id="preview-dni_r${i}" class="img-fluid mt-2" style="max-width: 200px; display: none;" />
+                                <div class="form-group mt-2">
+                                    <label for="dateOfBirth${i}" class="form-control">Fecha de nacimiento</label>
+                                    <input type="date" id="dateOfBirth${i}" name="persons[${i}][date_of_birth]" class="form-control">
+                                </div>
 
                                 <div class="form-group col">
                                     <label for="first_name${i}">Nombres:</label>
@@ -99,7 +103,7 @@ $(document).ready(function () {
                                     <input type="text" class="form-control" id="address${i}" name="persons[${i}][address]" maxlength="50" required>
                                 </div>
 
- 
+
 
 
                             </div>
@@ -137,7 +141,7 @@ $(document).ready(function () {
         const reader = new FileReader();
         const progressId = `progress-${inputId}`;
         const previewId = `preview-${inputId}`;
-        
+
         $(`#${progressId}`).show();
         $(`#${progressId} .progress-bar`).css('width', '0%').text('0%');
 

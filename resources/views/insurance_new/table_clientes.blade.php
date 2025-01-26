@@ -31,6 +31,7 @@
                         <th>Monto Pagado</th>
                         <th>Fecha de Pago</th>
                         <th>Carencia</th>
+                        <th>documento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,7 +52,7 @@
                                         }
                                     }
                                 @endphp
-                                ${{ $totalAmount }}
+                                S./{{ $totalAmount }}
                             </td>
                             <td>
                                 @if (!empty($data['pagos']['fechas']))
@@ -79,6 +80,14 @@
                                 @endphp
                                 {{ $carencia }}
                             </td>
+                            <td>
+                                <a href="{{ route('insurance.contract', ['persona' => json_encode($data['persona'])]) }}" 
+                                    target="_blank" 
+                                    class="btn btn-primary btn-sm">
+                                     Ver Contrato
+                                 </a>
+                            </td>
+
                         </tr>
                     @endforeach
                     </tbody> 

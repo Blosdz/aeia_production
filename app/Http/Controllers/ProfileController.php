@@ -378,6 +378,7 @@ class ProfileController extends AppBaseController
         'total_insured' => 'required|integer|min:1',
         'persons.*.dni_file' => 'required|file|image|max:2048',
         'persons.*.dni_r_file' => 'required|file|image|max:2048',
+        'persons.*.date_of_birth'=>'required|date|before:today',
         'persons.*.first_name' => 'required|string|max:30',
         'persons.*.lastname' => 'required|string|max:30',
         'persons.*.type_document' => 'required|string|max:255',
@@ -429,7 +430,7 @@ class ProfileController extends AppBaseController
 
     // Actualizar perfil con el JSON y total de asegurados
     $profile->total_insured = count($existingPersons); // Actualizar con el total correcto
-    $profile->data_filled_insured = json_encode($existingPersons, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    $profile->data_filled_insured = json_encode($existingPersons);
     $profile->save();
 
     return redirect()->route('insurance.pay')->with('success', 'Datos actualizados correctamente.');

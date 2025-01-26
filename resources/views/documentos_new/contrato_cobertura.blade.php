@@ -34,14 +34,14 @@
         <tr>
             <td>
                 <ul>
-                    <li><b>Nombre del Padre/Tutor:</b></li>
-                    <li><b>DNI Nombre del Padre/Tutor:</b></li>
-                    <li><b>Dirección:</b></li>
-                    <li><b>Teléfono:</b></li>
-                    <li><b>Correo Electrónico:</b></li>
-                    <li><b>Nombre del Beneficiario:</b></li>
-                    <li><b>DNI del Beneficiario:</b></li>
-                    <li><b>Edad del Beneficiario:</b></li>
+                    <li><b>Nombre del Padre/Tutor:</b>{{$profile->name . $profile->lastname}}</li>
+                    <li><b>DNI Nombre del Padre/Tutor:</b>{{$profile->identification_number}}</li>
+                    <li><b>Dirección:</b>{{$profile->address}}</li>
+                    <li><b>Teléfono:</b>{{$profile->phone_extension}}.{{$profile->phone}}</li>
+                    <li><b>Correo Electrónico:</b>{{$user->email}}</li>
+                    <li><b>Nombre del Beneficiario:</b>{{$profile_beneficiario->name}} {{ $profile_beneficiario->lastname}}</li>
+                    <li><b>DNI del Beneficiario:</b>{{$profile_beneficiario->identification_number}}</li>
+                    <li><b>Edad del Beneficiario:</b>{{$profile_beneficiario->age ?? " "}}</li>
                 </ul>
             </td>
         </tr>
@@ -51,8 +51,6 @@
     El presente contrato tiene por objeto proporcionar cobertura económica al beneficiario en caso de lesiones deportivas sufridas durante la práctica de actividades deportivas.
     </p>
     <p><u><b>Condiciones Generales </b></u></p><br>
-    <table>
-        <tr>
             <ol>
                 <li><b>Cobertura y Limitaciones</b>
                 <ol>
@@ -166,9 +164,6 @@
 
             </ol>
 
-        </tr>
-
-    </table>
 
 
     </body>

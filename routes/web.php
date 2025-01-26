@@ -253,6 +253,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('insurances/create',[App\Http\Controllers\InsuranceController::class,'create'])->name('insurance.create');
         Route::get('insurances/create/pay',[App\Http\Controllers\InsuranceController::class,'pay'])->name('insurance.pay');
         Route::get('insurances',[App\Http\Controllers\InsuranceController::class,'index'])->name('insurance.index');
+        Route::get('insurances/contract',[App\Http\Controllers\InsuranceController::class,'contract'])->name('insurance.contract');
         // Route::resource('insurances', App\Http\Controllers\InsuranceController::class);
 
     });

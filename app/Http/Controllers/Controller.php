@@ -17,6 +17,8 @@ class Controller extends BaseController
 
         $months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
+        // dd($fund->month);
+
         $month=$months[$fund->month-1];
 
 

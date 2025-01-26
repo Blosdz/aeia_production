@@ -4,8 +4,11 @@ FROM php:7.4-fpm-alpine
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # Install PHP extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && \
+RUN apk update && chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions gd xdebug pdo pdo_pgsql sockets zip
+
+# RUN chmod +x /usr/local/bin/install-php-extensions && \
+#     install-php-extensions gd xdebug pdo pdo_pgsql sockets zip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \

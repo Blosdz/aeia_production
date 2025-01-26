@@ -17,6 +17,7 @@ use DB;
 use App\Http\Requests\CreateProfileRequest;
 use App\Http\Requests\UpdateProfileRequest;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -51,7 +52,7 @@ class InsuranceController extends Controller
                 'pagos' => $insurancePayments,
             ];
         }
-        
+
         return view('insurance_new.table_insurance', compact('combinedData','user_session'));
     }
 
@@ -134,7 +135,7 @@ class InsuranceController extends Controller
 
         $insured_with_details = [];
 
-        // dd($insurance_data);
+        // dd($insurance_data,$insurance_data_client,$data_filled_insured);
         foreach ($data_filled_insured as $index => $person) {
             $persona_key = "persona#{$index}";
 
@@ -155,21 +156,29 @@ class InsuranceController extends Controller
             ];
         }
 
-       // Pasar por los datos de seguro y combinar con insured_with_details
-       foreach ($insurance_data as $month => $details) {
-            foreach ($details as $persona_key => $insurance_details) {
-                // Validar si el persona_key existe en insured_with_details
-                if (isset($insured_with_details[$persona_key])) {
-                    $insured_with_details[$persona_key]['insurance_details'][] = [
-                        "mes" => $month,
-                        "fecha" => $insurance_details['fecha'],
-                        "monto_pay" => $insurance_details['monto_pay'],
-                        "monto" => $insurance_details['monto'],
-                        "img_url" => asset($insurance_details['img_url']),
-                    ];
-                }
+
+
+        //insured_with_details persona#personaN
+
+        //insurance_data personaN
+        foreach ($insured_with_details as $persona_key => &$insured) { // Usar referencia para modificar directamente
+            $key = str_replace('persona#', '', $persona_key); // Obtener la clave correspondiente del JSON de insurance_data
+
+            if (isset($insurance_data[$key])) { // Verificar si existe el dato correspondiente en insurance_data
+                $insured['insurance_details'] = [ // Asignar directamente el JSON relacionado
+                    'img_urls' => $insurance_data[$key]['img_urls'] ?? [],
+                    'monto_pays' => $insurance_data[$key]['monto_pays'] ?? [],
+                    'status' => $insurance_data[$key]['status'] ?? '',
+                    'fechas' => $insurance_data[$key]['fechas'] ?? [],
+                ];
+            } else {
+                // En caso de no tener datos en insurance_data, dejar vacío
+                $insured['insurance_details'] = [];
             }
         }
+        unset($insured); // Liberar la referencia
+
+
 
         // Renderizar la vista
         // dd($insured_with_details);
@@ -211,7 +220,7 @@ class InsuranceController extends Controller
             'status' => 'required|string|in:validar,no_validar,corregir_data', // estado validado o no validado
             'month' => 'required|string', // mes, en este caso December
         ]);
-        //validar al json 
+        //validar al json
 
         // Obtener la persona y mes desde el request
         $persona_key_n = $request->input('persona_id'); // ejemplo persona#0
@@ -313,26 +322,26 @@ class InsuranceController extends Controller
             'last_names' => 'required|array',
             'payment_type' => 'required|string',
         ]);
-    
+
         $filePath = 'insurance_payment/';
         $name = uniqid() . '.' . $request->file('voucher_picture')->getClientOriginalExtension();
-    
+
         if (!Storage::exists('public/' . $filePath)) {
             Storage::makeDirectory('public/' . $filePath, 0777, true);
         }
-    
+
         $user = Auth::user();
         $profile = Profile::where('user_id', $user->id)->first();
-    
+
         $costPerPerson = $request->payment_type === 'annual' ? 180 : 15;
         $paidPersons = $request->input('paid_persons'); // Ejemplo: ["persona0", "persona1"]
         $firstNames = $request->input('first_names'); // Ejemplo: ["Juan", "Maria"]
         $lastNames = $request->input('last_names'); // Ejemplo: ["Perez", "Gomez"]
         $voucherPath = $filePath . $name;
-    
+
         // Guardar la imagen del voucher
         $request->file("voucher_picture")->storeAs('public/' . $filePath, $name);
-    
+
         $insurance = Insurance::firstOrCreate(
             ['phonenumber' => $profile->phone_extension . '.' . $profile->phone],
             [
@@ -340,10 +349,10 @@ class InsuranceController extends Controller
                 'email' => $user->email,
             ]
         );
-    
+
         $currentDate = Carbon::now()->toDateString();
         $insuranceData = json_decode($insurance->json, true) ?? [];
-    
+
         foreach ($paidPersons as $index => $personaKey) {
             // Si no existe esta persona, inicializamos su estructura
             if (!isset($insuranceData[$personaKey])) {
@@ -355,17 +364,17 @@ class InsuranceController extends Controller
                     'img_urls' => [],
                 ];
             }
-        
+
             // Actualizar las fechas, imágenes y tipos de pago
             $insuranceData[$personaKey]['fechas'][] = $currentDate;
             $insuranceData[$personaKey]['monto_pays'][] = $request->payment_type;
             $insuranceData[$personaKey]['img_urls'][] = $voucherPath;
         }
-    
+
         // Guardar el JSON actualizado en el modelo
         $insurance->json = json_encode($insuranceData, JSON_PRETTY_PRINT);
         $insurance->save();
-    
+
         // Actualizar o crear el registro de ClientInsurance
         ClientInsurance::updateOrCreate(
             ['user_id' => $user->id],
@@ -375,7 +384,7 @@ class InsuranceController extends Controller
                 'insurance_id' => $insurance->id,
             ]
         );
-    
+
         return redirect()->route('insurance.index')->with('success', 'Pago realizado y seguro creado/actualizado correctamente.');
     }
 
@@ -393,6 +402,23 @@ class InsuranceController extends Controller
 
     }
 
+    public function contract(Request $request)
+    {
+        $persona = json_decode($request->input('persona'), true);
+        $user = Auth::user();
+        $profile= Profile::where('user_id', $user->id)->first();
+        $edad=Carbon::parse($persona['date_of_birth'])->age;
 
+        $profile_beneficiario = (object) [
+            'name' => $persona['first_name'],
+            'lastname' => $persona['lastname'],
+            'identification_number' => $persona['dni_number'],
+            'address' => $persona['address'],
+            'age'=>$edad,
+        ];
+
+        return PDF::loadView('documentos_new.contrato_cobertura', compact('profile_beneficiario','profile','user'))
+            ->stream('contrato_cobertura.pdf');
+    }
 
 }
